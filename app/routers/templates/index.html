@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>edu-rewolucja</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="container">
+    <button onclick="load()" type="submit">load</button>
+
+    <h1>rejestracja</h1>
+        <label for="Remail">email:</label>
+        <input type="email" id="Remail" name="Remail"><br><br>
+        <label for="Rfirstname">imie:</label>
+        <input type="text" id="Rfirstname" name="Rfirstname"><br><br>
+        <label for="Rlastname">nazwisko:</label>
+        <input type="text" id="Rlastname" name="Rlastname"><br><br>
+        <label for="Rpassword">hasło:</label>
+        <input type="password" id="Rpassword" name="Rpassword"><br><br>
+
+    <button id="signUp" type="submit">Zarejestruj</button>
+
+
+
+    <br><br>
+    <h1>zaloguj</h1>
+        <label for="Lemail">email:</label>
+        <input type="text" id="Lemail" name="Lemail"><br><br>
+        <label for="Lpassword">Hasło:</label>
+        <input type="password" id="Lpassword" name="Lpassword"><br><br>
+
+    <button id="signIn" type="submit">Zaloguj się</button>
+
+    <br><br>
+    <h1>nowy post</h1>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title"><br><br>
+        <label for="content">Content:</label>
+        <input type="text" id="content" name="content"><br><br>
+
+    <button id="newPost" type="submit">Zatwierdź</button>
+
+
+</div>
+</body>
+<script>
+    window.onload=checkAuth()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+    async function checkAuth(){
+        $.ajax({
+            url: "/auth/",
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+getCookie('auth')
+            },
+            success: function(a,b,c){
+                console.log(a)
+                console.log("użytkownik jest zalogowany!")
+                },
+            error: function(e){
+                console.log("Zaloguj się!")
+            }
+            },)
+    }
+    
+//////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    async function load(){
+        var res = await fetch(
+            "/posts/",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer "+getCookie('auth')
+                },
+            }
+        )
+        res=await res.json()
+        console.log(res)
+    }
+
+$('#signUp').on('click',function(){
+    $.ajax({
+        url: "/users/",
+        method: 'POST',
+        data: JSON.stringify({ 
+            email: $('#Remail').val(),
+            firstname: $('#Rfirstname').val(),
+            lastname: $('#Rlastname').val(),
+            password: $('#Rpassword').val()
+            }),
+        contentType: 'application/json',
+        success: function(){
+            
+            },
+        error: function(e){console.log(e)}
+        },)
+});
+
+
+$('#signIn').on('click',function(){
+    $.ajax({
+        url: "/auth/",
+        method: 'POST',
+        data: { 
+            username: $('#Lemail').val(),
+            password: $('#Lpassword').val()
+            },
+        contentType: 'application/x-www-form-urlencoded',
+        crossDomain: true,
+        success: function(a,b,c){
+            var access_token = JSON.parse(c.responseText)
+            access_token = access_token["access_token"]
+
+            var expire_date = new Date(new Date().getTime()+60*60*1000*720).toGMTString(); // 720h
+            document.cookie = "auth="+access_token+"; expires="+expire_date+"; path=/";
+            },
+        error: function(e){console.log(e)}
+        },)
+});
+
+$('#newPost').on('click',function(){
+    $.ajax({
+        url: "/posts/",
+        method: 'POST',
+        data: JSON.stringify({ 
+            title: $('#title').val(),
+            content: $('#content').val(),
+            published: "true"
+            }),
+        headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+getCookie('auth')
+            },
+        success: function(){
+            // podmianka diva
+            },
+        error: function(e){}
+        },)
+});
+</script>
+</html>
