@@ -1,6 +1,6 @@
 from .. import utils, schemas
 from ..database import *
-from fastapi import status, APIRouter
+from fastapi import HTTPException, status, APIRouter
 
 
 router = APIRouter(
@@ -10,6 +10,12 @@ router = APIRouter(
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate):
+    # whether the user is already in the database
+    cursor.execute("""SELECT * FROM users WHERE email = %s""", (user.email,))
+    user_check = cursor.fetchone()
+    if user_check:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"User already exists")
+
 
     user.password = utils.hash(user.password)
 
