@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edu-rewolucja</title>
+    <style>
+        .sign{
+            height: 400px;
+            width: 200px;
+        }
+        .sign.in{
+            background-color: purple;
+        }
+        /* .sign.in.invalid{
+            background-color: blue;
+        } */
+        .sign.up{
+            background-color: red;
+        }
+        /* .sign.up.tutor{
+            background-color: red;
+        } */
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <div id="app" v-cloak>
+        <!-- <div id="verification"></div> -->
+        <div v-if="!checkAuth()" id="verification">
+            <p @click="signInPage">zaloguj się</p>
+            <p @click="signUpPage">zarejestruj</p>
+
+            <div v-if="isUserCookie" class="sign in">
+                <h1>zaloguj</h1>
+                <label for="Lemail">email:</label>
+                <input type="text" id="Lemail" name="Lemail"><br><br>
+                <label for="Lpassword">Hasło:</label>
+                <input type="password" id="Lpassword" name="Lpassword"><br><br>
+        
+                <button @click="signIn" id="signIn" type="submit">Zaloguj się</button>
+            </div>
+            <div v-else class="sign up">
+                <h1>Załóż konto</h1>
+                <label for="Remail">email:</label>
+                <input type="email" id="Remail" name="Remail"><br><br>
+                <label for="Rfirstname">imie:</label>
+                <input type="text" id="Rfirstname" name="Rfirstname"><br><br>
+                <label for="Rlastname">nazwisko:</label>
+                <input type="text" id="Rlastname" name="Rlastname"><br><br>
+                <label for="Rpassword">hasło:</label>
+                <input type="password" id="Rpassword" name="Rpassword"><br><br>
+        
+                <button @click="signUp" id="signUp" type="submit">Zarejestruj</button>
+            </div>
+        </div>
+        
+        <div>tylko dla zalogowanych</div>
+        <!-- <div v-if="checkAuth()">tylko dla zalogowanych</div> -->
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // window.onload = buildWindow()
+
+        // function buildWindow(){
+        //     $.ajax({
+        //         url: "/auth/",
+        //         method: 'GET',
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             "Authorization": "Bearer "+getCookie('auth')
+        //         },
+        //         success: function(a,b,c){
+        //             console.log(a)
+        //             console.log("użytkownik jest zalogowany!")
+        //             buildPanel(a)
+        //             },
+        //         error: function(e){
+        //             console.log("Zaloguj się!")
+        //             buildAuthentication()
+        //         }
+        //         })
+        // }
+        // function buildPanel(a){
+        //     $("#container").text('masz dostęp do panel, dane: '+a.account_type+' oraz id '+a.id)
+        // }
+        // function buildAuthentication(){
+        //     $("#container").text('musisz się zalogować')
+        // }
+        
+        let app = Vue.createApp({
+            data: function(){
+                return {
+                    isUserCookie: isUserCookie(),
+                    content: 'great content'
+                }
+            },
+            methods: {
+                checkAuth(){
+                    checkAuth()
+                },
+                signInPage(){
+                    this.isUserCookie = true
+                },
+                signUpPage(){
+                    this.isUserCookie = false
+                },
+                signIn(){
+                    signInfunction()
+                    alert('Zalogowałeś się')
+                },
+                signUp(){
+                    signUpfunction()
+                    alert('Zarejestrowałeś się')
+                    createUserCookie()
+                    this.isUserCookie = true
+                },
+            }
+        })
+        app.mount('#app')
+    </script>
+    
+</body>
+</html>

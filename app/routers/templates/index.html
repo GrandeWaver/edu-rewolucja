@@ -69,7 +69,6 @@
             }
             },)
     }
-    
 //////////////////////////////////////////////////////////////////////////////////////////////////
     
     async function load(){
@@ -101,7 +100,7 @@ $('#signUp').on('click',function(){
         success: function(){
             
             },
-        error: function(e){console.log(e)}
+        error: function(e){}
         },)
 });
 
@@ -123,7 +122,7 @@ $('#signIn').on('click',function(){
             var expire_date = new Date(new Date().getTime()+60*60*1000*720).toGMTString(); // 720h
             document.cookie = "auth="+access_token+"; expires="+expire_date+"; path=/";
             },
-        error: function(e){console.log(e)}
+        error: function(e){}
         },)
 });
 

@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id="usersVueApp" class="container">  
+      <div class="row"> 
+        <div class="card col-3 p-2 m-3" v-for="(user,index) in users" :key="index">
+          <img class="card-img-top":src="user.avatar" :alt="user.first_name">
+          <div class="card-body">
+            <h5 class="card-title">{{user.first_name}} {{user.last_name}}</h5>
+            <p class="card-text"> 
+               <a :href="`mailto:${user.email}`" class="btn btn-primary">Email {{user.first_name}}</a>
+            </p>
+          </div>
+        </div> 
+      </div>
+    </div>
+    <script>
+    var app = new Vue({ 
+      el: "#usersVueApp",
+
+      data: function(){
+        return { 
+          users: [] 
+        };
+      },
+
+      mounted : function() {
+        this.loadUsers();
+      },
+
+      methods : {
+        loadUsers : function () {
+          const _this = this;
+          $.ajax({
+            method: "GET",
+            url: "https://reqres.in/api/users",
+            dataType: "json",
+            success: function (users){
+                console.log(users.data)
+              _this.users = users.data;
+           }});
+        }
+      }
+    });
+    </script>
+  </body> 
+</html>
