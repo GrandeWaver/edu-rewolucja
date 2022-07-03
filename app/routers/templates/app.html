@@ -81,6 +81,8 @@
 <script src="js/utils.js"></script>
 
 <script>
+    var url = "https://app.edu-rewolucja.pl"
+
     let app = Vue.createApp({ 
       el: "#app",
 
@@ -205,7 +207,7 @@
           const _this = this
           $.ajax({
             method: "GET",
-            url: "/posts",
+            url: url+"/posts",
             dataType: "json",
             headers: {
                 "Content-Type": "application/json",
