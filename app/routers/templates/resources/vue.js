@@ -200,7 +200,7 @@ let app = Vue.createApp({
       logout: function(){
           const _this = this
           document.cookie = "auth=let's clean up; expires=Sat, 20 Jan 1980 12:00:00 UTC; path=/";
-          _this.init()
+          _this.href('SignIn')
       },
       checkEmailFunc: function(){
         const _this = this
