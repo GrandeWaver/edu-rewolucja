@@ -77,6 +77,8 @@ let app = Vue.createApp({
         var url = window.location.href
         var hash = url.split('#')[1]
         const _this = this
+        var userEmailCookie = getCookie("userCookie")
+        _this.userData.email = userEmailCookie
           $.ajax({
               url: "/auth/",
               method: 'GET',
@@ -115,11 +117,17 @@ let app = Vue.createApp({
                     _this.href('PrivacyPolicy')
                   }
                   else {
-                    _this.href('SignIn')
+                    if(_this.userData.email){
+                      _this.href('WelcomeBack')
+                    }
+                    else {
+                      _this.href('SignIn')
+                    }
                   }
               }
               },)
       },
+      // --------------------------------- formularze ---------------------------------
       signInFunc: function(){
           const _this = this
           $.ajax({
@@ -198,6 +206,7 @@ let app = Vue.createApp({
         const _this = this
         _this.userData.email = $('#Cemail').val()
         console.log(_this.userData)
+        createUserCookie(_this.userData.email)
         $.ajax({
             url: "/users/check",
             method: 'POST',
@@ -222,6 +231,7 @@ let app = Vue.createApp({
             }
             },)
       },
+// --------------------------------- po autoryzacji ---------------------------------
       loadPosts: function () {
         url = document.URL
         if(url.includes("#")){

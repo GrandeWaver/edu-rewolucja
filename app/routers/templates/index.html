@@ -80,9 +80,12 @@
 
     <div v-if="sc.showWelcomeBack" id="welcomeBack" class="box">
         <h1>Witaj z powrotem</h1>
+        <h5>{{userData.email}}</h5>
         Hasło:<input v-on:keyup.enter="signInFunc()" type="password" id="Lpassword"><br>
         <div v-if="val.notValidPassword" class="redWarning">Podano nieprawidłowe hasło</div><!-- Błąd hasła -->
         <button @click="signInFunc()" id="signIn" type="submit">Zaloguj się</button>
+        <br>
+        <i @click="href('SignIn')" class="blueWarning">Zaloguj za pomocą innego konta</i>
     </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
