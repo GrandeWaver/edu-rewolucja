@@ -217,7 +217,7 @@ let app = Vue.createApp({
                   }),
               contentType: 'application/json',
               success: function(){
-                  _this.showScreen('showSignIn')
+                  _this.href('SignIn')
                   },
               error: function(e){
                 if(e.responseJSON.detail[0].msg == 'value is not a valid email address'){
