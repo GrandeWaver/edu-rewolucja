@@ -70,7 +70,7 @@
 
         <div v-if="notValidCEmail1" class="redWarning">
             Nie możemy znaleźć konta z takim adresem email
-            <i @click="showScreen('showSignUp')" class="blueWarning">Stwórz nowe konto</i>
+            <i @click="href('SignUp')" class="blueWarning">Stwórz nowe konto</i>
         </div>
         <div v-if="notValidCEmail2" class="redWarning">
             Podano nieprawidłowy email
