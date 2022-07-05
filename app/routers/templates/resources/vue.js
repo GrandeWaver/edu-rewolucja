@@ -217,6 +217,7 @@ let app = Vue.createApp({
                   }),
               contentType: 'application/json',
               success: function(){
+                  _this.notValidCEmail1 = false
                   _this.href('SignIn')
                   },
               error: function(e){
