@@ -22,4 +22,26 @@ function getCookie(name) {
 //     return isCookie
 // }
 
+function resetVal(val){
+    val.notValidCEmail1 = false
+    val.notValidCEmail2 = false
+    val.notValidPassword = false
+
+
+    val.notValidREmail = false
+    val.emptyFieldFirstname = false
+    val.emptyFieldLastname = false
+    val.emailExists = false
+    val.passwordTooShort = false
+}
+
+function resetScreens(sc){
+    sc.showSignUp = false
+    sc.showSignIn = false
+    sc.showWelcomeBack = false
+    sc.showSignUpTutor = false
+    sc.showPanel = false
+    sc.showContact = false
+    sc.showPrivacyPolicy = false
+}
 

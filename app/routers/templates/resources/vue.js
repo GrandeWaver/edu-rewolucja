@@ -4,24 +4,10 @@ let app = Vue.createApp({
     data: function(){
       return { 
           showLoading: true,
-          showSignUp: false,
-          showSignIn: false,
-          showWelcomeBack: false,
-          showSignInWrong: false,
-          showSignUpTutor: false,
-          showPanel: false,
-          showContact: false,
-          showPrivacyPolicy: false,
+          sc: [], //screens
           userData: [],
           posts: [],
-          notValidPassword: false,
-          notValidCEmail1: false,
-          notValidCEmail2: false,
-          emailExists: false,
-          emptyFieldFirstname: false,
-          emptyFieldLastname: false,
-          notValidREmail: false,
-          passwordTooShort: false,
+          val: [], // walidacja formularzy
           isUserAuthenticated: false,
       };
     },
@@ -32,102 +18,60 @@ let app = Vue.createApp({
 
     methods : {
        href: function(url){
+          const _this = this
           window.location.href = '/#'+url
-          this.showScreen(url)
+          _this.showScreen(url)
        },
        showScreen: function(screen) {
+          const _this = this
           var url = window.location.href
           var hash = url.split('#')[1]
           if (hash) {
             $(".loading").css("display", "none")
             screen = 'show'+hash
-          } 
+          }
 
-          const _this = this
           console.log(screen + ' opening')
-
           _this.showLoading = true
           
           if(screen == 'showSignUp'){
               window.location.href = '/#SignUp'
-              _this.showLoading = false
-              _this.showSignUp = true
-              _this.showSignIn = false
-              _this.showWelcomeBack = false
-              _this.showSignUpTutor = false
-              _this.showPanel = false
-              _this.showContact = false
-              _this.showPrivacyPolicy = false
-              console.log('pętla zwrotna rejestracji')
+              resetScreens(_this.sc)
+              _this.sc.showSignUp = true
+              resetVal(_this.val)
           }
           else if(screen == 'showSignIn'){
             window.location.href = '/#SignIn'
-              _this.showLoading = false
-              _this.showSignUp = false
-              _this.showSignIn = true
-              _this.showWelcomeBack = false
-              _this.showSignUpTutor = false
-              _this.showPanel = false
-              _this.showContact = false
-              _this.showPrivacyPolicy = false
-              console.log('pętla zwrotna logowania')
+              resetScreens(_this.sc)
+              _this.sc.showSignIn = true
+              resetVal(_this.val)
           }
           else if(screen == 'showWelcomeBack'){
             window.location.href = '/#WelcomeBack'
-            _this.showLoading = false
-            _this.showSignUp = false
-            _this.showSignIn = false
-            _this.showWelcomeBack = true
-            _this.showSignUpTutor = false
-            _this.showPanel = false
-            _this.showContact = false
-            _this.showPrivacyPolicy = false
+            resetScreens(_this.sc)
+            _this.sc.showWelcomeBack = true
         }
           else if(screen == 'showSignUpTutor'){
               window.location.href = '/#SignUpTutor'
-              _this.showLoading = false
-              _this.showSignUp = false
-              _this.showSignIn = false
-              _this.showWelcomeBack = false
-              _this.showSignUpTutor = true
-              _this.showPanel = false
-              _this.showContact = false
-              _this.showPrivacyPolicy = false
-          }
-          else if(screen == 'showPanel'){
-              window.location.href = '/#Panel'
-              _this.showLoading = false
-              _this.showSignUp = false
-              _this.showSignIn = false
-              _this.showWelcomeBack = false
-              _this.showSignUpTutor = false
-              _this.showPanel = true
-              _this.showContact = false
-              _this.showPrivacyPolicy = false
-              _this.loadPosts()
+              resetScreens(_this.sc)
+              _this.sc.showSignUpTutor = true
           }
           else if(screen == 'showContact'){
               window.location.href = '/#Contact'
-              _this.showLoading = false
-              _this.showSignUp = false
-              _this.showSignIn = false
-              _this.showWelcomeBack = false
-              _this.showSignUpTutor = false
-              _this.showPanel = false
-              _this.showContact = true
-              _this.showPrivacyPolicy = false
+              resetScreens(_this.sc)
+              _this.sc.showContact = true
           }
           else if(screen == 'showPrivacyPolicy'){
               window.location.href = '/#PrivacyPolicy'
-              _this.showLoading = false
-              _this.showSignUp = false
-              _this.showSignIn = false
-              _this.showWelcomeBack = false
-              _this.showSignUpTutor = false
-              _this.showPanel = false
-              _this.showContact = false
-              _this.showPrivacyPolicy = true
+              resetScreens(_this.sc)
+              _this.sc.showPrivacyPolicy = true
           }
+          else if(screen == 'showPanel'){
+            window.location.href = '/#Panel'
+            resetScreens(_this.sc)
+            _this.sc.showPanel = true
+            _this.loadPosts()
+        }
       },
       init: function(){
         var url = window.location.href
@@ -187,7 +131,7 @@ let app = Vue.createApp({
                   },
               contentType: 'application/x-www-form-urlencoded',
               success: function(a,b,c){
-                  _this.notValidPassword = false
+                  _this.val.notValidPassword = false
                   var access_token = JSON.parse(c.responseText)
                   access_token = access_token["access_token"]
 
@@ -197,7 +141,7 @@ let app = Vue.createApp({
                   },
               error: function(e){
                 console.log(e.responseJSON.detail)
-                _this.notValidPassword = true
+                _this.val.notValidPassword = true
               }
               },)
       },
@@ -217,72 +161,33 @@ let app = Vue.createApp({
                   }),
               contentType: 'application/json',
               success: function(){
-                  _this.notValidCEmail1 = false
+                  _this.val.notValidCEmail1 = false
                   _this.href('SignIn')
                   },
               error: function(e){
                 if(e.responseJSON.detail[0].msg == 'value is not a valid email address'){
-                    //alert('nieprawidłowy adres email')
-                    _this.notValidREmail = true
-                    _this.emptyFieldFirstname = false
-                    _this.emptyFieldLastname = false
-                    _this.emailExists = false
-                    _this.passwordTooShort = false
+                  resetVal(_this.val)
+                  _this.val.notValidREmail = true
                 }
                 else if(e.responseJSON.detail == 'Empty field: firstname'){
-                    // alert('puste pole: imie')
-                    _this.notValidREmail = false
-                    _this.emptyFieldFirstname = true
-                    _this.emptyFieldLastname = false
-                    _this.emailExists = false
-                    _this.passwordTooShort = false
+                  resetVal(_this.val)
+                  _this.val.emptyFieldFirstname = true
                 }
                 else if(e.responseJSON.detail == 'Empty field: lastname'){
-                    // alert('puste pole: nazwisko')
-                    _this.notValidREmail = false
-                    _this.emptyFieldFirstname = false
-                    _this.emptyFieldLastname = true
-                    _this.emailExists = false
-                    _this.passwordTooShort = false
+                  resetVal(_this.val)
+                  _this.val.emptyFieldLastname = true
                 }
                 else if(e.responseJSON.detail == 'User already exists'){
-                    // alert('Użytkownik z tym adresem e-mail już istnieje.')
-                    _this.notValidREmail = false
-                    _this.emptyFieldFirstname = false
-                    _this.emptyFieldLastname = false
-                    _this.emailExists = true
-                    _this.passwordTooShort = false
+                  resetVal(_this.val)
+                  _this.val.emailExists = true
                 }
                 else if(e.responseJSON.detail == 'Password is too short'){
-                    // alert('hasło jest za krótkie (min 6 znaków)')
-                    _this.notValidREmail = false
-                    _this.emptyFieldFirstname = false
-                    _this.emptyFieldLastname = false
-                    _this.emailExists = false
-                    _this.passwordTooShort = true
+                  resetVal(_this.val)
+                  _this.val.passwordTooShort = true
                 }
                 console.log(e.responseJSON)
               }
               },)
-      },
-      loadPosts: function () {
-        url = document.URL
-        if(url.includes("#")){
-            url = url.split('#')[0]
-        }
-        const _this = this
-        $.ajax({
-          method: "GET",
-          url: url+"posts/",
-          dataType: "json",
-          headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer "+getCookie('auth')
-          },
-          success: function (posts){
-              console.log(posts)
-              _this.posts = posts;
-         }});
       },
       logout: function(){
           const _this = this
@@ -307,16 +212,35 @@ let app = Vue.createApp({
                     _this.href('WelcomeBack')
                 }
                 else{
-                    _this.notValidCEmail1 = true
-                    _this.notValidCEmail2 = false
+                    _this.val.notValidCEmail1 = true
+                    _this.val.notValidCEmail2 = false
                 }
                 },
             error: function(e){
-                _this.notValidCEmail2 = true
-                _this.notValidCEmail1 = false
+                _this.val.notValidCEmail2 = true
+                _this.val.notValidCEmail1 = false
             }
             },)
-      }
+      },
+      loadPosts: function () {
+        url = document.URL
+        if(url.includes("#")){
+            url = url.split('#')[0]
+        }
+        const _this = this
+        $.ajax({
+          method: "GET",
+          url: url+"posts/",
+          dataType: "json",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer "+getCookie('auth')
+          },
+          success: function (posts){
+              console.log(posts)
+              _this.posts = posts;
+         }});
+      },
     }
   })
   app.mount('#app')

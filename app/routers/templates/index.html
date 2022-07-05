@@ -9,141 +9,152 @@
 <body>
 
 <div id="app" v-cloak>
-    <!-- Pasek nawigacyjny (wyświetla się mimo wszystko) -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Pasek nawigacyjny -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
     <a href="https://edu-rewolucja.pl">edu-rewolucja</a>
 
+    <!-- Gdy user nie jest zalogowany -->
     <div v-if="!isUserAuthenticated" id="authNavi">
-        <i v-if="!showLoading" @click="href('SignIn')" id="SignIn">Zaloguj</i>
-        <i v-if="!showLoading" @click="href('SignUp')" id="SignUp">Zarejestruj</i>
+        <i v-if="!sc.showLoading" @click="href('SignIn')" id="SignIn">Zaloguj</i>
+        <i v-if="!sc.showLoading" @click="href('SignUp')" id="SignUp">Zarejestruj</i>
     </div>
 
+    <!-- Gdy user jest zalogowany -->
     <div v-if="isUserAuthenticated" id="authNavi">
         <i @click="href('Panel')" id="Panel">panel</i>
         <i @click="logout()">wyloguj</i>
     </div>
 
-    <!-- To co ma się wyświetlać w czasie ładowania strony i sprawdzania czy user jest zalogowany -->
-    <div v-if="showLoading" class="loading">
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Kręcące się kółko ładowania -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showLoading" class="loading">
         <div class="loader"></div>
     </div>
 
-    <!-- Gdy user nie jest zalogowany -->
-    <div v-if="showSignUp" id="signUp" class="box signup">
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- zarejestruj się screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showSignUp" id="signUp" class="box signup">
         <h1>Załóż konto</h1>
-        email:
-        <input :value="userData.email" v-on:keyup.enter="signUpFunc()" type="email" id="Remail">
-
-        <div v-if="emailExists" class="redWarning">
-            Użytkownik z tym adresem e-mail już istnieje.
+        email:<input :value="userData.email" v-on:keyup.enter="signUpFunc()" type="email" id="Remail" >
+        <div v-if="val.emailExists" class="redWarning">Użytkownik z tym adresem e-mail już istnieje.
             <i @click="href('SignIn')" class="blueWarning">Zaloguj się</i>
-        </div>
-        <div v-if="notValidREmail" class="redWarning">
-            Nieprawidłowy adres email
-        </div><br><br>
-
-        imie:</label>
-        <input :value="userData.firstname" v-on:keyup.enter="signUpFunc()" type="text" id="Rfirstname">
-
-        <div v-if="emptyFieldFirstname" class="redWarning">
-            Puste pole.
-        </div><br><br>
-
-        nazwisko:
-        <input :value="userData.lastname" v-on:keyup.enter="signUpFunc()" type="text" id="Rlastname">
-
-        <div v-if="emptyFieldLastname" class="redWarning">
-            Puste pole.
-        </div><br><br>
-
-        hasło:
-        <input v-on:keyup.enter="signUpFunc()" type="password" id="Rpassword">
-        <div v-if="passwordTooShort" class="redWarning">
-            Za krótkie hasło
-        </div><br><br>
-
+        </div><!-- Błąd emaila 1 -->
+        <div v-if="val.notValidREmail" class="redWarning">Nieprawidłowy adres email</div><!-- Błąd emaila 2 -->
+        <br><br>
+        imie:<input :value="userData.firstname" v-on:keyup.enter="signUpFunc()" type="text" id="Rfirstname">
+        <div v-if="val.emptyFieldFirstname" class="redWarning">Puste pole.</div><!-- Błąd pustego pola -->
+        <br><br>
+        nazwisko:<input :value="userData.lastname" v-on:keyup.enter="signUpFunc()" type="text" id="Rlastname">
+        <div v-if="val.emptyFieldLastname" class="redWarning">Puste pole.</div><!-- Błąd pustego pola -->
+        <br><br>
+        hasło:<input v-on:keyup.enter="signUpFunc()" type="password" id="Rpassword">
+        <div v-if="val.passwordTooShort" class="redWarning">Za krótkie hasło</div><!-- Błąd zbyt krótkiego hasła -->
+        <br><br>
         <button @click="signUpFunc()" id="signUp" type="submit">Zarejestruj</button>
     </div>
-    <div v-if="showSignIn" id="signIn" class="box">
-        <h1>Zaloguj się</h1>
-        Email:
-        <input :value="userData.email" v-on:keyup.enter="checkEmailFunc()" type="email" id="Cemail"><br><br>
 
-        <div v-if="notValidCEmail1" class="redWarning">
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Logowanie screen-->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showSignIn" id="signIn" class="box">
+        <h1>Zaloguj się</h1>
+        Email:<input :value="userData.email" v-on:keyup.enter="checkEmailFunc()" type="email" id="Cemail" placeholder="example@gmail.com"><br><br>
+        <div v-if="val.notValidCEmail1" class="redWarning">
             Nie możemy znaleźć konta z takim adresem email
             <i @click="href('SignUp')" class="blueWarning">Stwórz nowe konto</i>
-        </div>
-        <div v-if="notValidCEmail2" class="redWarning">
-            Podano nieprawidłowy email
-        </div>
-
+        </div><!-- Błąd emaila -->
+        <div v-if="val.notValidCEmail2" class="redWarning">Podano nieprawidłowy email</div><!-- Błąd emaila -->
         <button @click="checkEmailFunc()" id="checkEmail" type="submit">Dalej</button>
     </div>
-    <div v-if="showWelcomeBack" id="welcomeBack" class="box">
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Witaj ponownie screen-->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showWelcomeBack" id="welcomeBack" class="box">
         <h1>Witaj z powrotem</h1>
-        Hasło:
-        <input v-on:keyup.enter="signInFunc()" type="password" id="Lpassword"><br>
-
-        <div v-if="notValidPassword" class="redWarning">
-            Podano nieprawidłowe hasło
-        </div>
+        Hasło:<input v-on:keyup.enter="signInFunc()" type="password" id="Lpassword"><br>
+        <div v-if="val.notValidPassword" class="redWarning">Podano nieprawidłowe hasło</div><!-- Błąd hasła -->
         <button @click="signInFunc()" id="signIn" type="submit">Zaloguj się</button>
-
-    </div>
-    <div v-if="showSignInWrong" id="signInWrong" class="box">Zaloguj się - niepoprawne dane logowania</div>
-    <div v-if="showSignUpTutor" id="signUpTutor" class="box"><b>Załóż konto nauczyciela:</b> napisz na edurewolucja@gmail.com</div>
-
-    <!-- Gdy user jest zalogowany -->
-    <div v-if="showPanel" id="panel" class="panel">
-        Aplikacja - dostęp tylko dla zalogowanych
-        <h2> id użytkownika: {{userData.id}} typ: {{userData.account_type}} </h2>
-            <div v-for="(post,index) in posts" :key="index">
-                <h5> tytuł: {{post.title}} treść: {{post.content}} </h5>
-          </div>
     </div>
 
-    <!-- Podstrony do Footera -->
-    <div v-if="showContact">
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Kontakt screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showContact">
         <ul>
             <li>Numer tel: 530 547 713</li>
             <li>email: edurewolucja@gmail.com</li>
         </ul>
     </div>
 
-    <div v-if="showPrivacyPolicy">
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Zarejestruj się jako nauczyciel screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showSignUpTutor" id="signUpTutor" class="box">
+        <b>Załóż konto nauczyciela:</b> napisz na edurewolucja@gmail.com
+    </div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Polityka prywatności screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showPrivacyPolicy">
         <h1>Polityka Prywatności</h1>
         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</p>
     </div>
 
-    <!-- Footer (wyświetla się mimo wszystko) -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Footer -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
     <div class="footer" id="footer">
         <i @click="href('SignUpTutor')" id="SignUpTutor">Zostań korepetytorem</i>
         <i @click="href('Contact')" id="Contact">Kontakt</i>
         <i @click="href('PrivacyPolicy')" id="PrivacyPolicy">Polityka Prywatności</i>
     </div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Panel screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <div v-if="sc.showPanel" id="panel" class="panel">
+        Aplikacja - dostęp tylko dla zalogowanych
+        <h2> id użytkownika: {{userData.id}} typ: {{userData.account_type}} </h2>
+            <div v-for="(post,index) in posts" :key="index">
+                <h5> tytuł: {{post.title}} treść: {{post.content}} </h5>
+            </div>
+    </div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
 </div>
 
 <script>
-    // czy to w ogóle będzie potrzebne gdy zmienię funkcję init() i dodam tam przekierowania?
+    // odczytywanie z linku który screen aplikacja ma otworzyć
+    // a gdybym w przyszłości zrobił screen który nie ma przycisku który przeniósłby na odpowiedni ->
+    // -> screen to zawsze można zrobić ukrytą listę stron i z niej "klikać" 
     window.onhashchange = function(){
-        console.log('oswiezenie')
         var url = window.location.href
         hash = url.split('#')[1];
-        
         if (hash) {
             $(".loading").css("display", "none");
             document.getElementById(hash).click();
         } 
-        // else {
-        //     if(document.getElementById('SignIn') == null){
-        //         // document.getElementById('Panel').click();
-        //     }
-        //     else{
-        //         document.getElementById('SignIn').click();
-        //     }
-        // }
     }
 </script>
 
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Importowanie zasobów -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://unpkg.com/vue@next"></script>
 <script src="resources/utils.js"></script>
