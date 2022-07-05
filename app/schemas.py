@@ -32,3 +32,6 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: Optional[str] = None
     account_type: Optional[str] = None
+
+class Email(BaseModel):
+    email: EmailStr

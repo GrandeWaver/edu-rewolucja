@@ -1,0 +1,13 @@
+pages = [
+	      showLoading,
+            showSignUp,
+            showSignIn,
+            showWelcomeBack,
+            showSignInWrong,
+            showSignUpTutor,
+            showPanel,
+            showContact,
+            showPrivacyPolicy,
+]
+
+\\ założenia: tylko jedna strona może być otwarta w jednym momencie

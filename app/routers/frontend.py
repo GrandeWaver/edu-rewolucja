@@ -15,16 +15,16 @@ router = APIRouter(
 @router.get("/")
 def testing():
     path =str(Path(BASE_DIR, 'templates'))
-    file_path = os.path.join(path, 'app.html')
+    file_path = os.path.join(path, 'index.html')
     if os.path.exists(file_path):
         return FileResponse(file_path)
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
 
 
-@router.get("/app")
-def mainhome(request: Request):
-    return templates.TemplateResponse('VueIndex.html', {'request': request})
+# @router.get("/app")
+# def mainhome(request: Request):
+#     return templates.TemplateResponse('VueIndex.html', {'request': request})
 
 # @router.get("/")
 # def mainhome(request: Request):
@@ -39,3 +39,5 @@ def testing():
         return FileResponse(file_path)
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
+
+

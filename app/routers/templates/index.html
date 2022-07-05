@@ -1,149 +1,153 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <title>edu-rewolucja</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="/resources/style.css" rel="stylesheet">
+    <title>App</title>
 </head>
 <body>
-<div id="container">
-    <button onclick="load()" type="submit">load</button>
 
-    <h1>rejestracja</h1>
-        <label for="Remail">email:</label>
-        <input type="email" id="Remail" name="Remail"><br><br>
-        <label for="Rfirstname">imie:</label>
-        <input type="text" id="Rfirstname" name="Rfirstname"><br><br>
-        <label for="Rlastname">nazwisko:</label>
-        <input type="text" id="Rlastname" name="Rlastname"><br><br>
-        <label for="Rpassword">hasło:</label>
-        <input type="password" id="Rpassword" name="Rpassword"><br><br>
+<div id="app" v-cloak>
+    <!-- Pasek nawigacyjny (wyświetla się mimo wszystko) -->
+    <a href="https://edu-rewolucja.pl">edu-rewolucja</a>
 
-    <button id="signUp" type="submit">Zarejestruj</button>
+    <div v-if="!isUserAuthenticated" id="authNavi">
+        <i v-if="!showLoading" @click="href('SignIn')" id="SignIn">Zaloguj</i>
+        <i v-if="!showLoading" @click="href('SignUp')" id="SignUp">Zarejestruj</i>
+    </div>
 
+    <div v-if="isUserAuthenticated" id="authNavi">
+        <i @click="href('Panel')" id="Panel">panel</i>
+        <i @click="logout()">wyloguj</i>
+    </div>
 
+    <!-- To co ma się wyświetlać w czasie ładowania strony i sprawdzania czy user jest zalogowany -->
+    <div v-if="showLoading" class="loading">
+        <div class="loader"></div>
+    </div>
 
-    <br><br>
-    <h1>zaloguj</h1>
-        <label for="Lemail">email:</label>
-        <input type="text" id="Lemail" name="Lemail"><br><br>
-        <label for="Lpassword">Hasło:</label>
-        <input type="password" id="Lpassword" name="Lpassword"><br><br>
+    <!-- Gdy user nie jest zalogowany -->
+    <div v-if="showSignUp" id="signUp" class="box signup">
+        <h1>Załóż konto</h1>
+        email:
+        <input :value="userData.email" v-on:keyup.enter="signUpFunc()" type="email" id="Remail">
 
-    <button id="signIn" type="submit">Zaloguj się</button>
+        <div v-if="emailExists" class="redWarning">
+            Użytkownik z tym adresem e-mail już istnieje.
+            <i @click="href('SignIn')" class="blueWarning">Zaloguj się</i>
+        </div>
+        <div v-if="notValidREmail" class="redWarning">
+            Nieprawidłowy adres email
+        </div><br><br>
 
-    <br><br>
-    <h1>nowy post</h1>
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title"><br><br>
-        <label for="content">Content:</label>
-        <input type="text" id="content" name="content"><br><br>
+        imie:</label>
+        <input :value="userData.firstname" v-on:keyup.enter="signUpFunc()" type="text" id="Rfirstname">
 
-    <button id="newPost" type="submit">Zatwierdź</button>
+        <div v-if="emptyFieldFirstname" class="redWarning">
+            Puste pole.
+        </div><br><br>
 
+        nazwisko:
+        <input :value="userData.lastname" v-on:keyup.enter="signUpFunc()" type="text" id="Rlastname">
 
+        <div v-if="emptyFieldLastname" class="redWarning">
+            Puste pole.
+        </div><br><br>
+
+        hasło:
+        <input v-on:keyup.enter="signUpFunc()" type="password" id="Rpassword">
+        <div v-if="passwordTooShort" class="redWarning">
+            Za krótkie hasło
+        </div><br><br>
+
+        <button @click="signUpFunc()" id="signUp" type="submit">Zarejestruj</button>
+    </div>
+    <div v-if="showSignIn" id="signIn" class="box">
+        <h1>Zaloguj się</h1>
+        Email:
+        <input :value="userData.email" v-on:keyup.enter="checkEmailFunc()" type="email" id="Cemail"><br><br>
+
+        <div v-if="notValidCEmail1" class="redWarning">
+            Nie możemy znaleźć konta z takim adresem email
+            <i @click="showScreen('showSignUp')" class="blueWarning">Stwórz nowe konto</i>
+        </div>
+        <div v-if="notValidCEmail2" class="redWarning">
+            Podano nieprawidłowy email
+        </div>
+
+        <button @click="checkEmailFunc()" id="checkEmail" type="submit">Dalej</button>
+    </div>
+    <div v-if="showWelcomeBack" id="welcomeBack" class="box">
+        <h1>Witaj z powrotem</h1>
+        Hasło:
+        <input v-on:keyup.enter="signInFunc()" type="password" id="Lpassword"><br>
+
+        <div v-if="notValidPassword" class="redWarning">
+            Podano nieprawidłowe hasło
+        </div>
+        <button @click="signInFunc()" id="signIn" type="submit">Zaloguj się</button>
+
+    </div>
+    <div v-if="showSignInWrong" id="signInWrong" class="box">Zaloguj się - niepoprawne dane logowania</div>
+    <div v-if="showSignUpTutor" id="signUpTutor" class="box"><b>Załóż konto nauczyciela:</b> napisz na edurewolucja@gmail.com</div>
+
+    <!-- Gdy user jest zalogowany -->
+    <div v-if="showPanel" id="panel" class="panel">
+        Aplikacja - dostęp tylko dla zalogowanych
+        <h2> id użytkownika: {{userData.id}} typ: {{userData.account_type}} </h2>
+            <div v-for="(post,index) in posts" :key="index">
+                <h5> tytuł: {{post.title}} treść: {{post.content}} </h5>
+          </div>
+    </div>
+
+    <!-- Podstrony do Footera -->
+    <div v-if="showContact">
+        <ul>
+            <li>Numer tel: 530 547 713</li>
+            <li>email: edurewolucja@gmail.com</li>
+        </ul>
+    </div>
+
+    <div v-if="showPrivacyPolicy">
+        <h1>Polityka Prywatności</h1>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</p>
+    </div>
+
+    <!-- Footer (wyświetla się mimo wszystko) -->
+    <div class="footer" id="footer">
+        <i @click="href('SignUpTutor')" id="SignUpTutor">Zostań korepetytorem</i>
+        <i @click="href('Contact')" id="Contact">Kontakt</i>
+        <i @click="href('PrivacyPolicy')" id="PrivacyPolicy">Polityka Prywatności</i>
+    </div>
 </div>
-</body>
+
 <script>
-    window.onload=checkAuth()
-////////////////////////////////////////////////////////////////////////////////////////////////////
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-
-    async function checkAuth(){
-        $.ajax({
-            url: "/auth/",
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer "+getCookie('auth')
-            },
-            success: function(a,b,c){
-                console.log(a)
-                console.log("użytkownik jest zalogowany!")
-                },
-            error: function(e){
-                console.log("Zaloguj się!")
-            }
-            },)
+    // czy to w ogóle będzie potrzebne gdy zmienię funkcję init() i dodam tam przekierowania?
+    window.onhashchange = function(){
+        console.log('oswiezenie')
+        var url = window.location.href
+        hash = url.split('#')[1];
+        
+        if (hash) {
+            $(".loading").css("display", "none");
+            document.getElementById(hash).click();
+        } 
+        // else {
+        //     if(document.getElementById('SignIn') == null){
+        //         // document.getElementById('Panel').click();
+        //     }
+        //     else{
+        //         document.getElementById('SignIn').click();
+        //     }
+        // }
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    async function load(){
-        var res = await fetch(
-            "/posts/",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer "+getCookie('auth')
-                },
-            }
-        )
-        res=await res.json()
-        console.log(res)
-    }
-
-$('#signUp').on('click',function(){
-    $.ajax({
-        url: "/users/",
-        method: 'POST',
-        data: JSON.stringify({ 
-            email: $('#Remail').val(),
-            firstname: $('#Rfirstname').val(),
-            lastname: $('#Rlastname').val(),
-            password: $('#Rpassword').val()
-            }),
-        contentType: 'application/json',
-        success: function(){
-            
-            },
-        error: function(e){}
-        },)
-});
-
-
-$('#signIn').on('click',function(){
-    $.ajax({
-        url: "/auth/",
-        method: 'POST',
-        data: { 
-            username: $('#Lemail').val(),
-            password: $('#Lpassword').val()
-            },
-        contentType: 'application/x-www-form-urlencoded',
-        crossDomain: true,
-        success: function(a,b,c){
-            var access_token = JSON.parse(c.responseText)
-            access_token = access_token["access_token"]
-
-            var expire_date = new Date(new Date().getTime()+60*60*1000*720).toGMTString(); // 720h
-            document.cookie = "auth="+access_token+"; expires="+expire_date+"; path=/";
-            },
-        error: function(e){}
-        },)
-});
-
-$('#newPost').on('click',function(){
-    $.ajax({
-        url: "/posts/",
-        method: 'POST',
-        data: JSON.stringify({ 
-            title: $('#title').val(),
-            content: $('#content').val(),
-            published: "true"
-            }),
-        headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer "+getCookie('auth')
-            },
-        success: function(){
-            // podmianka diva
-            },
-        error: function(e){}
-        },)
-});
 </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="resources/utils.js"></script>
+<script src="resources/vue.js"></script>
+
+</body>
 </html>
