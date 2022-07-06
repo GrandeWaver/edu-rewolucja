@@ -69,7 +69,7 @@ let app = Vue.createApp({
           else if(screen == 'showTermsAndConditions'){
             window.location.href = '/#TermsAndConditions'
             resetScreens(_this.sc)
-            _this.sc.TermsAndConditions = true
+            _this.sc.showTermsAndConditions = true
           }
           else if(screen == 'showPanel'){
             window.location.href = '/#Panel'
