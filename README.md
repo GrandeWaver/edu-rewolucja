@@ -2,4 +2,4 @@
 
 discord: https://discord.gg/xtSnvTBx
 <br>
-htpps://website app.edurewolucja.pl
+htpps://app.edurewolucja.pl
