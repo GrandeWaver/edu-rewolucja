@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="/resources/style.css" rel="stylesheet">
     <title>App</title>
+
+    <!-- Google signIn -->
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="365589210157-88s142dtgt2e1hd4muaiqbj6bb96dm5b.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
 
@@ -172,6 +177,38 @@
 <script src="https://unpkg.com/vue@next"></script>
 <script src="resources/utils.js"></script>
 <script src="resources/vue.js"></script>
+
+
+
+<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      }
+    </script>
+
+
+
+    <a href="#" onclick="signOut();">Sign out</a>
+    <script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+        console.log('User signed out.');
+        });
+    }
+    </script>
 
 </body>
 </html>
