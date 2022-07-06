@@ -66,6 +66,11 @@ let app = Vue.createApp({
               resetScreens(_this.sc)
               _this.sc.showPrivacyPolicy = true
           }
+          else if(screen == 'showTermsAndConditions'){
+            window.location.href = '/#TermsAndConditions'
+            resetScreens(_this.sc)
+            _this.sc.TermsAndConditions = true
+          }
           else if(screen == 'showPanel'){
             window.location.href = '/#Panel'
             resetScreens(_this.sc)
@@ -115,6 +120,9 @@ let app = Vue.createApp({
                   }
                   else if (hash == 'PrivacyPolicy') {
                     _this.href('PrivacyPolicy')
+                  }
+                  else if (hash == 'TermsAndConditions') {
+                    _this.href('TermsAndConditions')
                   }
                   else {
                     if(_this.userData.email){

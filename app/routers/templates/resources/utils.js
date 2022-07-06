@@ -43,5 +43,6 @@ function resetScreens(sc){
     sc.showPanel = false
     sc.showContact = false
     sc.showPrivacyPolicy = false
+    sc.showTermsAndConditions = false
 }
 

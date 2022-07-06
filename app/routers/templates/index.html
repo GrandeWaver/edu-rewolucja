@@ -117,6 +117,15 @@
     </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Warunki korzystania z aplikacji screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+<div v-if="sc.TermsAndConditions">
+    <h1>Warunki korzystania z aplikacji</h1>
+    <p>totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</p>
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
     <!-- Footer -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
@@ -124,6 +133,7 @@
         <i @click="href('SignUpTutor')" id="SignUpTutor">Zostań korepetytorem</i>
         <i @click="href('Contact')" id="Contact">Kontakt</i>
         <i @click="href('PrivacyPolicy')" id="PrivacyPolicy">Polityka Prywatności</i>
+        <i @click="href('TermsAndConditions')" id="TermsAndConditions">Watunki korzystania z aplikacji</i>
     </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
