@@ -1,4 +1,5 @@
 # edu-rewolucja-API
 
 discord: https://discord.gg/xtSnvTBx
-website app.edurewolucja.pl
+<br>
+htpps://website app.edurewolucja.pl
