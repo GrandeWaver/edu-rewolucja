@@ -19,6 +19,9 @@ let app = Vue.createApp({
     methods : {
        href: function(url){
           const _this = this
+
+          _this.showLoading = true
+
           window.location.href = '/#'+url
           _this.showScreen(url)
        },
@@ -27,12 +30,11 @@ let app = Vue.createApp({
           var url = window.location.href
           var hash = url.split('#')[1]
           if (hash) {
-            $(".loading").css("display", "none")
+            _this.showLoading = false
             screen = 'show'+hash
           }
 
           console.log(screen + ' opening')
-          _this.showLoading = true
           
           if(screen == 'showSignUp'){
               window.location.href = '/#SignUp'

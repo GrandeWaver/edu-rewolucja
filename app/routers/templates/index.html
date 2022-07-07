@@ -32,11 +32,12 @@
         <i @click="logout()">wyloguj</i>
     </div>
 
+    <div class="container"> <!-- otwarcie containera -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
     <!-- Kręcące się kółko ładowania -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
-    <div v-if="sc.showLoading" class="loading">
+    <div v-if="showLoading" class="loading">
         <div class="loader"></div>
     </div>
 
@@ -97,7 +98,7 @@
     <!-- Kontakt screen -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
-    <div v-if="sc.showContact">
+    <div v-if="sc.showContact" class="box">
         <ul>
             <li>Numer tel: 530 547 713</li>
             <li>email: edurewolucja@gmail.com</li>
@@ -116,16 +117,16 @@
     <!-- Polityka prywatności screen -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
-    <div v-if="sc.showPrivacyPolicy">
+    <div v-if="sc.showPrivacyPolicy" class="box">
         <h1>Polityka Prywatności</h1>
-        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</p>
+        <p>Sed ut et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</p>
     </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
     <!-- Warunki korzystania z aplikacji screen -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
-<div v-if="sc.showTermsAndConditions">
+<div v-if="sc.showTermsAndConditions" class="box">
     <h1>Warunki korzystania z aplikacji</h1>
     <p>totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</p>
 </div>
@@ -152,7 +153,8 @@
                 <h5> tytuł: {{post.title}} treść: {{post.content}} </h5>
             </div>
     </div>
-
+    
+</div> <!-- zamknięcie containera -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 </div>
 
@@ -164,7 +166,7 @@
         var url = window.location.href
         hash = url.split('#')[1];
         if (hash) {
-            $(".loading").css("display", "none");
+            // $(".loading").css("display", "none");
             document.getElementById(hash).click();
         } 
     }
@@ -180,7 +182,7 @@
 
 
 
-<!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     <script>
       function onSignIn(googleUser) {
         // Useful data for your client-side scripts:
@@ -208,7 +210,7 @@
         console.log('User signed out.');
         });
     }
-    </script> -->
+    </script>
 
 </body>
 </html>

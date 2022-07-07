@@ -4,13 +4,13 @@
 .box{
     background-color: rgb(212, 212, 208);
     border: solid grey;
-    width: 300px;
-    height: 200px;
+    width: 30%;
+    height: 20%;
     margin-top: 10px;
     /* position: absolute; */
 }
 .box.signup{
-    height: 300px;
+    height: 30%;
 }
 .panel{
     background-color: rgb(212, 212, 208);
@@ -51,4 +51,9 @@
     color: red;
 }.blueWarning{
     color: blue;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
