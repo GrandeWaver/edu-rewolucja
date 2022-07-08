@@ -41,3 +41,13 @@ def testing():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
 
 
+@router.get("/signup")
+def signup():
+    path =str(Path(BASE_DIR, 'templates'))
+    file_path = os.path.join(path, 'signup.html')
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
+
+

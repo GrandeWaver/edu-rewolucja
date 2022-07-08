@@ -3,6 +3,7 @@ let app = Vue.createApp({
 
     data: function(){
       return { 
+          appleButton: true,
           showLoading: true,
           sc: [], //screens
           userData: [],

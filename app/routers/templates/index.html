@@ -5,11 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="/resources/style.css" rel="stylesheet">
     <title>App</title>
-
-    <!-- Google signIn -->
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="365589210157-88s142dtgt2e1hd4muaiqbj6bb96dm5b.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
 
@@ -45,8 +40,13 @@
     <!-- zarejestruj się screen -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
+
     <div v-if="sc.showSignUp" id="signUp" class="box signup">
         <h1>Załóż konto</h1>
+        <a href="https://appleid.apple.com/auth/authorize?client_id=[CLIENT_ID]&redirect_uri=[REDIRECT_URL]&response_type=code id_token&state=[STATE]&scope=[SCOPES]&response_mode=form_post">Sign In with Apple</a>
+        <br>
+        <a href="https://appleid.apple.com/auth/authorize?client_id=[CLIENT_ID]&redirect_uri=[REDIRECT_URL]&response_type=code id_token&state=[STATE]&scope=[SCOPES]&response_mode=form_post">Sign In with Google</a>
+        <br>
         email:<input :value="userData.email" v-on:keyup.enter="signUpFunc()" type="email" id="Remail" >
         <div v-if="val.emailExists" class="redWarning">Użytkownik z tym adresem e-mail już istnieje.
             <i @click="href('SignIn')" class="blueWarning">Zaloguj się</i>
@@ -182,7 +182,7 @@
 
 
 
-<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+
     <script>
       function onSignIn(googleUser) {
         // Useful data for your client-side scripts:
@@ -200,9 +200,7 @@
       }
     </script>
 
-
-
-    <a href="#" onclick="signOut();">Sign out</a>
+    <!-- <a href="#" onclick="signOut();">Sign out</a>
     <script>
     function signOut() {
         var auth2 = gapi.auth2.getAuthInstance();
@@ -210,7 +208,7 @@
         console.log('User signed out.');
         });
     }
-    </script>
+    </script> -->
 
 </body>
 </html>
