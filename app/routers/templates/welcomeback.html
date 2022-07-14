@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/resources/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
+    <title>Witaj z powrotem</title>
+
+</head>
+<body class="signin">
+
+  <div class="menu">
+    <a href="https://edu-rewolucja.pl" class="brand">edu-rewolucja</a>
+    <div class="menu right">
+      <a href="/signin">Zaloguj się</a>
+      <a href="signup">Zarejestruj</a>
+    </div>
+  </div>
+
+    <div class="container">
+        <div class="box welcomeback">
+          <h1>Witaj z powrotem</h1>
+            <div id="app" v-cloak>
+              <br>
+              <h4>{{userData.email}}</h4>
+              <br>
+
+              <input v-on:keyup.enter="signInFunc()" type="password" id="Lpassword" placeholder="hasło"><br>
+              <div v-if="val.notValidPassword" class="redWarning">Podano nieprawidłowe hasło</div><!-- Błąd hasła -->
+              <button @click="signInFunc()" id="signIn" type="submit">Zaloguj się</button>
+              <br><br><br><br><br><br><br>
+              <a href="#" @click="redirect()" class="blueWarning">Zaloguj za pomocą innego konta</a>
+            </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="resources/utils.js"></script>
+
+<script>
+    let app = Vue.createApp({ 
+    el: "#app",
+
+    data: function(){
+      return { 
+          userData: [],
+          val: [], // walidacja formularzy
+      };
+    },
+    mounted: function (){
+      const _this = this
+      _this.userData.email = getCookie('userCookie')
+    },
+    methods : {
+      redirect: function(){
+        deleteCookie('userCookie')
+        window.location.href = '/signin'
+      },
+      signInFunc: function(){
+          const _this = this
+          $.ajax({
+              url: "/auth/",
+              method: 'POST',
+              data: { 
+                  username: _this.userData.email,
+                  password: $('#Lpassword').val()
+                  },
+              contentType: 'application/x-www-form-urlencoded',
+              success: function(a,b,c){
+                  _this.val.notValidPassword = false
+                  var access_token = JSON.parse(c.responseText)
+                  access_token = access_token["access_token"]
+
+                  var expire_date = new Date(new Date().getTime()+60*60*1000*720).toGMTString(); // 720h
+                  document.cookie = "auth="+access_token+"; expires="+expire_date+"; path=/";
+                  window.location.href = '/'
+                  },
+              error: function(e){
+                console.log(e.responseJSON.detail)
+                _this.val.notValidPassword = true
+              }
+              },)
+      },
+    }
+  })
+  app.mount('#app')
+</script>
+
+</body>
+</html>

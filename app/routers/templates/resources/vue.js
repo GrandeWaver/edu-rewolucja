@@ -3,7 +3,7 @@ let app = Vue.createApp({
 
     data: function(){
       return { 
-          appleButton: true,
+        googleButton: true,
           showLoading: true,
           sc: [], //screens
           userData: [],
@@ -38,19 +38,19 @@ let app = Vue.createApp({
           console.log(screen + ' opening')
           
           if(screen == 'showSignUp'){
-              window.location.href = '/#SignUp'
+              window.location.href = '/signup'
               resetScreens(_this.sc)
               _this.sc.showSignUp = true
               resetVal(_this.val)
           }
           else if(screen == 'showSignIn'){
-            window.location.href = '/#SignIn'
+            window.location.href = '/signin'
               resetScreens(_this.sc)
               _this.sc.showSignIn = true
               resetVal(_this.val)
           }
           else if(screen == 'showWelcomeBack'){
-            window.location.href = '/#WelcomeBack'
+            window.location.href = '/welcomeback'
             resetScreens(_this.sc)
             _this.sc.showWelcomeBack = true
         }
@@ -132,7 +132,7 @@ let app = Vue.createApp({
                       _this.href('WelcomeBack')
                     }
                     else {
-                      _this.href('SignIn')
+                      window.location.href = '/signin'
                     }
                   }
               }
@@ -181,7 +181,7 @@ let app = Vue.createApp({
               contentType: 'application/json',
               success: function(){
                   _this.val.notValidCEmail1 = false
-                  _this.href('SignIn')
+                  window.location.href = '/signin'
                   },
               error: function(e){
                 if(e.responseJSON.detail[0].msg == 'value is not a valid email address'){
@@ -211,7 +211,8 @@ let app = Vue.createApp({
       logout: function(){
           const _this = this
           document.cookie = "auth=let's clean up; expires=Sat, 20 Jan 1980 12:00:00 UTC; path=/";
-          _this.href('SignIn')
+          deleteCookie('userCookie')
+          window.location.href = '/signin'
       },
       checkEmailFunc: function(){
         const _this = this

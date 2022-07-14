@@ -18,6 +18,7 @@ class UserOut(BaseModel):
     email: EmailStr
     firstname: str
     lastname: str
+    picture: str
     created_at: datetime
     account_type: str
 
@@ -35,3 +36,12 @@ class TokenData(BaseModel):
 
 class Email(BaseModel):
     email: EmailStr
+
+class GoogleUser(BaseModel):
+    iss: str
+    firstname: str
+    lastname: str
+    picture: str
+    email: EmailStr
+    email_verified: bool
+    sub: str

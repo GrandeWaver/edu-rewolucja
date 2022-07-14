@@ -5,65 +5,148 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/resources/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
     <title>Sign Up</title>
 
     <!-- Google signIn -->
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="365589210157-88s142dtgt2e1hd4muaiqbj6bb96dm5b.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 </head>
-<body>
-<!-- <div id="app" v-cloak> -->
-    <div class="container">
-        <div class="box">
-            <h1>Stwórz konto</h1>
-            
-            <div id="g_id_onload"
-               data-client_id="365589210157-88s142dtgt2e1hd4muaiqbj6bb96dm5b.apps.googleusercontent.com"
-               data-login_uri="https://localhost:3000/your_login_endpoint"
-               data-auto_prompt="true">
-            </div>
-            <div class="g_id_signin"
-               data-type="standard"
-               data-size="large"
-               data-theme="outline"
-               data-text="sign_in_with"
-               data-shape="rectangular"
-               data-logo_alignment="left">
-            </div>
+<body class="signup">
 
-            <br>
-            <hr>
-            <h2>Lub</h2>
-
-            email:<input :value="userData.email" v-on:keyup.enter="signUpFunc()" type="email" id="Remail" >
-            <!--<div v-if="val.emailExists" class="redWarning">Użytkownik z tym adresem e-mail już istnieje.
-                <i @click="href('SignIn')" class="blueWarning">Zaloguj się</i>
-            </div><!-- Błąd emaila 1 -->
-            <!--<div v-if="val.notValidREmail" class="redWarning">Nieprawidłowy adres email</div><!-- Błąd emaila 2 -->
-            <br><br>
-            imie:<input :value="userData.firstname" v-on:keyup.enter="signUpFunc()" type="text" id="Rfirstname">
-            <!--<div v-if="val.emptyFieldFirstname" class="redWarning">Puste pole.</div><!-- Błąd pustego pola -->
-            <br><br>
-            nazwisko:<input :value="userData.lastname" v-on:keyup.enter="signUpFunc()" type="text" id="Rlastname">
-            <!--<div v-if="val.emptyFieldLastname" class="redWarning">Puste pole.</div><!-- Błąd pustego pola -->
-            <br><br>
-            hasło:<input v-on:keyup.enter="signUpFunc()" type="password" id="Rpassword">
-            <!--<div v-if="val.passwordTooShort" class="redWarning">Za krótkie hasło</div><!-- Błąd zbyt krótkiego hasła -->
-            <br><br>
-            <button @click="signUpFunc()" id="signUp" type="submit">Zarejestruj</button>
-        </div>
+  <div class="menu">
+    <a href="https://edu-rewolucja.pl" class="brand">edu-rewolucja</a>
+    <div class="menu right">
+      <a href="/signin">Zaloguj się</a>
+      <a href="signup">Zarejestruj</a>
     </div>
-<!-- </div> -->
+  </div>
 
+  <div class="container">
+    <div class="box">
+      <h1>Załóż konto</h1>
+      Masz już konto? <a href="/signin">Zaloguj się</a><br>
+      
+      <br>
+      <div class="opacity50">Zarejestruj się przy użyciu Google</div>
+      <br>
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <div id="g_id_onload"
+        data-client_id="365589210157-88s142dtgt2e1hd4muaiqbj6bb96dm5b.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+      </div>
+      
+      <br><br>
+      <div class="strike"><span>Lub</span></div>
+      <br>
+
+      <div class="opacity50">Zarejestruj się przez adres email</div>
+      <div id="app" v-cloak>
+        <input :value="userData.email" v-on:keyup.enter="signUpFunc()" type="email" id="Remail" placeholder="adres email">
+        <div v-if="val.emailExists" class="redWarning">Użytkownik z tym adresem e-mail już istnieje.
+            <i @click="href('SignIn')" class="blueWarning">Zaloguj się</i>
+        </div><!-- Błąd emaila 1 -->
+        <div v-if="val.notValidREmail" class="redWarning">Nieprawidłowy adres email</div><!-- Błąd emaila 2 -->
+        <input :value="userData.firstname" v-on:keyup.enter="signUpFunc()" type="text" id="Rfirstname" placeholder="imie">
+        <div v-if="val.emptyFieldFirstname" class="redWarning">Puste pole.</div><!-- Błąd pustego pola -->
+        <input :value="userData.lastname" v-on:keyup.enter="signUpFunc()" type="text" id="Rlastname" placeholder="nazwisko">
+        <div v-if="val.emptyFieldLastname" class="redWarning">Puste pole.</div><!-- Błąd pustego pola -->
+        <input v-on:keyup.enter="signUpFunc()" type="password" id="Rpassword" placeholder="hasło">
+        <div v-if="val.passwordTooShort" class="redWarning">Za krótkie hasło</div><!-- Błąd zbyt krótkiego hasła -->
+        <button @click="signUpFunc()" id="signUp" type="submit">Załóż konto</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a class="footerItem" href="/#SignUpTutor">Zostań korepetytorem</a>
+    <a class="footerItem" href="/#Contact" id="Contact">Kontakt</a>
+    <a class="footerItem" href="/#PrivacyPolicy" id="PrivacyPolicy">Polityka Prywatności</a>
+    <a class="footerItem" href="/#TermsAndConditions" id="TermsAndConditions">Watunki korzystania z aplikacji</a>
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://unpkg.com/vue@next"></script>
 <script src="resources/utils.js"></script>
-<script src="resources/vue.js"></script> -->
+
+<script>
+    let app = Vue.createApp({ 
+    el: "#app",
+
+    data: function(){
+      return { 
+        googleButton: true,
+          showLoading: true,
+          sc: [], //screens
+          userData: [],
+          posts: [],
+          val: [], // walidacja formularzy
+          isUserAuthenticated: false,
+      };
+    },
+    mounted : function() {
+      // sprawdz czy nie jest już zalogowany (z ciasteczka)
+    },
+    methods : {
+      signUpFunc: function(){
+          const _this = this
+          _this.userData.email = $('#Remail').val()
+          _this.userData.firstname = $('#Rfirstname').val()
+          _this.userData.lastname = $('#Rlastname').val()
+          $.ajax({
+              url: "/users/",
+              method: 'POST',
+              data: JSON.stringify({ 
+                  email: _this.userData.email,
+                  firstname: _this.userData.firstname,
+                  lastname: _this.userData.lastname,
+                  password: $('#Rpassword').val()
+                  }),
+              contentType: 'application/json',
+              success: function(){
+                  _this.val.notValidCEmail1 = false
+                  window.location.href = '/signin'
+                  },
+              error: function(e){
+                if(e.responseJSON.detail[0].msg == 'value is not a valid email address'){
+                  resetVal(_this.val)
+                  _this.val.notValidREmail = true
+                }
+                else if(e.responseJSON.detail == 'User already exists'){
+                  resetVal(_this.val)
+                  _this.val.emailExists = true
+                }
+                else if(e.responseJSON.detail == 'Empty field: firstname'){
+                  resetVal(_this.val)
+                  _this.val.emptyFieldFirstname = true
+                }
+                else if(e.responseJSON.detail == 'Empty field: lastname'){
+                  resetVal(_this.val)
+                  _this.val.emptyFieldLastname = true
+                }
+                else if(e.responseJSON.detail == 'Password is too short'){
+                  resetVal(_this.val)
+                  _this.val.passwordTooShort = true
+                }
+                console.log(e.responseJSON)
+              }
+              },)
+      },
+    }
+  })
+  app.mount('#app')
+</script>
+
 </body>
 </html>

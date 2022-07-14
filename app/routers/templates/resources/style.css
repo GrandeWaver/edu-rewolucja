@@ -1,16 +1,27 @@
 [v-cloak]{
     display: none;
 }
+*{
+    font-family: 'Inter', sans-serif;
+}
+.signup{
+    background-color: #E2E2E2;
+}
+.signin{
+    background-color: #F4E4FF;
+}
 .box{
-    background-color: rgb(212, 212, 208);
-    border: solid grey;
-    width: 30%;
-    height: 20%;
-    margin-top: 10px;
+    background-color: #FFFFFF;
+    width: 400px;
+    height: 600px;
+    padding: 15px;
     /* position: absolute; */
 }
-.box.signup{
-    height: 30%;
+.box.signin{
+    height: 500px;
+}
+.box.welcomeback{
+    height: 400px;
 }
 .panel{
     background-color: rgb(212, 212, 208);
@@ -19,12 +30,26 @@
     width: 500px;
     height: 500px;
 }
+.menu{
+    font-size: large;
+}
+.menu.right{
+    float: right;
+}
+.brand{
+    font-size: 30px;
+    font-weight: 600;
+}
 .footer {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
     text-align: center;
+}
+.footerItem{
+    margin-left: 10px;
+    margin-right: 10px;
 }
 .loading{
     position: absolute;
@@ -56,8 +81,83 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 25px;
 }
-.signin-button > div > div > svg {  
-    height: 50px;  
-    width: 100%;  
-  } 
+.opacity50{
+    opacity: 0.5;
+}
+.strike {
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap; 
+    opacity: 0.5;
+}
+
+.strike > span {
+    position: relative;
+    display: inline-block;
+}
+.strike > span:before,
+.strike > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: black;
+}
+
+.strike > span:before {
+    right: 100%;
+    margin-right: 15px;
+}
+
+.strike > span:after {
+    left: 100%;
+    margin-left: 15px;
+}
+input {
+    border: none;
+    border-bottom: 1px solid rgb(122, 122, 122);
+    width: 100%;
+    height: 25px;
+    margin-top: 25px;
+}
+button{
+    float: right;
+    margin-top: 25px;
+    background: #8DCCF0;
+    color: black;
+    height: 30px;
+    width: 100px;
+    border: none;
+    border-radius: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

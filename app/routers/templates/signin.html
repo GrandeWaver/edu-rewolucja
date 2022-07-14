@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/resources/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
+    <title>Sign In</title>
+
+    <!-- Google signIn -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+<body class="signin">
+
+  <div class="menu">
+    <a href="https://edu-rewolucja.pl" class="brand">edu-rewolucja</a>
+    <div class="menu right">
+      <a href="/signin">Zaloguj się</a>
+      <a href="signup">Zarejestruj</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="box signin">
+      <h1>Zaloguj się</h1>
+      Nowy użytkownik? <a href="/signup">Utwórz konto</a><br><br>
+      
+      <br>
+      <div class="opacity50">Kontynuuj z Google</div>
+      <br>
+
+      <div id="g_id_onload"
+        data-client_id="365589210157-88s142dtgt2e1hd4muaiqbj6bb96dm5b.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+      </div>
+
+      <br><br><br>
+      <div class="strike"><span>Lub</span></div>
+      <br><br>
+      
+      <div id="app" v-cloak>
+        Email:<input :value="userData.email" v-on:keyup.enter="checkEmailFunc()" type="email" id="Cemail" placeholder="example@gmail.com"><br><br>
+        <div v-if="val.notValidCEmail1" class="redWarning">
+            Nie możemy znaleźć konta z takim adresem email
+            <i @click="href('SignUp')" class="blueWarning">Stwórz nowe konto</i>
+        </div><!-- Błąd emaila -->
+        <div v-if="val.notValidCEmail2" class="redWarning">Podano nieprawidłowy email</div><!-- Błąd emaila -->
+        <button @click="checkEmailFunc()" id="checkEmail" type="submit">Dalej</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <a class="footerItem" href="/#SignUpTutor">Zostań korepetytorem</a>
+    <a class="footerItem" href="/#Contact" id="Contact">Kontakt</a>
+    <a class="footerItem" href="/#PrivacyPolicy" id="PrivacyPolicy">Polityka Prywatności</a>
+    <a class="footerItem" href="/#TermsAndConditions" id="TermsAndConditions">Watunki korzystania z aplikacji</a>
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="resources/utils.js"></script>
+
+<script>
+    let app = Vue.createApp({ 
+    el: "#app",
+
+    data: function(){
+      return { 
+          userData: [],
+          val: [], // walidacja formularzy
+      };
+    },
+    mounted : function() {
+      // sprawdz czy nie jest już zalogowany (z ciasteczka)
+      
+      // lub jeśli ma userCookie to przenieś na welcomeback
+      if(getCookie('userCookie') != null){
+        window.location.href = '/welcomeback'
+      }
+    },
+    methods : {
+      checkEmailFunc: function(){
+        const _this = this
+        _this.userData.email = $('#Cemail').val()
+        console.log(_this.userData)
+        createUserCookie(_this.userData.email)
+        $.ajax({
+          url: "/users/check",
+          method: 'POST',
+          data: JSON.stringify({ 
+              email: $('#Cemail').val(),
+              }),
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          success: function(a,b,c){
+              if(a.response == 'true'){
+                createUserCookie(_this.userData.email)  
+                window.location.href = '/welcomeback'
+              }
+              else{
+                  _this.val.notValidCEmail1 = true
+                  _this.val.notValidCEmail2 = false
+              }
+              },
+          error: function(e){
+              _this.val.notValidCEmail2 = true
+              _this.val.notValidCEmail1 = false
+          }
+          },)
+      },
+    }
+  })
+  app.mount('#app')
+</script>
+
+</body>
+</html>

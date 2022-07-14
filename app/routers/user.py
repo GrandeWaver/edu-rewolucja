@@ -1,8 +1,12 @@
 from sqlalchemy import true
 from .. import utils, schemas
+from pathlib import Path
 from ..database import *
 from fastapi import HTTPException, status, APIRouter
 from pydantic import EmailStr
+from fastapi.responses import FileResponse
+
+BASE_DIR = Path(__file__).resolve().parent
 
 router = APIRouter(
     prefix="/users",
@@ -56,3 +60,23 @@ def get_user(id: int):
     cursor.execute("""SELECT * FROM users WHERE id = %s""", (id,))
     user = cursor.fetchone()
     return user
+
+
+@router.get('/picture/{id}')
+def get_photo(id: int):
+    cursor.execute("""SELECT picture FROM users WHERE id = %s""", (id,))
+    photo_link = cursor.fetchone()
+    if photo_link["picture"] == None:
+        return {'picture': '/users/defaultpicture'}
+    else:
+        return {'picture': photo_link["picture"]}
+
+
+@router.get("/defaultpicture")
+def image_endpoint():
+    path =str(Path(BASE_DIR, 'images'))
+    file_path = os.path.join(path, 'avatar.jpg')
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
