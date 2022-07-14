@@ -94,3 +94,33 @@ function handleCredentialResponse(response) {
          }
          },)
  }
+
+//  function getUserBasicData(id) {
+//  $.ajax({
+//        url: "/users/",
+//        method: 'POST',
+//        data: JSON.stringify({ 
+//          iss: responsePayload.iss,
+//          firstname: responsePayload.given_name,
+//          lastname: responsePayload.family_name,
+//          picture: responsePayload.picture,
+//          email: responsePayload.email,
+//          email_verified: responsePayload.email_verified,
+//          sub: responsePayload.sub
+//            }),
+//            headers: {
+//                "Content-Type": "application/json",
+//            },
+//        success: function(a, b, c){
+//          var access_token = JSON.parse(c.responseText)
+//          access_token = access_token["access_token"]
+
+//          var expire_date = new Date(new Date().getTime()+60*60*1000*720).toGMTString(); // 720h
+//          document.cookie = "auth="+access_token+"; expires="+expire_date+"; path=/";
+//          window.location.href = '/'
+//            },
+//        error: function(e){
+//          alert(e.responseJSON.detail)
+//        }
+//        },)
+// }

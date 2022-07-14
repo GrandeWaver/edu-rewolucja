@@ -98,7 +98,6 @@ let app = Vue.createApp({
                   _this.isUserAuthenticated = true
                   _this.userData = userData
                   console.log(_this.userData)
-                  console.log(hash)
                   // przekierowania
                   if (hash == 'WelcomeBack') {
                     _this.href('Panel')

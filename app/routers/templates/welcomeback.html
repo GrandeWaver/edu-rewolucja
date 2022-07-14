@@ -13,30 +13,36 @@
 </head>
 <body class="signin">
 
-  <div class="menu">
-    <a href="https://edu-rewolucja.pl" class="brand">edu-rewolucja</a>
-    <div class="menu right">
-      <a href="/signin">Zaloguj się</a>
-      <a href="signup">Zarejestruj</a>
-    </div>
+<div class="menu">
+  <a href="https://edu-rewolucja.pl" class="brand">edu-rewolucja</a>
+  <div class="menu right">
+    <a href="/signin">Zaloguj się</a>
+    <a href="signup">Zarejestruj</a>
   </div>
+</div>
 
-    <div class="container">
-        <div class="box welcomeback">
-          <h1>Witaj z powrotem</h1>
-            <div id="app" v-cloak>
-              <br>
-              <h4>{{userData.email}}</h4>
-              <br>
+  <div class="container">
+    <div class="box welcomeback">
+      <h1>Witaj z powrotem</h1>
+        <div id="app" v-cloak>
+          <br>
+          <h4>{{userData.email}}</h4>
+          <br>
 
-              <input v-on:keyup.enter="signInFunc()" type="password" id="Lpassword" placeholder="hasło"><br>
-              <div v-if="val.notValidPassword" class="redWarning">Podano nieprawidłowe hasło</div><!-- Błąd hasła -->
-              <button @click="signInFunc()" id="signIn" type="submit">Zaloguj się</button>
-              <br><br><br><br><br><br><br>
-              <a href="#" @click="redirect()" class="blueWarning">Zaloguj za pomocą innego konta</a>
-            </div>
+          <input v-on:keyup.enter="signInFunc()" type="password" id="Lpassword" placeholder="hasło"><br>
+          <div v-if="val.notValidPassword" class="redWarning">Podano nieprawidłowe hasło</div><!-- Błąd hasła -->
+          <button @click="signInFunc()" id="signIn" type="submit">Zaloguj się</button>
+          <br><br><br><br><br><br><br>
+          <a href="#" @click="redirect()" class="blueWarning">Zaloguj za pomocą innego konta</a>
         </div>
     </div>
+  </div>
+  <div class="footer">
+    <a class="footerItem" href="/#SignUpTutor">Zostań korepetytorem</a>
+    <a class="footerItem" href="/#Contact" id="Contact">Kontakt</a>
+    <a class="footerItem" href="/#PrivacyPolicy" id="PrivacyPolicy">Polityka Prywatności</a>
+    <a class="footerItem" href="/#TermsAndConditions" id="TermsAndConditions">Watunki korzystania z aplikacji</a>
+  </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://unpkg.com/vue@next"></script>

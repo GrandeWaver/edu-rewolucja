@@ -4,7 +4,7 @@ from pathlib import Path
 from ..database import *
 from fastapi import HTTPException, status, APIRouter
 from pydantic import EmailStr
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -66,10 +66,7 @@ def get_user(id: int):
 def get_photo(id: int):
     cursor.execute("""SELECT picture FROM users WHERE id = %s""", (id,))
     photo_link = cursor.fetchone()
-    if photo_link["picture"] == None:
-        return {'picture': '/users/defaultpicture'}
-    else:
-        return {'picture': photo_link["picture"]}
+    return RedirectResponse(photo_link["picture"])
 
 
 @router.get("/defaultpicture")

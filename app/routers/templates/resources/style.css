@@ -33,6 +33,9 @@
 .menu{
     font-size: large;
 }
+.menu.forPanel{
+    background-color: #F4F4F4;
+}
 .menu.right{
     float: right;
 }
