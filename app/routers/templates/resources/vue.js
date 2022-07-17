@@ -1,18 +1,21 @@
-let app = Vue.createApp({ 
+const headersAuth = {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer "+getCookie('auth')
+}
+
+const app = new Vue({ 
     el: "#app",
-
-    data: function(){
-      return { 
-        googleButton: true,
-          showLoading: true,
-          sc: [], //screens
-          userData: [],
-          posts: [],
-          val: [], // walidacja formularzy
-          isUserAuthenticated: false,
-      };
+    data: {
+      showLoading: true,
+      sc: [], //screens
+      val: [], // walidacja formularzy
+      userData: [],
+      classes: [],
+      posts: [],
+      isUserAuthenticated: false,
+      currClass: [],
+      // messages: [],
     },
-
     mounted : function() {
       this.init()
     },
@@ -20,9 +23,7 @@ let app = Vue.createApp({
     methods : {
        href: function(url){
           const _this = this
-
           _this.showLoading = true
-
           window.location.href = '/#'+url
           _this.showScreen(url)
        },
@@ -33,10 +34,14 @@ let app = Vue.createApp({
           if (hash) {
             _this.showLoading = false
             screen = 'show'+hash
-          }
 
+            number = url.split('Class')[1] // numer zajęć, które klient chce zobaczyć
+            if(number){
+              screen = 'showClass' // wyczyszczenie numeru, po to aby wyświetlić screen
+            }
+          }
           console.log(screen + ' opening')
-          
+        
           if(screen == 'showSignUp'){
               window.location.href = '/signup'
               resetScreens(_this.sc)
@@ -78,22 +83,24 @@ let app = Vue.createApp({
             window.location.href = '/#Panel'
             resetScreens(_this.sc)
             _this.sc.showPanel = true
-            _this.loadPosts()
+            _this.loadClasses()
+        }
+        else if(screen == 'showClass'){
+          window.location.href = '/#Class'+number
+          resetScreens(_this.sc)
+          _this.sc.showClass = true
+          _this.loadPosts(number)
         }
       },
       init: function(){
-        var url = window.location.href
-        var hash = url.split('#')[1]
         const _this = this
+        var hash = window.location.href.split('#')[1]
         var userEmailCookie = getCookie("userCookie")
         _this.userData.email = userEmailCookie
           $.ajax({
               url: "/auth/",
               method: 'GET',
-              headers: {
-                  "Content-Type": "application/json",
-                  "Authorization": "Bearer "+getCookie('auth')
-              },
+              headers: headersAuth,
               success: function(userData){
                   _this.isUserAuthenticated = true
                   _this.userData = userData
@@ -208,8 +215,7 @@ let app = Vue.createApp({
               },)
       },
       logout: function(){
-          const _this = this
-          document.cookie = "auth=let's clean up; expires=Sat, 20 Jan 1980 12:00:00 UTC; path=/";
+          deleteCookie('auth')
           deleteCookie('userCookie')
           window.location.href = '/signin'
       },
@@ -224,9 +230,7 @@ let app = Vue.createApp({
             data: JSON.stringify({ 
                 email: $('#Cemail').val(),
                 }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: {"Content-Type": "application/json"},
             success: function(a,b,c){
                 if(a.response == 'true'){
                     _this.href('WelcomeBack')
@@ -242,26 +246,42 @@ let app = Vue.createApp({
             }
             },)
       },
-// --------------------------------- po autoryzacji ---------------------------------
-      loadPosts: function () {
-        url = document.URL
-        if(url.includes("#")){
-            url = url.split('#')[0]
-        }
+// ---------------------------- load application data --------------------------------------
+      loadPosts: function (class_id) {
         const _this = this
+        url = splitUrl(document.URL)
+        // GET subject AND schedules
         $.ajax({
           method: "GET",
-          url: url+"posts/",
+          url: url+"posts/classes/"+class_id,
           dataType: "json",
-          headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer "+getCookie('auth')
-          },
-          success: function (posts){
-              console.log(posts)
-              _this.posts = posts;
+          headers: headersAuth,
+          success: function (currClass){
+              _this.currClass = currClass;
+              console.log(_this.currClass)
          }});
+         setTimeout(() => {
+            $.ajax({
+            method: "GET",
+            url: url+"posts/"+class_id,
+            dataType: "json",
+            headers: headersAuth,
+            success: function (posts){
+                _this.posts = posts;
+          }});
+         }, 30)
+      },
+      loadClasses: function () {
+        const _this = this
+        url = splitUrl(document.URL)
+        $.ajax({
+          method: "GET",
+          url: url+"posts/classes/",
+          dataType: "json",
+          headers: headersAuth,
+          success: function (classes){
+              _this.classes = classes;
+          }});
       },
     }
   })
-  app.mount('#app')

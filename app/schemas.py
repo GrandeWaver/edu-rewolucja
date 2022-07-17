@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import token
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
@@ -37,11 +38,5 @@ class TokenData(BaseModel):
 class Email(BaseModel):
     email: EmailStr
 
-class GoogleUser(BaseModel):
-    iss: str
-    firstname: str
-    lastname: str
-    picture: str
-    email: EmailStr
-    email_verified: bool
-    sub: str
+class GoogleToken(BaseModel):
+    token: str

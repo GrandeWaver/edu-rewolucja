@@ -86,7 +86,6 @@
 
     data: function(){
       return { 
-        googleButton: true,
           showLoading: true,
           sc: [], //screens
           userData: [],
@@ -97,6 +96,7 @@
     },
     mounted : function() {
       // sprawdz czy nie jest już zalogowany (z ciasteczka)
+      // jeśli ma ciastko 'auth' to przenieś na /#Panel
     },
     methods : {
       signUpFunc: function(){

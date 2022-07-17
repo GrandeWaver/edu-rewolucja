@@ -15,19 +15,6 @@ function deleteCookie(name) {
     }
   }
 
-// function isUserCookie(){
-//     console.log("wywołanie funckjji: isUserCookie()")
-//     let cookie = getCookie('userCookie')
-//     if (cookie == undefined){
-//         createUserCookie()
-//         var isCookie = false
-//     }
-//     else {
-//         var isCookie = true
-//     }
-//     return isCookie
-// }
-
 function resetVal(val){
     val.notValidCEmail1 = false
     val.notValidCEmail2 = false
@@ -50,33 +37,16 @@ function resetScreens(sc){
     sc.showContact = false
     sc.showPrivacyPolicy = false
     sc.showTermsAndConditions = false
+    sc.showClass = false
 }
 
-function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-};
-
 function handleCredentialResponse(response) {
-    // decode the credential response from google.
-    const responsePayload = parseJwt(response.credential);
-
    $.ajax({
          url: "/auth/googleuser",
          method: 'POST',
          data: JSON.stringify({ 
-           iss: responsePayload.iss,
-           firstname: responsePayload.given_name,
-           lastname: responsePayload.family_name,
-           picture: responsePayload.picture,
-           email: responsePayload.email,
-           email_verified: responsePayload.email_verified,
-           sub: responsePayload.sub
+          // tu wysyłany jest tylko token, który backend sam sobie odszyfruje
+           token: response.credential,
              }),
              headers: {
                  "Content-Type": "application/json",
@@ -95,32 +65,10 @@ function handleCredentialResponse(response) {
          },)
  }
 
-//  function getUserBasicData(id) {
-//  $.ajax({
-//        url: "/users/",
-//        method: 'POST',
-//        data: JSON.stringify({ 
-//          iss: responsePayload.iss,
-//          firstname: responsePayload.given_name,
-//          lastname: responsePayload.family_name,
-//          picture: responsePayload.picture,
-//          email: responsePayload.email,
-//          email_verified: responsePayload.email_verified,
-//          sub: responsePayload.sub
-//            }),
-//            headers: {
-//                "Content-Type": "application/json",
-//            },
-//        success: function(a, b, c){
-//          var access_token = JSON.parse(c.responseText)
-//          access_token = access_token["access_token"]
-
-//          var expire_date = new Date(new Date().getTime()+60*60*1000*720).toGMTString(); // 720h
-//          document.cookie = "auth="+access_token+"; expires="+expire_date+"; path=/";
-//          window.location.href = '/'
-//            },
-//        error: function(e){
-//          alert(e.responseJSON.detail)
-//        }
-//        },)
-// }
+ function splitUrl(url){
+    new_url = url
+    if(new_url.includes("#")){
+      new_url = new_url.split('#')[0]
+    }
+    return new_url
+ }

@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="/resources/style.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
     <title>App</title>
 
     <!-- Google signIn -->
@@ -16,18 +20,19 @@
     <!-- Pasek nawigacyjny -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
     <div class="menu forPanel">
+        <img v-if="isUserAuthenticated && !sc.showPanel" @click="href('Panel')" id="Panel" class="backArrow" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Google_material_icons_arrow_back_24px.svg/1024px-Google_material_icons_arrow_back_24px.svg.png">
         <a href="https://edu-rewolucja.pl" class="brand">edu-rewolucja</a>
 
         <!-- Gdy user nie jest zalogowany -->
         <div v-if="!isUserAuthenticated" id="authNavi" class="menu right">
-            <i v-if="!sc.showLoading" @click="href('SignIn')" id="SignIn">Zaloguj </i>
-            <i v-if="!sc.showLoading" @click="href('SignUp')" id="SignUp">Zarejestruj</i>
+            <a v-if="!sc.showLoading" @click="href('SignIn')" id="SignIn">Zaloguj się </a>
+            <a v-if="!sc.showLoading" @click="href('SignUp')" id="SignUp">Zarejestruj</a>
         </div>
 
         <!-- Gdy user jest zalogowany -->
         <div v-if="isUserAuthenticated" id="authNavi" class="menu right">
-            <i @click="href('Panel')" id="Panel">panel </i>
-            <i @click="logout()">wyloguj</i>
+            <i class="opacity50">id użytkownika: {{userData.id}} typ: {{userData.account_type}}</i>
+            <a @click="logout()">wyloguj</a>
             <!-- <img v-bind:src="'/users/picture/'+userData.id" height="40"> ta metoda nie wczytuje zdjęcia za pierwszym razem :/ -->
         </div>
     </div>
@@ -46,8 +51,6 @@
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
     <div v-if="sc.showSignUp" id="signUp" class="box signup">
-
-
 
         <h1>Załóż konto</h1>
 
@@ -114,21 +117,50 @@
     <div class="footer" id="footer">
         <i class="footerItem" @click="href('SignUpTutor')" id="SignUpTutor">Zostań korepetytorem</i>
         <i class="footerItem" @click="href('Contact')" id="Contact">Kontakt</i>
-        <i class="footerItem" @click="href('PrivacyPolicy')" id="PrivacyPolicy">Polityka Prywatności</i>
+        <i class="footerItem" @click="href('PrivacyPolicy')">Polityka Prywatności</i>
         <i class="footerItem" @click="href('TermsAndConditions')" id="TermsAndConditions">Watunki korzystania z aplikacji</i>
     </div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Lista osób - pusher -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+    <!-- <div class="friendList">
+        <h2>Lista osób</h2>
+        <li v-for="message in messages">
+            {{message}}
+          </li>
+    </div> -->
+
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
     <!-- Panel screen -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
     <div v-if="sc.showPanel" id="panel" class="panel">
-        Aplikacja - dostęp tylko dla zalogowanych
-        <h2> id użytkownika: {{userData.id}} typ: {{userData.account_type}} </h2>
-            <div v-for="(post,index) in posts" :key="index">
-                <h5> tytuł: {{post.title}} treść: {{post.content}} </h5>
+        Twoje zajęcia
+            <div v-for="(class_,index) in classes" :key="index" class="class" @click="href('Class'+class_.id)">
+                <h5> przedmiot: {{class_.subject}}</h5>
+                <h5 v-if="userData.account_type == 'tutor'"> uczeń: {{class_.firstname}} {{class_.lastname}}</h5>
+                <h5 v-if="userData.account_type == 'student'"> nauczyciel: {{class_.firstname}} {{class_.lastname}}</h5>
+                <h5> day: {{class_.day}}</h5>
+                <h5> hour: {{class_.hour}}:00</h5>
             </div>
     </div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Class screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+<div v-if="sc.showClass" id="class" class="panel">
+    {{currClass[0].subject}} {{currClass[0].day}} {{currClass[0].hour}}:00
+    
+        <div v-for="(post,index) in posts" :key="index" class="class post" @click="href('post-'.$post.id)">
+            <h5> tytuł: {{post.title}}</h5>
+            <h5> data: {{post.created_at}}</h5>
+            <h5> content: {{post.content}}</h5>
+        </div>
+</div>
     
 </div> <!-- zamknięcie containera -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -152,9 +184,28 @@
     <!-- Importowanie zasobów -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://unpkg.com/vue@next"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="resources/utils.js"></script>
 <script src="resources/vue.js"></script>
+
+<script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+
+
+<!-- <script>
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = false;
+
+    var pusher = new Pusher('94fb841a5b6a5b0fd651', {
+      cluster: 'eu'
+    });
+
+    var channel = pusher.subscribe('frontend');
+    channel.bind('privacy-policy', function(data) {
+        // alert("przeniesiemy cie na polityke prywatnosci")
+        app.messages.push(JSON.stringify(data));
+        console.log(data)
+    })
+</script> -->
 
 </body>
 </html>

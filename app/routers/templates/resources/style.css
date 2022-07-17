@@ -4,6 +4,9 @@
 *{
     font-family: 'Inter', sans-serif;
 }
+body{
+    margin: 0;
+}
 .signup{
     background-color: #E2E2E2;
 }
@@ -25,10 +28,39 @@
 }
 .panel{
     background-color: rgb(212, 212, 208);
-    border: solid grey;
-    margin-top: 5px;
-    width: 500px;
-    height: 500px;
+    display: grid;
+    gap: 1rem;
+
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+}
+.class{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #035509;
+    font-size: 1rem;
+    color: #fff;
+    box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    transition: all 500ms;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.class:hover{
+    box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+    transform: translateY(-3px) scale(1.1);
+}
+.class.post{
+    background: #2d0bf1;
+}
+.backArrow{
+    height: 35px;
 }
 .menu{
     font-size: large;
@@ -137,7 +169,9 @@ button{
     border: none;
     border-radius: 25px;
 }
-
+.post{
+    background-color: aquamarine;
+}
 
 
 

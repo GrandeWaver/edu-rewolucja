@@ -59,6 +59,9 @@
       };
     },
     mounted: function (){
+      // sprawdz czy nie jest już zalogowany (z ciasteczka)
+      // jeśli ma ciastko 'auth' to przenieś na /#Panel
+      
       const _this = this
       _this.userData.email = getCookie('userCookie')
     },
