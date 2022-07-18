@@ -60,7 +60,8 @@ body{
     background: #2d0bf1;
 }
 .backArrow{
-    height: 35px;
+    height: 25px;
+    width: 35px;
 }
 .menu{
     font-size: large;
@@ -90,6 +91,7 @@ body{
     position: absolute;
     left: 0; 
     right: 0; 
+    margin-top: 30%;
     margin-left: auto; 
     margin-right: auto; 
     width: 100px;

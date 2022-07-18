@@ -14,9 +14,35 @@ def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
     posts = cursor.fetchall()
     return posts
 
+
+# SELECT id as class_id, subject, j_id, hour, day, tutor_id, student_id
+# FROM 
+# (SELECT join_schedules.id as j_id, hour, day
+# FROM join_schedules, schedules
+# WHERE join_schedules.schedules_id = schedules.id) as schedules
+# LEFT JOIN classes
+# ON schedules.j_id = classes.schedule_id
+
+@router.get("/schedules/{class_id}")
+def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
+    cursor.execute("""
+    SELECT id as class_id, day, hour
+    FROM 
+    (SELECT join_schedules.class_id as j_id, hour, day
+    FROM join_schedules, schedules
+    WHERE join_schedules.schedules_id = schedules.id) as schedules
+    LEFT JOIN classes
+    ON schedules.j_id = classes.schedule_id
+    WHERE j_id = %s
+    """, [class_id])
+    schedules = cursor.fetchall()
+    print(schedules)
+    return schedules
+
 @router.get("/classes/")
 def get_posts(user_data = Depends(oauth2.get_current_user)):
     if user_data.account_type == 'tutor':
+        # usunąć day i hour
         cursor.execute("""SELECT 
         classes.id,
         subject, 
@@ -31,6 +57,7 @@ def get_posts(user_data = Depends(oauth2.get_current_user)):
         return classes
 
     if user_data.account_type == 'student':
+        # usunąć day i hour
         cursor.execute("""SELECT 
         classes.id,
         subject, 
@@ -48,6 +75,7 @@ def get_posts(user_data = Depends(oauth2.get_current_user)):
 @router.get("/classes/{class_id}")
 def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
     if user_data.account_type == 'tutor':
+        # usunąć day i hour
         cursor.execute("""SELECT 
         classes.id,
         subject, 
@@ -62,6 +90,7 @@ def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
         return classes
 
     if user_data.account_type == 'student':
+        # usunąć day i hour
         cursor.execute("""SELECT 
         classes.id,
         subject, 
