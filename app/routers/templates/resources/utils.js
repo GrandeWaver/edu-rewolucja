@@ -82,7 +82,6 @@ async function getData(url = ''){
 
  async function getSchedules(_this, classes){
   list_id = []
-  
   classes.map(value => {list_id.push(value.id)})
 
   let i = 0;
@@ -90,19 +89,8 @@ async function getData(url = ''){
     await getData(url+"posts/schedules/"+_this.classes[i].id)
       .then(data => {
         _this.schedules.push(data)
+        console.log(_this.schedules)
         i++
       })
   }
-
-  console.log(_this.classes)
-  console.log(_this.schedules)
-
-  // for (let i in classes){
-  //   fetch(url+"posts/schedules/"+classes[i].id, {
-  //     dataType: "json",
-  //     headers: headersAuth,
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => console.log(data))
-  // }
  }

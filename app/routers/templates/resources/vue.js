@@ -175,32 +175,7 @@ const app = new Vue({
           .then(data => {
             _this.classes = data
             getSchedules(_this, data)
-            console.log(_this.classes)
           })
-
-
-        // $.ajax({
-        //   method: "GET",
-        //   url: url+"posts/classes/",
-        //   dataType: "json",
-        //   headers: headersAuth,
-        //   success: function (classes){
-        //       _this.classes = classes;
-        //       for (let i in classes){
-        //         setTimeout(() => {
-        //           $.ajax({
-        //             method: "GET",
-        //             url: url+"posts/schedules/"+classes[i].id,
-        //             dataType: "json",
-        //             headers: headersAuth,
-        //             success: function (schedules){
-        //               console.log(schedules)
-        //                 // _this.classes.push(schedules);
-        //                 // console.log(classes)
-        //           }});
-        //        }, 50) // NAPRAW TO !!!!!!!  SZYBKO !!
-        //       }
-        //   }});
       },
     }
   })

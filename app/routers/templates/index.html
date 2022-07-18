@@ -154,10 +154,9 @@
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
 <div v-if="sc.showClass" id="class" class="panel">
-    {{currClass[0].subject}} 
-    <br>
+    <div v-for="curr in currClass"><b>{{curr.subject}}</b></div>
     <div v-for="currSchedule in currSchedules"> 
-        {{currSchedule.day}} {{currSchedule.hour}}:00<br>
+        {{currSchedule.day}}: {{currSchedule.hour}}:00<br>
     </div>
     
         <div v-for="(post,index) in posts" :key="index" class="class post" @click="href('post-'.$post.id)">
