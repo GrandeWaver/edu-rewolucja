@@ -154,16 +154,23 @@
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
 <div v-if="sc.showClass" id="class" class="panel">
-    <div v-for="curr in currClass"><b>{{curr.subject}}</b></div>
-    <div v-for="currSchedule in currSchedules"> 
-        {{currSchedule.day}}: {{currSchedule.hour}}:00<br>
-    </div>
-    
-        <div v-for="(post,index) in posts" :key="index" class="class post" @click="href('post-'.$post.id)">
-            <h5> tytuł: {{post.title}}</h5>
-            <h5> data: {{post.created_at}}</h5>
-            <h5> content: {{post.content}}</h5>
+    <div v-for="curr in currClass"><b>{{curr.subject}}</b>
+        <div v-for="currSchedule in currSchedules"> 
+            {{currSchedule.day}}: {{currSchedule.hour}}:00<br>
         </div>
+        <div class="makePost">
+            <input @click="expandFormFunc()" v-model="newPost.title" placeholder="Ogłoś coś...">
+            <textarea v-if="expandForm" v-model="newPost.content" placeholder="Opis" rows="6"></textarea>
+            <br>
+            <button v-if="expandForm" @click="submitPost(curr.id)">Wyślij</button>
+            <button v-if="expandForm" @click="hideForm()">Anuluj</button>
+        </div>
+    </div>
+    <div v-for="(post,index) in posts" :key="index" class="class post" @click="href('post-'.$post.id)">
+        <h5> tytuł: {{post.title}}</h5>
+        <h5> data: {{post.created_at}}</h5>
+        <h5> content: {{post.content}}</h5>
+    </div>
 </div>
     
 </div> <!-- zamknięcie containera -->

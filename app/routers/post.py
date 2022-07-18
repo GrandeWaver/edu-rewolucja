@@ -10,7 +10,7 @@ router = APIRouter(
 
 @router.get("/{class_id}")
 def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
-    cursor.execute("""SELECT * FROM posts WHERE class_id = %s""", [class_id])
+    cursor.execute("""SELECT * FROM posts WHERE class_id = %s order by created_at desc""", [class_id])
     posts = cursor.fetchall()
     return posts
 
@@ -86,8 +86,8 @@ def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_posts(post: schemas.Post, user_data = Depends(oauth2.get_current_user)):
-    cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """, 
-    (post.title, post.content, post.published))
+    cursor.execute("""INSERT INTO posts (title, content, published, class_id) VALUES (%s, %s, %s, %s) RETURNING * """, 
+    (post.title, post.content, post.published, post.class_id))
 
     conn.commit()
     new_post = cursor.fetchone()

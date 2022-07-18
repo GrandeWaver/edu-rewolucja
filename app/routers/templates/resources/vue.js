@@ -14,7 +14,9 @@ const app = new Vue({
       posts: [],
       isUserAuthenticated: false,
       currClass: [],
-      currSchedules: []
+      currSchedules: [],
+      expandForm: false,
+      newPost: [],
       // messages: [],
     },
     mounted : function() {
@@ -150,6 +152,34 @@ const app = new Vue({
           deleteCookie('auth')
           deleteCookie('userCookie')
           window.location.href = '/signin'
+      },
+      expandFormFunc: function(){
+        const _this = this
+        _this.expandForm = true
+      },
+      hideForm: function(){
+        const _this = this
+        _this.expandForm = false
+      },
+      submitPost: function(class_id){
+        const _this = this
+        _this.newPost.class_id = class_id
+        console.log(_this.newPost)
+        fetch(url+"posts/", {
+          method: "POST",
+          dataType: "json",
+          body: JSON.stringify({
+            title: _this.newPost.title,
+            content: _this.newPost.content,
+            class_id: _this.newPost.class_id
+          }),
+          headers: headersAuth,
+        })
+        .then({
+          _this: _this.expandForm = false,
+          _this: _this.loadPosts(number),
+          _this: _this.newPost = []
+        })
       },
 // ---------------------------- load application data --------------------------------------
       loadPosts: function (class_id) {
