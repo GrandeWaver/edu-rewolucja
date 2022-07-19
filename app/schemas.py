@@ -4,10 +4,20 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 class Post(BaseModel):
+    id: int
     title: str
     content: str
+    created_at: datetime
+
+class PostDetails(BaseModel):
+    id: int
+    title: str
+    content: str
+    created_at: datetime
     class_id: int
-    published: bool = True
+    # comments
+    # files
+    # etc
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -41,3 +51,19 @@ class Email(BaseModel):
 
 class GoogleToken(BaseModel):
     token: str
+
+class Schedule(BaseModel):
+    day: str
+    hour: int
+
+class Class(BaseModel):
+    id: int
+    subject: str
+    firstname: str
+    lastname: str
+
+class ClassDetails(BaseModel):
+    subject: str
+    # firstname
+    # lastname
+    # homework

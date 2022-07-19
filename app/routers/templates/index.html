@@ -20,7 +20,7 @@
     <!-- Pasek nawigacyjny -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
     <div class="menu forPanel">
-        <img v-if="isUserAuthenticated && !sc.showPanel" @click="href('Panel')" id="Panel" class="backArrow" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Google_material_icons_arrow_back_24px.svg/1024px-Google_material_icons_arrow_back_24px.svg.png">
+        <img v-if="isUserAuthenticated && !sc.showPanel" @click="backArrowFunc()" id="Panel" class="backArrow" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Google_material_icons_arrow_back_24px.svg/1024px-Google_material_icons_arrow_back_24px.svg.png">
         <a href="https://edu-rewolucja.pl" class="brand">edu-rewolucja</a>
 
         <!-- Gdy user nie jest zalogowany -->
@@ -147,6 +147,7 @@
                     {{schedule.day}} {{schedule.hour}}:00<br>
                 </div>
             </a>
+            <img @click="href('Newclass1')" id="Newclass1" class="plusIcon" src="https://cdn0.iconfinder.com/data/icons/very-basic-2-android-l-lollipop-icon-pack/24/plus-512.png">
     </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -166,11 +167,72 @@
             <button v-if="expandForm" @click="hideForm()">Anuluj</button>
         </div>
     </div>
-    <div v-for="(post,index) in posts" :key="index" class="class post" @click="href('post-'.$post.id)">
+    <div v-for="(post,index) in posts" :key="index" class="class post" v-bind:id="'Post'+post.id" @click="href('Post'+post.id)">
         <h5> tytuł: {{post.title}}</h5>
         <h5> data: {{post.created_at}}</h5>
         <h5> content: {{post.content}}</h5>
     </div>
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Post screen -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+<div v-if="sc.showPost" v-for="curr in currPost" id="post" class="panel">
+    <h1>Tytuł: {{curr.title}}</h1>
+    <h3>{{curr.created_at}}</h3>
+    <h2>Opis: {{curr.content}}</h2>
+    <br>
+    W przyszłości: komentarze i załączone pliki
+    
+
+    <div v-bind:id="'Class'+curr.class_id" @click="href('Class'+curr.class_id)">&nbsp</div> <!--  div potrzebny do nawigacji -->
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- New Class1 -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+<div v-if="sc.showNewclass1" class="panel">
+    Czego chcesz się uczyć?
+        <div v-for="">
+            <div @click="href('Newclass2');" class="choose">matematyka</div>
+            <br>
+            <!-- <div @click="href('Newclass2'); select({{subject}})" class="chooseSubject">angielski</div> -->
+        </div>
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- New Class2 -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+<div v-if="sc.showNewclass2" class="panel">
+    Wybierz nauczyciela
+        <div v-for="">
+            <img>
+            <div @click="href('Newclass3');" class="choose tutor">
+                Tomek Mróz
+                <div>lekcji:</div>
+                <div>stopień:</div>
+            </div>
+            <br>
+
+        </div>
+</div>
+
+<!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- New Class3 -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
+
+<div v-if="sc.showNewclass3" class="panel">
+    Wybierz termin pierwszej lekcji
+        <div>
+            lekcji subcject
+            wtorek 23 lipca
+
+            <br>
+            <button @click="href('Panel');">Zapisz</button>
+        </div>
 </div>
     
 </div> <!-- zamknięcie containera -->
@@ -185,7 +247,6 @@
         var url = window.location.href
         hash = url.split('#')[1];
         if (hash) {
-            // $(".loading").css("display", "none");
             document.getElementById(hash).click();
         } 
     }

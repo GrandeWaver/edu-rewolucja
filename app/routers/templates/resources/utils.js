@@ -38,6 +38,10 @@ function resetScreens(sc){
   sc.showPrivacyPolicy = false
   sc.showTermsAndConditions = false
   sc.showClass = false
+  sc.showPost = false
+  sc.showNewclass1 = false
+  sc.showNewclass2 = false
+  sc.showNewclass3 = false
 }
 
 function handleCredentialResponse(response) {
@@ -86,10 +90,9 @@ async function getData(url = ''){
 
   let i = 0;
   for (const e of list_id){
-    await getData(url+"posts/schedules/"+_this.classes[i].id)
+    await getData(url+"classes/schedules/"+_this.classes[i].id)
       .then(data => {
         _this.schedules.push(data)
-        console.log(_this.schedules)
         i++
       })
   }

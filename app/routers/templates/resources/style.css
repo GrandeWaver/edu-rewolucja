@@ -182,8 +182,25 @@ button{
 .post{
     background-color: aquamarine;
 }
-.makePost{
-    
+.plusIcon{
+    background-color: #2AB5F2;
+    position: fixed;
+    left: 5%;
+    bottom: 5%;
+    width: 100px;
+    border-radius: 50%;
+    text-align: center;
+}
+.choose{
+    cursor: pointer;
+    height: 50px;
+}
+.choose:hover{
+    background-color: #b9b9b9;
+    color: black;
+}
+.choose.tutor{
+    height: 90px;
 }
 
 

@@ -15,6 +15,7 @@ const app = new Vue({
       isUserAuthenticated: false,
       currClass: [],
       currSchedules: [],
+      currPost: [],
       expandForm: false,
       newPost: [],
       // messages: [],
@@ -38,9 +39,15 @@ const app = new Vue({
             _this.showLoading = false
             screen = 'show'+hash
 
-            number = url.split('Class')[1] // numer zajęć, które klient chce zobaczyć
-            if(number){
+            class_id = url.split('Class')[1] // numer zajęć, które klient chce zobaczyć
+            if(class_id){
               screen = 'showClass' // wyczyszczenie numeru, po to aby wyświetlić screen
+            }
+
+            post_id = url.split('Post')[1] // numer posta, który klient chce zobaczyć
+            if(post_id){
+              _this.currPost.post_id = post_id
+              screen = 'showPost' // wyczyszczenie numeru, po to aby wyświetlić screen
             }
           }
           console.log(screen + ' opening')
@@ -90,10 +97,31 @@ const app = new Vue({
             _this.currSchedules = [] //czyszczenie pamięci
         }
         else if(screen == 'showClass'){
-          window.location.href = '/#Class'+number
+          window.location.href = '/#Class'+class_id
           resetScreens(_this.sc)
           _this.sc.showClass = true
-          _this.loadPosts(number)
+          _this.loadPosts(class_id)
+        }
+        else if(screen == 'showPost'){
+          window.location.href = '/#Post'+post_id
+          resetScreens(_this.sc)
+          _this.sc.showPost = true
+          _this.loadCurrPost(post_id)
+        }
+        else if(screen == 'showNewclass1'){
+          window.location.href = '/#Newclass1'
+          resetScreens(_this.sc)
+          _this.sc.showNewclass1 = true
+        }
+        else if(screen == 'showNewclass2'){
+          window.location.href = '/#Newclass2'
+          resetScreens(_this.sc)
+          _this.sc.showNewclass2 = true
+        }
+        else if(screen == 'showNewclass3'){
+          window.location.href = '/#Newclass3'
+          resetScreens(_this.sc)
+          _this.sc.showNewclass3 = true
         }
       },
       init: function(){
@@ -148,6 +176,17 @@ const app = new Vue({
               },)
       },
 // ---------------------------- utils --------------------------------------
+      backArrowFunc: function(){
+        const _this = this
+        var url = window.location.href
+        post = url.split('Post')[1]
+        if(post){
+          _this.href('Class'+_this.currPost[0].class_id)
+        }
+        else {
+          _this.href('Panel')
+        }
+      },
       logout: function(){
           deleteCookie('auth')
           deleteCookie('userCookie')
@@ -177,7 +216,7 @@ const app = new Vue({
         })
         .then({
           _this: _this.expandForm = false,
-          _this: _this.loadPosts(number),
+          _this: _this.loadPosts(class_id),
           _this: _this.newPost = []
         })
       },
@@ -185,13 +224,13 @@ const app = new Vue({
       loadPosts: function (class_id) {
         const _this = this
         url = splitUrl(document.URL)
-        getData(url+"posts/classes/"+class_id)
+        getData(url+"classes/details/"+class_id)
         .then(data => {
           _this.currClass = data
           getData(url+"posts/"+class_id)
             .then(data => {
               _this.posts = data
-              getData(url+"posts/schedules/"+class_id)
+              getData(url+"classes/schedules/"+class_id)
                 .then(data => {
                   _this.currSchedules = data
             })
@@ -200,12 +239,23 @@ const app = new Vue({
       },
       loadClasses: function () {
         const _this = this
+        _this.schedules = [] // czyszczenie pamięci
         url = splitUrl(document.URL)
-        getData(url+"posts/classes/")
+        getData(url+"classes/")
           .then(data => {
             _this.classes = data
             getSchedules(_this, data)
           })
       },
+      loadCurrPost: function (post_id){
+        const _this = this
+        _this.schedules = [] // czyszczenie pamięci
+        _this.currPost = [] // czyszczenie pamięci
+        url = splitUrl(document.URL)
+        getData(url+"posts/details/"+post_id)
+        .then(data => {
+          _this.currPost = data
+        })
+      }
     }
   })

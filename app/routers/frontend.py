@@ -22,6 +22,14 @@ def testing():
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
 
+@router.get("/favicon.ico")
+def testing():
+    path =str(Path(BASE_DIR, 'images'))
+    file_path = os.path.join(path, 'favicon.png')
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
 
 # @router.get("/app")
 # def mainhome(request: Request):
@@ -82,6 +90,7 @@ def signup():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
 
 
+# testing pushera
 @router.get("/privacy-policy")
 def testing():
     pusher_client.trigger('frontend', 'privacy-policy', {'message': 'hello'})
