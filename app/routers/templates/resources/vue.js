@@ -18,10 +18,16 @@ const app = new Vue({
       currPost: [],
       expandForm: false,
       newPost: [],
+      selected_day: "Pn",
+      selected_day_index: 0,
+      select: {rank: ["początkujący"],}, // domyślnie zaznaczony stopień nauki
+      days: ["Pn","Wt","Śr","Cz","Pt","Sb","Nd"],
+      availability: {},
       // messages: [],
     },
     mounted : function() {
       this.init()
+      importAvailability(this)
     },
 
     methods : {
@@ -203,7 +209,6 @@ const app = new Vue({
       submitPost: function(class_id){
         const _this = this
         _this.newPost.class_id = class_id
-        console.log(_this.newPost)
         fetch(url+"posts/", {
           method: "POST",
           dataType: "json",
@@ -218,6 +223,93 @@ const app = new Vue({
           _this: _this.expandForm = false,
           _this: _this.loadPosts(class_id),
           _this: _this.newPost = []
+        })
+        .then(result => {
+          console.log('Success:', result);
+        })
+        .catch(error => {
+          alert('Error:', error);
+        })
+      },
+      selectDay: function (day, index){
+        const _this = this
+        _this.selected_day = day
+        _this.selected_day_index = index
+      },
+      downDayFunc: function(){
+        const _this = this
+        if(_this.selected_day_index == 0){
+          return
+        }
+        new_index = _this.selected_day_index-1
+        new_day = _this.days[new_index]
+        _this.selectDay(new_day, new_index)
+      },
+      upDayFunc: function(){
+        const _this = this
+        if(_this.selected_day_index == 6){
+          return
+        }
+        new_index = _this.selected_day_index+1
+        new_day = _this.days[new_index]
+        _this.selectDay(new_day, new_index)
+      },
+      changeClass(index) {
+        const _this = this
+        if(index == _this.selected_day_index){
+          return 'selectedDay yes'
+        }
+        else {
+          return 'SelectedDay'
+        }
+      },
+      addSchedule(selected_day){
+        const _this = this
+        _this.availability[selected_day][0].available = true
+        pushToschedule(_this, selected_day)
+      },
+      deleteSchedule(selected_day){
+        const _this = this
+        if(Object.keys(_this.availability[selected_day][0].schedule).length == 1){
+          _this.availability[selected_day][0].available = false
+        }
+        _this.availability[selected_day][0].schedule.pop()
+      },
+      isDictEmpty(selected_day){
+        const _this = this
+        if(Object.keys(_this.availability[selected_day][0].schedule).length == 0){
+          pushToschedule(_this, selected_day)
+        }
+      },
+      submitClassTutor(){
+        const _this = this
+        console.log(_this.availability)
+        let subject = _this.select.subject
+        rank_coded = codeRank(_this.select.rank)
+
+        let tutor_id = _this.userData.id
+        console.log(
+          'subject: '+subject+
+          '\nrank: '+rank_coded+
+          '\ntutor_id: '+tutor_id
+        )
+        fetch(url+"create_class/", {
+          method: "POST",
+          dataType: "json",
+          body: JSON.stringify({
+            subject: subject,
+            rank: rank_coded,
+            tutor_id: tutor_id,
+            availability: _this.availability
+          }),
+          headers: headersAuth,
+        })
+        .then(result => {
+          console.log('Success:', result);
+          _this.href('Panel')
+        })
+        .catch(error => {
+          alert('Error:', error);
         })
       },
 // ---------------------------- load application data --------------------------------------
@@ -256,6 +348,6 @@ const app = new Vue({
         .then(data => {
           _this.currPost = data
         })
-      }
-    }
+      },
+    },
   })

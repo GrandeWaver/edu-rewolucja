@@ -10,7 +10,7 @@ router = APIRouter(
 )
 
 @router.post('/')
-def auth(user_credentials: OAuth2PasswordRequestForm = Depends()):
+def auth(user_credentials: OAuth2PasswordRequestForm = Depends(OAuth2PasswordRequestForm)):
 
     cursor.execute("""SELECT * FROM users WHERE email = %s""", (user_credentials.username,))
     user = cursor.fetchone()

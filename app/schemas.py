@@ -1,5 +1,5 @@
 from lib2to3.pgen2 import token
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
@@ -8,6 +8,11 @@ class Post(BaseModel):
     title: str
     content: str
     created_at: datetime
+
+class NewPost(BaseModel):
+    class_id: int
+    title: str
+    content: str
 
 class PostDetails(BaseModel):
     id: int
@@ -64,6 +69,31 @@ class Class(BaseModel):
 
 class ClassDetails(BaseModel):
     subject: str
+    id: int
     # firstname
     # lastname
     # homework
+
+class ScheduleModel(BaseModel):
+    start: int
+    end: int
+
+class DayModel(BaseModel):
+    available: bool
+    name: str
+    schedule: List[ScheduleModel]
+
+class WeekModel(BaseModel):
+    Pn: List[DayModel]
+    Wt: List[DayModel]
+    Śr: List[DayModel]
+    Cz: List[DayModel]
+    Pt: List[DayModel]
+    Sb: List[DayModel]
+    Nd: List[DayModel]
+
+class CreateNewClass(BaseModel):
+    subject: str
+    rank: str
+    tutor_id: int
+    availability: WeekModel

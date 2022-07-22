@@ -183,7 +183,7 @@
     <h3>{{curr.created_at}}</h3>
     <h2>Opis: {{curr.content}}</h2>
     <br>
-    W przyszłości: komentarze i załączone pliki
+    W przyszłości: czat i załączone pliki
     
 
     <div v-bind:id="'Class'+curr.class_id" @click="href('Class'+curr.class_id)">&nbsp</div> <!--  div potrzebny do nawigacji -->
@@ -194,12 +194,16 @@
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
 <div v-if="sc.showNewclass1" class="panel">
-    Czego chcesz się uczyć?
-        <div v-for="">
-            <div @click="href('Newclass2');" class="choose">matematyka</div>
-            <br>
-            <!-- <div @click="href('Newclass2'); select({{subject}})" class="chooseSubject">angielski</div> -->
-        </div>
+    <div v-if="userData.account_type == 'student'"><b>Czego chcesz się uczyć?</b></div>
+    <div v-if="userData.account_type == 'tutor'"><b>Czego chcesz uczyć?</b></div>
+
+    <br>
+
+    <div @click="href('Newclass2'); select.subject='matematyka'" class="choose">matematyka</div>
+    <div @click="href('Newclass2'); select.subject='angielski'" class="choose">angielski</div>
+
+    <!-- <br> -->
+    <!-- <i>Nie ma twojego przedmiotu? Napisz do nas: <a href="mailto:edurewolucja@gmail.com">edurewolucja@gmail.com</a></i> -->
 </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -207,7 +211,8 @@
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
 <div v-if="sc.showNewclass2" class="panel">
-    Wybierz nauczyciela
+    <div v-if="userData.account_type == 'student'">
+        Wybierz nauczyciela
         <div v-for="">
             <img>
             <div @click="href('Newclass3');" class="choose tutor">
@@ -216,8 +221,32 @@
                 <div>stopień:</div>
             </div>
             <br>
-
         </div>
+    </div>
+    <div v-if="userData.account_type == 'tutor'">
+        <b>Jakiego stopnia nauki chcesz uczyć?</b>
+
+        <label class="mini-container">początkujący
+            <input type="checkbox" checked="checked" value="początkujący" v-model="select.rank">
+            <span class="checkmark"></span>
+          </label>
+          <label class="mini-container">podstawowy
+            <input type="checkbox" value="podstawowy" v-model="select.rank">
+            <span class="checkmark"></span>
+          </label>
+          <label class="mini-container">średni
+            <input type="checkbox" value="średni" v-model="select.rank">
+            <span class="checkmark"></span>
+          </label>
+          <label class="mini-container">zaawansowany
+            <input type="checkbox" value="zaawansowany" v-model="select.rank">
+            <span class="checkmark"></span>
+          </label>
+
+          <br>
+        <button @click="href('Newclass3');">Zapisz</button>
+    </div>
+
 </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -225,14 +254,51 @@
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
 <div v-if="sc.showNewclass3" class="panel">
-    Wybierz termin pierwszej lekcji
-        <div>
-            lekcji subcject
-            wtorek 23 lipca
+    <div v-if="userData.account_type == 'student'">
+        Wybierz termin pierwszej lekcji
+        
+        Poniedziałek
+        Wtorek
+        Środa
+        Czwartek
+        Piątek
+        Sobota Niedziela
 
-            <br>
-            <button @click="href('Panel');">Zapisz</button>
+        <button @click="href('Panel');">Zapisz</button>
+    </div>
+
+    <div v-if="userData.account_type == 'tutor'">
+        W jakie dni chcesz mieć zajęcia?
+
+        <div v-for="(day, index) in days">
+            <div @click="selectDay(day, index)">
+                <div :class="changeClass(index)">{{day}}</div>
+            </div>
         </div>
+
+        <h1>
+            <a @click="downDayFunc()"><</a> 
+            {{availability[selected_day][0].name}} 
+            <a @click="upDayFunc()">></a>
+        </h1>
+
+
+        <label @click="isDictEmpty(selected_day)" class="mini-container">W ten dzień chcę mieć zajęcia
+            <input type="checkbox" checked="checked" value=!availability[selected_day][0].available v-model="availability[selected_day][0].available">
+            <span class="checkmark"></span>
+        </label>
+
+        <div v-if="availability[selected_day][0].available" v-for="schedule in availability[selected_day][0].schedule">
+            od <input type="number" min="0" max="24" v-model="schedule.start" placeholder="wpisz godzinę" class="inputNumber"/>:00
+            do <input type="number" min="0" max="24" v-model="schedule.end" placeholder="wpisz godzinę" class="inputNumber"/>:00
+            <br>
+        </div>
+
+        <a v-if="availability[selected_day][0].available" @click="addSchedule(selected_day)"> dodaj</a>
+        <a v-if="availability[selected_day][0].available" @click="deleteSchedule(selected_day)">usuń </a>
+
+        <button @click="submitClassTutor()">Zapisz</button>
+    </div>
 </div>
     
 </div> <!-- zamknięcie containera -->

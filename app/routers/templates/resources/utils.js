@@ -97,3 +97,131 @@ async function getData(url = ''){
       })
   }
  }
+
+ function pushToschedule(_this, selected_day){
+  let last_index = Object.keys(_this.availability[selected_day][0].schedule).length
+  if(last_index == 0){
+    _this.availability[selected_day][0].schedule.push(
+      {
+        start: 11,
+        end: 16
+      }
+    )
+    return
+  }
+  last_hour_start = parseInt(_this.availability[selected_day][0].schedule[last_index-1].start)
+  last_hour_end = parseInt(_this.availability[selected_day][0].schedule[last_index-1].end)
+  // walidacja 24 godzin
+  if(last_hour_end >= 24){
+    return
+  }
+  else{
+    if(last_hour_end + 3 > 24){
+      last_hour_end = 24
+      _this.availability[selected_day][0].schedule.push(
+        {
+          start: last_hour_end - 1,
+          end: last_hour_end
+        }
+      )
+    }
+    else{
+      _this.availability[selected_day][0].schedule.push(
+        {
+          start: last_hour_end + 1,
+          end: last_hour_end + 3
+        }
+      )
+    }
+  }
+ }
+
+ function importAvailability(_this){
+  _this.availability = {
+    Pn: [
+      {name: "poniedziałek",
+      available: true,
+      schedule: [
+          {
+            start: 11,
+            end: 16
+          }
+        ]
+      }
+    ],
+  Wt: [{
+      name: "wtorek",
+      available: true,
+      schedule: [
+        {
+          start: 11,
+          end: 16
+        }
+      ]
+    }],
+    Śr: [{
+      name: "środa",
+      available: true,
+      schedule: [
+        {
+          start: 11,
+          end: 16
+        }
+      ]
+    }],
+    Cz: [{
+      name: "czwartek",
+      available: true,
+      schedule: [
+        {
+          start: 11,
+          end: 16
+        }
+      ]
+    }],
+    Pt: [{
+      name: "piątek",
+      available: true,
+      schedule: [
+        {
+          start: 11,
+          end: 16
+        }
+      ]
+    }],
+    Sb: [{
+      name: "sobota",
+      available: true,
+      schedule: [
+        {
+          start: 8,
+          end: 16
+        }
+      ]
+    }],
+    Nd: [{
+      name: "niedziela",
+      available: false,
+      schedule: []
+    }],
+  }
+ }
+
+ function codeRank(rank_encoded){
+  let rank_coded = ''
+
+  if(rank_encoded.includes("początkujący")){
+    rank_coded += '1'
+  }
+  if(rank_encoded.includes("podstawowy")){
+    rank_coded += '2'
+  }
+  if(rank_encoded.includes("średni")){
+    rank_coded += '3'
+  }
+  if(rank_encoded.includes("zaawansowany")){
+    rank_coded += '4'
+  }
+  
+  return rank_coded
+ }
