@@ -280,6 +280,9 @@ const app = new Vue({
         if(Object.keys(_this.availability[selected_day][0].schedule).length == 0){
           pushToschedule(_this, selected_day)
         }
+        if (_this.availability[selected_day][0].available){
+          _this.availability[selected_day][0].schedule = []
+        }
       },
       submitClassTutor(){
         const _this = this
