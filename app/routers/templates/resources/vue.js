@@ -304,8 +304,10 @@ const app = new Vue({
           }),
           headers: headersAuth,
         })
-        .then(result => {
-          console.log('Success:', result);
+        .then(response => {
+          if(response.status == 500){
+            alert('error: błąd połączenia z bazą danych... \nkod błędu: 500')
+          }
           _this.href('Panel')
         })
         .catch(error => {
