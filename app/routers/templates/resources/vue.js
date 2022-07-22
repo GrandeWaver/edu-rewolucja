@@ -128,6 +128,10 @@ const app = new Vue({
           window.location.href = '/#Newclass3'
           resetScreens(_this.sc)
           _this.sc.showNewclass3 = true
+          if(_this.select.subject == undefined){
+            alert('Błąd: dodaj zajęcia jeszcze raz :) \nBardzo przepraszamy')
+            this.href('Panel')
+          }
         }
       },
       init: function(){
@@ -287,15 +291,11 @@ const app = new Vue({
       submitClassTutor(){
         const _this = this
         console.log(_this.availability)
+        // if każdy dzień availability = false -> alert i przekierowanie na  panel (bez wysyłania do bd)
         let subject = _this.select.subject
         rank_coded = codeRank(_this.select.rank)
 
         let tutor_id = _this.userData.id
-        console.log(
-          'subject: '+subject+
-          '\nrank: '+rank_coded+
-          '\ntutor_id: '+tutor_id
-        )
         fetch(url+"create_class/", {
           method: "POST",
           dataType: "json",
@@ -310,6 +310,9 @@ const app = new Vue({
         .then(response => {
           if(response.status == 500){
             alert('error: błąd połączenia z bazą danych... \nkod błędu: 500')
+          }
+          if(response.status == 418){
+            alert('error: Brak wsparcia dla leniów \nkod błędu: 418')
           }
           _this.href('Panel')
         })
