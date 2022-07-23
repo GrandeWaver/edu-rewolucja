@@ -290,8 +290,6 @@ const app = new Vue({
       },
       submitClassTutor(){
         const _this = this
-        console.log(_this.availability)
-        // if każdy dzień availability = false -> alert i przekierowanie na  panel (bez wysyłania do bd)
         let subject = _this.select.subject
         rank_coded = codeRank(_this.select.rank)
 
@@ -313,6 +311,9 @@ const app = new Vue({
           }
           if(response.status == 418){
             alert('error: Brak wsparcia dla leniów \nkod błędu: 418')
+          }
+          if(response.status == 409){
+            alert('Te zajęcia do tego przedmiotu są już stworzone, poinformujemy cię gdy znajdzie się chętny uczeń')
           }
           _this.href('Panel')
         })

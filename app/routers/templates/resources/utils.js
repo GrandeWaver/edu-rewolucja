@@ -137,74 +137,90 @@ async function getData(url = ''){
  }
 
  function importAvailability(_this){
-  _this.availability = {
-    Pn: [
-      {name: "poniedziałek",
-      available: true,
-      schedule: [
-          {
-            start: 11,
-            end: 16
-          }
-        ]
-      }
+  _this.availability = 
+  {
+    "Pn":[
+       {
+          "name":"poniedziałek",
+          "available":true,
+          "schedule":[
+             {
+                "start":11,
+                "end":16
+             }
+          ]
+       }
     ],
-  Wt: [{
-      name: "wtorek",
-      available: true,
-      schedule: [
-        {
-          start: 11,
-          end: 16
-        }
-      ]
-    }],
-    Śr: [{
-      name: "środa",
-      available: true,
-      schedule: [
-        {
-          start: 11,
-          end: 16
-        }
-      ]
-    }],
-    Cz: [{
-      name: "czwartek",
-      available: true,
-      schedule: [
-        {
-          start: 11,
-          end: 16
-        }
-      ]
-    }],
-    Pt: [{
-      name: "piątek",
-      available: true,
-      schedule: [
-        {
-          start: 11,
-          end: 16
-        }
-      ]
-    }],
-    Sb: [{
-      name: "sobota",
-      available: true,
-      schedule: [
-        {
-          start: 8,
-          end: 16
-        }
-      ]
-    }],
-    Nd: [{
-      name: "niedziela",
-      available: false,
-      schedule: []
-    }],
-  }
+    "Wt":[
+       {
+          "name":"wtorek",
+          "available":true,
+          "schedule":[
+             {
+                "start":11,
+                "end":16
+             }
+          ]
+       }
+    ],
+    "Śr":[
+       {
+          "name":"środa",
+          "available":true,
+          "schedule":[
+             {
+                "start":11,
+                "end":16
+             }
+          ]
+       }
+    ],
+    "Cz":[
+       {
+          "name":"czwartek",
+          "available":true,
+          "schedule":[
+             {
+                "start":11,
+                "end":16
+             }
+          ]
+       }
+    ],
+    "Pt":[
+       {
+          "name":"piątek",
+          "available":true,
+          "schedule":[
+             {
+                "start":11,
+                "end":16
+             }
+          ]
+       }
+    ],
+    "Sb":[
+       {
+          "name":"sobota",
+          "available":true,
+          "schedule":[
+             {
+                "start":8,
+                "end":16
+             }
+          ]
+       }
+    ],
+    "Nd":[
+       {
+          "name":"niedziela",
+          "available":false,
+          "schedule":[
+             
+          ]
+       }
+    ]
+ }
  }
 
  function codeRank(rank_encoded){

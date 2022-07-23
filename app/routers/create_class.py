@@ -17,9 +17,15 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
     availability = data.availability #potrzebne w eval()
     days = ["Pn","Wt","Śr","Cz","Pt","Sb","Nd"]
 
+    cursor.execute("""SELECT id FROM available_classes WHERE tutor_id = %s AND subject = %s""", (tutor_id, subject))
+    is_already = cursor.fetchone()
+    print(is_already)
+    if is_already != None:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"You have already created this class")
+
     available_check = []
     for day in days:
-        available = eval(f' availability.{day}[0].available')
+        available = eval(f'availability.{day}[0].available')
         if available == False:
             available_check.append('.')
     if len(available_check) == 7:
@@ -36,16 +42,15 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
     max_week_id = int(max_week_id['max_week_id']) + 1
 
     for day in days:
-        WeekItems = eval(f' availability.{day}[0].schedule')
-        available = eval(f' availability.{day}[0].available')
+        WeekItems = eval(f'availability.{day}[0].schedule')
+        available = eval(f'availability.{day}[0].available')
 
         if available == False:
-            print('available == false, skip day')
+            print('available == false, skipping day')
         else:
             cursor.execute("""SELECT MAX(schedule_id) as max_schedule_id FROM schedule_array""") # INIT: musi być pierwszy wiersz
             schedule_id_for_day = cursor.fetchone()
             schedule_id_for_day = int(schedule_id_for_day['max_schedule_id']) + 1
-
 
             for i in WeekItems:
                 cursor.execute("""INSERT INTO schedule_array (schedule_id, start_at, end_at) VALUES (%s, %s, %s) RETURNING * """,
@@ -62,7 +67,7 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
             cursor.execute("""INSERT INTO join_tutor_week (week_id, available_day_id) VALUES (%s, %s) RETURNING * """,
             (max_week_id, available_day_id))
 
-            available_tutor_schedule_id = cursor.fetchone() # POTEM WYKORZYSTAMY GO W INNYCH DNIACH TYGODNIA!
+            available_tutor_schedule_id = cursor.fetchone() # POTEM WYKORZYSTAMY GO W INNYCH DNIACH TYGODNIA
             print(f'available_tutor_schedule_id: {available_tutor_schedule_id}')
 
     cursor.execute("""INSERT INTO available_classes (subject, rank, tutor_id, available_tutor_schedule_id) VALUES (%s, %s, %s, %s) RETURNING * """,
