@@ -97,3 +97,12 @@ class CreateNewClass(BaseModel):
     rank: str
     tutor_id: int
     availability: WeekModel
+
+class Tutor(BaseModel):
+    tutor_id: int
+    class_id: int
+    firstname: str
+    lastname: str
+    picture: str
+    # count_lessons: int
+    rank: str

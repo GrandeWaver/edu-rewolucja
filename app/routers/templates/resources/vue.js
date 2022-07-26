@@ -20,9 +20,12 @@ const app = new Vue({
       newPost: [],
       selected_day: "Pn",
       selected_day_index: 0,
-      select: {rank: ["początkujący"],}, // domyślnie zaznaczony stopień nauki
+      select: {rank: ["początkujący"]}, // domyślnie zaznaczony stopień nauki
       days: ["Pn","Wt","Śr","Cz","Pt","Sb","Nd"],
       availability: {},
+      available_tutors: [],
+      available_schedules: [],
+      select_first_lesson: {day: undefined, month: undefined, month_index: 0, day_index: 0, hour: undefined},
       // messages: [],
     },
     mounted : function() {
@@ -123,15 +126,17 @@ const app = new Vue({
           window.location.href = '/#Newclass2'
           resetScreens(_this.sc)
           _this.sc.showNewclass2 = true
+          _this.available_tutors = [] // czyszczenie pamięci
+          _this.loadTutors()
         }
         else if(screen == 'showNewclass3'){
           window.location.href = '/#Newclass3'
           resetScreens(_this.sc)
           _this.sc.showNewclass3 = true
           if(_this.select.subject == undefined){
-            alert('Błąd: dodaj zajęcia jeszcze raz :) \nBardzo przepraszamy')
-            this.href('Panel')
+            addClassesAgainError(_this)
           }
+          _this.loadSchedules()
         }
       },
       init: function(){
@@ -325,15 +330,16 @@ const app = new Vue({
       loadPosts: function (class_id) {
         const _this = this
         url = splitUrl(document.URL)
-        getData(url+"classes/details/"+class_id)
+        getData(_this, url+"classes/details/"+class_id)
         .then(data => {
           _this.currClass = data
-          getData(url+"posts/"+class_id)
+          getData(_this, url+"posts/"+class_id)
             .then(data => {
               _this.posts = data
-              getData(url+"classes/schedules/"+class_id)
+              getData(_this, url+"classes/schedules/"+class_id)
                 .then(data => {
                   _this.currSchedules = data
+                  _this.showLoading = false
             })
           })
         })
@@ -342,7 +348,7 @@ const app = new Vue({
         const _this = this
         _this.schedules = [] // czyszczenie pamięci
         url = splitUrl(document.URL)
-        getData(url+"classes/")
+        getData(_this, url+"classes/")
           .then(data => {
             _this.classes = data
             getSchedules(_this, data)
@@ -353,10 +359,65 @@ const app = new Vue({
         _this.schedules = [] // czyszczenie pamięci
         _this.currPost = [] // czyszczenie pamięci
         url = splitUrl(document.URL)
-        getData(url+"posts/details/"+post_id)
+        getData(_this, url+"posts/details/"+post_id)
         .then(data => {
+          _this.showLoading = false
           _this.currPost = data
         })
       },
+      loadTutors(counter = 0){
+        const _this = this
+        let subject = _this.select.subject
+        if(subject == undefined){ // Vue wolniej zapisuje zmienną niż js, który sprawdza czy jest zdefiniowana
+          setTimeout(() => {
+            if(counter < 40){
+              counter = counter + 1
+              _this.loadTutors(counter)
+            }
+            if(counter == 40){
+              addClassesAgainError(_this)
+            }
+          }, 5)
+        }
+        else if(_this.userData.account_type == 'student'){ //nie jestem z tego rozwiązania dumny jak coś
+          url = splitUrl(document.URL)
+          getData(_this, url+"select_class/"+subject)
+          .then(data => {
+            _this.showLoading = false
+            _this.available_tutors = data
+            console.log(data)
+            _this.available_tutors.forEach(function (value, index) {
+              encoded = encodeRank(_this.available_tutors[index].rank)
+              _this.available_tutors[index].encoded = encoded
+            })
+          })
+        }
+      },
+      loadSchedules(counter = 0){
+        const _this = this
+        available_class_id = _this.select.available_class_id
+        if(available_class_id == undefined){ // Vue wolniej zapisuje zmienną niż js, który sprawdza czy jest zdefiniowana
+          setTimeout(() => {
+            if(counter < 40){
+              counter = counter + 1
+              _this.loadSchedules(counter)
+            }
+            if(counter == 40){
+              addClassesAgainError(_this)
+            }
+          }, 5)
+        }
+        else{
+          console.log(available_class_id)
+          getData(_this, url+"select_class/schedules/"+available_class_id)
+          .then(data => {
+            _this.showLoading = false
+            console.log(data)
+            _this.available_schedules = data
+            _this.select_first_lesson.day = data[_this.select_first_lesson.month_index].days[_this.select_first_lesson.day_index].day
+            _this.select_first_lesson.month = data[_this.select_first_lesson.month_index].month
+          })
+        }
+      }
     },
   })

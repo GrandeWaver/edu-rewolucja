@@ -64,6 +64,7 @@ def get_class_details(class_id: int, user_data = Depends(oauth2.get_current_user
 
     if user_data.account_type == 'student':
         cursor.execute("""SELECT 
+        id,
         subject
         FROM classes
         WHERE student_id = %s AND classes.id = %s""",

@@ -55,7 +55,7 @@
         Email:<input :value="userData.email" v-on:keyup.enter="checkEmailFunc()" type="email" id="Cemail" placeholder="example@gmail.com"><br><br>
         <div v-if="val.notValidCEmail1" class="redWarning">
             Nie możemy znaleźć konta z takim adresem email
-            <i @click="href('SignUp')" class="blueWarning">Stwórz nowe konto</i>
+            <a href="/signup" class="blueWarning">Stwórz nowe konto</a>
         </div><!-- Błąd emaila -->
         <div v-if="val.notValidCEmail2" class="redWarning">Podano nieprawidłowy email</div><!-- Błąd emaila -->
         <button @click="checkEmailFunc()" id="checkEmail" type="submit">Dalej</button>
@@ -114,11 +114,13 @@
                 window.location.href = '/welcomeback'
               }
               else{
+                  deleteCookie('userCookie')
                   _this.val.notValidCEmail1 = true
                   _this.val.notValidCEmail2 = false
               }
               },
           error: function(e){
+              deleteCookie('userCookie')
               _this.val.notValidCEmail2 = true
               _this.val.notValidCEmail1 = false
           }

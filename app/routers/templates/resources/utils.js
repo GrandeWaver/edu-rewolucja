@@ -76,7 +76,8 @@ function handleCredentialResponse(response) {
     return new_url
  }
 
-async function getData(url = ''){
+async function getData(_this, url = ''){
+  _this.showLoading = true
   const response = await fetch(url, {
     dataType: "json",
     headers: headersAuth,
@@ -90,12 +91,13 @@ async function getData(url = ''){
 
   let i = 0;
   for (const e of list_id){
-    await getData(url+"classes/schedules/"+_this.classes[i].id)
+    await getData(_this, url+"classes/schedules/"+_this.classes[i].id)
       .then(data => {
         _this.schedules.push(data)
         i++
       })
   }
+  _this.showLoading = false
  }
 
  function pushToschedule(_this, selected_day){
@@ -240,4 +242,28 @@ async function getData(url = ''){
   }
   
   return rank_coded
+ }
+
+ function encodeRank(rank_coded){
+  let rank_encoded = []
+
+  if(rank_coded.includes("1")){
+    rank_encoded.push('początkujący')
+  }
+  if(rank_coded.includes("2")){
+    rank_encoded.push('podstawowy')
+  }
+  if(rank_coded.includes("3")){
+    rank_encoded.push('średni')
+  }
+  if(rank_coded.includes("4")){
+    rank_encoded.push('zaawansowany')
+  }
+
+  return rank_encoded.join(", ")
+ }
+
+ function addClassesAgainError(_this){
+  // alert('Błąd: dodaj zajęcia jeszcze raz :) \nBardzo przepraszamy')
+  _this.href('Panel')
  }

@@ -35,16 +35,10 @@
             <a @click="logout()">wyloguj</a>
             <!-- <img v-bind:src="'/users/picture/'+userData.id" height="40"> ta metoda nie wczytuje zdjęcia za pierwszym razem :/ -->
         </div>
+        <div v-if="showLoading" class="loading"></div>
     </div>
 
     <div class="container"> <!-- otwarcie containera -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
-    <!-- Kręcące się kółko ładowania -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
-
-    <div v-if="showLoading" class="loading">
-        <div class="loader"></div>
-    </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
     <!-- zarejestruj się screen -->
@@ -199,8 +193,8 @@
 
     <br>
 
-    <div @click="href('Newclass2'); select.subject='matematyka'" class="choose">matematyka</div>
-    <div @click="href('Newclass2'); select.subject='angielski'" class="choose">angielski</div>
+    <div @click="select.subject='matematyka'; href('Newclass2')" class="choose">matematyka</div>
+    <div @click="select.subject='angielski'; href('Newclass2')" class="choose">angielski</div>
 
     <!-- <br> -->
     <!-- <i>Nie ma twojego przedmiotu? Napisz do nas: <a href="mailto:edurewolucja@gmail.com">edurewolucja@gmail.com</a></i> -->
@@ -213,12 +207,15 @@
 <div v-if="sc.showNewclass2" class="panel">
     <div v-if="userData.account_type == 'student'">
         Wybierz nauczyciela
-        <div v-for="">
-            <img>
-            <div @click="href('Newclass3');" class="choose tutor">
-                Tomek Mróz
-                <div>lekcji:</div>
-                <div>stopień:</div>
+        <div v-for="tutor in available_tutors">
+            <img class="TutorImage" v-bind:src="tutor.picture" >
+            <div @click="href('Newclass3'); select.available_class_id = tutor.class_id" class="choose tutor">
+                <div>
+                    {{tutor.firstname}}
+                    {{tutor.lastname}}
+                </div>
+                <div>lekcji: 0</div>
+                <div>stopień: {{tutor.encoded}}</div>
             </div>
             <br>
         </div>
@@ -255,15 +252,39 @@
 
 <div v-if="sc.showNewclass3" class="panel">
     <div v-if="userData.account_type == 'student'">
-        Wybierz termin pierwszej lekcji
+        <b>Wybierz termin pierwszej lekcji</b>
         
-        Poniedziałek
-        Wtorek
-        Środa
-        Czwartek
-        Piątek
-        Sobota Niedziela
-
+        <div>lekcja {{select.subject}}</div>
+        <br>
+        
+        dzień tygodnia: {{available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].name}}<br>
+        day: {{select_first_lesson.day}}<br>
+        month: {{available_schedules[select_first_lesson.month_index].month}}<br>
+        hour: {{select_first_lesson.hour}}<br>
+        <div>
+            <select v-model="select_first_lesson.day_index" 
+                @change="select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day">
+                <option 
+                    v-for="day in available_schedules[select_first_lesson.month_index].days" 
+                    v-bind:value="day.day_index">
+                    {{day.day}}
+                </option>
+            </select>
+            <select v-model="select_first_lesson.month_index" 
+                @change="
+                    select_first_lesson.day_index = 0; 
+                    select_first_lesson.month = available_schedules[select_first_lesson.month_index].month
+                    select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day
+                ">
+                <option v-for="month in available_schedules" v-bind:value="month.month_index">{{month.month}}</option>
+            </select>
+            <select v-model="select_first_lesson.hour">
+                <option 
+                    v-for="hour in available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours" 
+                    v-bind:value="hour">{{hour}}:00
+                </option>
+            </select>
+        </div>
         <button @click="href('Panel');">Zapisz</button>
     </div>
 
