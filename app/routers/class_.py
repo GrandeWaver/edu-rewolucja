@@ -1,4 +1,5 @@
 from app import oauth2
+from app.utils import format_date, format_hour
 from .. import schemas
 from fastapi import Depends, HTTPException, status, APIRouter
 from typing import List
@@ -22,6 +23,16 @@ def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
     WHERE j_id = %s
     """, [class_id])
     schedules = cursor.fetchall()
+
+    if schedules[0]['day'] == 'first_lesson':
+        cursor.execute("""
+            SELECT date FROM lessons WHERE class_id = %s
+        """, (class_id,))
+        raw_date = cursor.fetchone()
+        date = format_date(raw_date)
+        hour = format_hour(raw_date)
+        return [{"day": date, "hour": hour}]
+
     return schedules
 
 @router.get("/", response_model=List[schemas.Class])

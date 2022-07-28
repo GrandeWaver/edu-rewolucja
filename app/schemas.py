@@ -1,3 +1,4 @@
+from calendar import day_name
 from lib2to3.pgen2 import token
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr
@@ -106,3 +107,11 @@ class Tutor(BaseModel):
     picture: str
     # count_lessons: int
     rank: str
+
+class CreateNewClassStudent(BaseModel):
+    month: str
+    year: int
+    day_name: str
+    day: int
+    hour: int
+    available_class_id: int

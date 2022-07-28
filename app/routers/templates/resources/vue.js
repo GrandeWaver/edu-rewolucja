@@ -133,9 +133,6 @@ const app = new Vue({
           window.location.href = '/#Newclass3'
           resetScreens(_this.sc)
           _this.sc.showNewclass3 = true
-          if(_this.select.subject == undefined){
-            addClassesAgainError(_this)
-          }
           _this.loadSchedules()
         }
       },
@@ -299,7 +296,7 @@ const app = new Vue({
         rank_coded = codeRank(_this.select.rank)
 
         let tutor_id = _this.userData.id
-        fetch(url+"create_class/", {
+        fetch(url+"create_class/tutor", {
           method: "POST",
           dataType: "json",
           body: JSON.stringify({
@@ -396,7 +393,7 @@ const app = new Vue({
       loadSchedules(counter = 0){
         const _this = this
         available_class_id = _this.select.available_class_id
-        if(available_class_id == undefined){ // Vue wolniej zapisuje zmienną niż js, który sprawdza czy jest zdefiniowana
+        if(available_class_id == undefined && _this.userData.account_type == 'student'){ // Vue wolniej zapisuje zmienną niż js, który sprawdza czy jest zdefiniowana
           setTimeout(() => {
             if(counter < 40){
               counter = counter + 1
@@ -407,7 +404,7 @@ const app = new Vue({
             }
           }, 5)
         }
-        else{
+        else if(_this.userData.account_type == 'student'){
           console.log(available_class_id)
           getData(_this, url+"select_class/schedules/"+available_class_id)
           .then(data => {
@@ -416,7 +413,36 @@ const app = new Vue({
             _this.available_schedules = data
             _this.select_first_lesson.day = data[_this.select_first_lesson.month_index].days[_this.select_first_lesson.day_index].day
             _this.select_first_lesson.month = data[_this.select_first_lesson.month_index].month
+            _this.select_first_lesson.year = data[_this.select_first_lesson.month_index].year
           })
+        }
+      },
+      SignUpForLesson(){
+        const _this = this
+        var hour_input_value = $("#select_hour").val();
+        if(hour_input_value != null){
+          fetch(url+"create_class/student", {
+            method: "POST",
+            dataType: "json",
+            body: JSON.stringify({
+              month: _this.select_first_lesson.month,
+              year: _this.select_first_lesson.year,
+              day_name: _this.available_schedules[_this.select_first_lesson.month_index].days[_this.select_first_lesson.day_index].name,
+              day: _this.select_first_lesson.day,
+              hour: _this.select_first_lesson.hour,
+              available_class_id: _this.select.available_class_id
+            }),
+            headers: headersAuth,
+          })
+          .then(response => {
+            if(response.status == 201){
+              _this.href('Panel')
+            }
+            if(response.status == 500){
+              alert('error: błąd połączenia z bazą danych... \nkod błędu: 500')
+            }
+          })
+        console.log('wysyłanie do create_class/student')
         }
       }
     },

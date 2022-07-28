@@ -258,9 +258,6 @@
         <br>
         
         dzień tygodnia: {{available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].name}}<br>
-        day: {{select_first_lesson.day}}<br>
-        month: {{available_schedules[select_first_lesson.month_index].month}}<br>
-        hour: {{select_first_lesson.hour}}<br>
         <div>
             <select v-model="select_first_lesson.day_index" 
                 @change="select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day">
@@ -275,17 +272,18 @@
                     select_first_lesson.day_index = 0; 
                     select_first_lesson.month = available_schedules[select_first_lesson.month_index].month
                     select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day
+                    select_first_lesson.year = available_schedules[select_first_lesson.month_index].year
                 ">
                 <option v-for="month in available_schedules" v-bind:value="month.month_index">{{month.month}}</option>
             </select>
-            <select v-model="select_first_lesson.hour">
+            <select v-model="select_first_lesson.hour" id="select_hour">
                 <option 
                     v-for="hour in available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours" 
                     v-bind:value="hour">{{hour}}:00
                 </option>
             </select>
         </div>
-        <button @click="href('Panel');">Zapisz</button>
+        <button @click="SignUpForLesson();">Zapisz</button>
     </div>
 
     <div v-if="userData.account_type == 'tutor'">

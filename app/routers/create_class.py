@@ -1,14 +1,16 @@
+from hashlib import new
 from app import oauth2
 from .. import schemas
 from fastapi import Depends, HTTPException, status, APIRouter
 from ..database import *
+from datetime import datetime
 
 router = APIRouter(
     prefix="/create_class",
     tags=['Create Class']
     )
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/tutor", status_code=status.HTTP_201_CREATED)
 def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_current_user)):
 
     tutor_id = data.tutor_id
@@ -78,3 +80,54 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
 
 
     return new_available_class
+
+@router.post("/student", status_code=status.HTTP_201_CREATED)
+def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2.get_current_user)):
+    print(data)
+
+    # konwertowanie tego na date
+    months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień", ]
+    month = months.index(data.month)
+    month = month + 1
+
+    first_lesson_date_str = str(data.day)+'/'+str(month)+'/'+str(data.year)+' '+str(data.hour)+':00:00'
+    first_lesson_date = datetime.strptime(first_lesson_date_str, "%d/%m/%y %H:%M:%S")
+
+    print(f'first_lesson_date: {first_lesson_date}')
+
+    cursor.execute("""
+        SELECT * FROM available_classes WHERE id = %s
+    """,(data.available_class_id,))
+    available_class = cursor.fetchone()
+    print(available_class)
+    print(user_data.id)
+
+    # szybki check czy ten tutor nie ma już zajęć z tym uczniem i z tym przedmiotem
+    cursor.execute("""
+        SELECT * FROM classes WHERE subject = %s AND tutor_id = %s AND student_id = %s
+    """, (available_class['subject'], available_class['tutor_id'], user_data.id,))
+    is_already = cursor.fetchone()
+    print(is_already)
+
+    if is_already != None:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"You already have this class")
+    
+    # INSERT INTO classes
+    cursor.execute("""
+        INSERT INTO classes (subject, tutor_id, schedule_id, student_id, rank) VALUES(%s, %s, %s, %s, %s) RETURNING *
+    """, (available_class['subject'], available_class['tutor_id'], 69, user_data.id, available_class['rank']))
+
+    new_class = cursor.fetchone()
+    print(f'new_class: {new_class}')
+
+    cursor.execute("""
+        INSERT INTO join_schedules (class_id, schedules_id) VALUES(%s, %s) RETURNING *
+    """, (new_class['id'], 69))
+    
+    # INSERT INTO LESSONS
+    cursor.execute("""
+        INSERT INTO lessons (date, status, class_id) VALUES(%s, %s, %s) RETURNING *
+    """, (first_lesson_date, 'planned', new_class['id']))
+
+    conn.commit()
+    return data

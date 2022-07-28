@@ -267,3 +267,5 @@ async function getData(_this, url = ''){
   // alert('Błąd: dodaj zajęcia jeszcze raz :) \nBardzo przepraszamy')
   _this.href('Panel')
  }
+
+ 
