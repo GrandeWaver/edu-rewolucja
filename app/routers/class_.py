@@ -1,5 +1,5 @@
 from app import oauth2
-from app.utils import format_date, format_hour
+from app.utils import format_data
 from .. import schemas
 from fastapi import Depends, HTTPException, status, APIRouter
 from typing import List
@@ -13,27 +13,15 @@ router = APIRouter(
 @router.get("/schedules/{class_id}", response_model=List[schemas.Schedule])
 def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
     cursor.execute("""
-    SELECT day, hour
-    FROM 
-    (SELECT join_schedules.class_id as j_id, hour, day
-    FROM join_schedules, schedules
-    WHERE join_schedules.schedules_id = schedules.id) as schedules
-    LEFT JOIN classes
-    ON schedules.j_id = classes.schedule_id
-    WHERE j_id = %s
-    """, [class_id])
-    schedules = cursor.fetchall()
-
-    if schedules[0]['day'] == 'first_lesson':
-        cursor.execute("""
             SELECT date FROM lessons WHERE class_id = %s
-        """, (class_id,))
-        raw_date = cursor.fetchone()
-        date = format_date(raw_date)
-        hour = format_hour(raw_date)
-        return [{"day": date, "hour": hour}]
+    """, (class_id,))
+    data = cursor.fetchall()
 
-    return schedules
+    if data == None:
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"You have no scheduled lessons")
+
+    data = format_data(data)
+    return data
 
 @router.get("/", response_model=List[schemas.Class])
 def get_posts(user_data = Depends(oauth2.get_current_user)):
@@ -43,8 +31,8 @@ def get_posts(user_data = Depends(oauth2.get_current_user)):
         subject, 
         (SELECT firstname from users where id = classes.student_id), 
         (SELECT lastname from users where id = classes.student_id)
-        FROM classes, schedules
-        WHERE classes.schedule_id = schedules.id AND tutor_id = %s""",
+        FROM classes
+        WHERE tutor_id = %s""",
         (user_data.id,))
         classes = cursor.fetchall()
         return classes
@@ -55,8 +43,8 @@ def get_posts(user_data = Depends(oauth2.get_current_user)):
         subject, 
         (SELECT firstname from users where id = classes.tutor_id), 
         (SELECT lastname from users where id = classes.tutor_id)
-        FROM classes, schedules
-        WHERE classes.schedule_id = schedules.id AND student_id = %s""",
+        FROM classes
+        WHERE student_id = %s""",
         (user_data.id,))
         classes = cursor.fetchall()
         return classes

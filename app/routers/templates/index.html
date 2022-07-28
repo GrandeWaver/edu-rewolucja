@@ -133,14 +133,17 @@
 
     <div v-if="sc.showPanel" id="panel" class="panel">
         Twoje zajęcia
-            <a v-for="(class_,index) in classes" :key="index" class="class"  v-bind:id="'Class'+class_.id" @click="href('Class'+class_.id)">
-                <h5> przedmiot: {{class_.subject}}</h5>
-                <h5 v-if="userData.account_type == 'tutor'"> uczeń: {{class_.firstname}} {{class_.lastname}}</h5>
-                <h5 v-if="userData.account_type == 'student'"> nauczyciel: {{class_.firstname}} {{class_.lastname}}</h5>
-                <div v-for="schedule in schedules[index]"> 
-                    {{schedule.day}} {{schedule.hour}}:00<br>
+            <div v-for="(class_,index) in classes" :key="index" class="class"  v-bind:id="'Class'+class_.id">
+                <div v-if="userData.account_type == 'student'" @click="BuyLesson(class_.id)">Dokup lekcje</div>
+                <div @click="href('Class'+class_.id)">
+                    <h5> przedmiot: {{class_.subject}}</h5>
+                    <h5 v-if="userData.account_type == 'tutor'"> uczeń: {{class_.firstname}} {{class_.lastname}}</h5>
+                    <h5 v-if="userData.account_type == 'student'"> nauczyciel: {{class_.firstname}} {{class_.lastname}}</h5>
+                    <div v-for="schedule in schedules[index]"> 
+                        {{schedule.day}} {{schedule.hour}}:00<br>
+                    </div>
                 </div>
-            </a>
+            </div>
             <img @click="href('Newclass1')" id="Newclass1" class="plusIcon" src="https://cdn0.iconfinder.com/data/icons/very-basic-2-android-l-lollipop-icon-pack/24/plus-512.png">
     </div>
 
@@ -320,6 +323,44 @@
     </div>
 </div>
     
+<div v-if="sc.showBuyLesson" class="panel">
+    <div v-if="userData.account_type == 'student'">
+        <b>Dokup lekcję</b>
+
+        <div>lekcja: {{BuyLessonVariables.subject}}</div>
+        <br>
+
+        dzień tygodnia: {{available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].name}}<br>
+        <div>
+            <select v-model="select_first_lesson.day_index" 
+                @change="select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day">
+                <option 
+                    v-for="day in available_schedules[select_first_lesson.month_index].days" 
+                    v-bind:value="day.day_index">
+                    {{day.day}}
+                </option>
+            </select>
+            <select v-model="select_first_lesson.month_index" 
+                @change="
+                    select_first_lesson.day_index = 0; 
+                    select_first_lesson.month = available_schedules[select_first_lesson.month_index].month
+                    select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day
+                    select_first_lesson.year = available_schedules[select_first_lesson.month_index].year
+                ">
+                <option v-for="month in available_schedules" v-bind:value="month.month_index">{{month.month}}</option>
+            </select>
+            <select v-model="select_first_lesson.hour" id="select_hour_buy">
+                <option 
+                    v-for="hour in available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours" 
+                    v-bind:value="hour">{{hour}}:00
+                </option>
+            </select>
+        </div>
+        <button @click="BuyLessonSubmit()">Zapisz</button>
+    </div>
+</div>
+
+
 </div> <!-- zamknięcie containera -->
 <!-- ---------------------------------------------------------------------------------------------------- -->
 </div>

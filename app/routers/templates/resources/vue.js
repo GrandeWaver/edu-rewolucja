@@ -26,6 +26,7 @@ const app = new Vue({
       available_tutors: [],
       available_schedules: [],
       select_first_lesson: {day: undefined, month: undefined, month_index: 0, day_index: 0, hour: undefined},
+      BuyLessonVariables: {} 
       // messages: [],
     },
     mounted : function() {
@@ -134,6 +135,11 @@ const app = new Vue({
           resetScreens(_this.sc)
           _this.sc.showNewclass3 = true
           _this.loadSchedules()
+        }
+        else if(screen == 'showBuyLesson'){
+          window.location.href = '/#BuyLesson'
+          resetScreens(_this.sc)
+          _this.sc.showBuyLesson = true
         }
       },
       init: function(){
@@ -336,7 +342,6 @@ const app = new Vue({
               getData(_this, url+"classes/schedules/"+class_id)
                 .then(data => {
                   _this.currSchedules = data
-                  _this.showLoading = false
             })
           })
         })
@@ -358,7 +363,6 @@ const app = new Vue({
         url = splitUrl(document.URL)
         getData(_this, url+"posts/details/"+post_id)
         .then(data => {
-          _this.showLoading = false
           _this.currPost = data
         })
       },
@@ -380,7 +384,6 @@ const app = new Vue({
           url = splitUrl(document.URL)
           getData(_this, url+"select_class/"+subject)
           .then(data => {
-            _this.showLoading = false
             _this.available_tutors = data
             console.log(data)
             _this.available_tutors.forEach(function (value, index) {
@@ -408,7 +411,6 @@ const app = new Vue({
           console.log(available_class_id)
           getData(_this, url+"select_class/schedules/"+available_class_id)
           .then(data => {
-            _this.showLoading = false
             console.log(data)
             _this.available_schedules = data
             _this.select_first_lesson.day = data[_this.select_first_lesson.month_index].days[_this.select_first_lesson.day_index].day
@@ -441,9 +443,63 @@ const app = new Vue({
             if(response.status == 500){
               alert('error: błąd połączenia z bazą danych... \nkod błędu: 500')
             }
+            if(response.status == 409){
+              alert('error: Prawdopodobnie masz już zajęcia tego przedmiotu z tym nauczycielem \nkod błędu: 409')
+            }
           })
         console.log('wysyłanie do create_class/student')
         }
-      }
+      },
+      BuyLesson(class_id){
+        const _this = this
+        console.log(class_id)
+        // wyślij class_id i otrzymaj available_class_id
+        // get-available-class-id
+        getData(_this, url+"lesson/get-available-class-id/"+class_id)
+        .then(data => {
+          console.log(data)
+          _this.BuyLessonVariables.available_class_id = data.source_available_class_id
+          _this.BuyLessonVariables.subject = data.subject
+          _this.BuyLessonVariables.class_id = class_id
+          getData(_this, url+"select_class/schedules/"+_this.BuyLessonVariables.available_class_id)
+          .then(data => {
+            console.log(data)
+            // wrzuć data do zmiennych które będzie się dało wyświetlić
+            _this.available_schedules = data
+            _this.select_first_lesson.day = data[_this.select_first_lesson.month_index].days[_this.select_first_lesson.day_index].day
+            _this.select_first_lesson.month = data[_this.select_first_lesson.month_index].month
+            _this.select_first_lesson.year = data[_this.select_first_lesson.month_index].year
+        })
+        })
+        _this.href('BuyLesson')
+      },
+      BuyLessonSubmit(){
+        const _this = this
+        var hour_input_value = $("#select_hour_buy").val();
+        if(hour_input_value != null){
+          fetch(url+"lesson/", {
+            method: "POST",
+            dataType: "json",
+            body: JSON.stringify({
+              month: _this.select_first_lesson.month,
+              year: _this.select_first_lesson.year,
+              day_name: _this.available_schedules[_this.select_first_lesson.month_index].days[_this.select_first_lesson.day_index].name,
+              day: _this.select_first_lesson.day,
+              hour: _this.select_first_lesson.hour,
+              class_id: _this.BuyLessonVariables.class_id
+            }),
+            headers: headersAuth,
+          })
+          .then(response => {
+            if(response.status == 201){
+              _this.href('Panel')
+            }
+            if(response.status == 500){
+              alert('error: błąd połączenia z bazą danych... \nkod błędu: 500')
+            }
+          })
+        console.log('wysyłanie do /lesson')
+        }
+      },
     },
   })

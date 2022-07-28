@@ -93,8 +93,6 @@ def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2
     first_lesson_date_str = str(data.day)+'/'+str(month)+'/'+str(data.year)+' '+str(data.hour)+':00:00'
     first_lesson_date = datetime.strptime(first_lesson_date_str, "%d/%m/%y %H:%M:%S")
 
-    print(f'first_lesson_date: {first_lesson_date}')
-
     cursor.execute("""
         SELECT * FROM available_classes WHERE id = %s
     """,(data.available_class_id,))
@@ -114,15 +112,11 @@ def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2
     
     # INSERT INTO classes
     cursor.execute("""
-        INSERT INTO classes (subject, tutor_id, schedule_id, student_id, rank) VALUES(%s, %s, %s, %s, %s) RETURNING *
-    """, (available_class['subject'], available_class['tutor_id'], 69, user_data.id, available_class['rank']))
+        INSERT INTO classes (subject, tutor_id, student_id, rank, source_available_class_id) VALUES(%s, %s, %s, %s, %s) RETURNING *
+    """, (available_class['subject'], available_class['tutor_id'], user_data.id, available_class['rank'], available_class['id']))
 
     new_class = cursor.fetchone()
     print(f'new_class: {new_class}')
-
-    cursor.execute("""
-        INSERT INTO join_schedules (class_id, schedules_id) VALUES(%s, %s) RETURNING *
-    """, (new_class['id'], 69))
     
     # INSERT INTO LESSONS
     cursor.execute("""

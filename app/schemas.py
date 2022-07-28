@@ -115,3 +115,11 @@ class CreateNewClassStudent(BaseModel):
     day: int
     hour: int
     available_class_id: int
+
+class BuyLesson(BaseModel):
+    month: str
+    year: int
+    day_name: str
+    day: int
+    hour: int
+    class_id: int

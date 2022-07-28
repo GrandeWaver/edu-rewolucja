@@ -42,6 +42,7 @@ function resetScreens(sc){
   sc.showNewclass1 = false
   sc.showNewclass2 = false
   sc.showNewclass3 = false
+  sc.showBuyLesson = false
 }
 
 function handleCredentialResponse(response) {
@@ -82,6 +83,7 @@ async function getData(_this, url = ''){
     dataType: "json",
     headers: headersAuth,
   })
+    _this.showLoading = false
     return response.json()
 }
 
@@ -97,7 +99,6 @@ async function getData(_this, url = ''){
         i++
       })
   }
-  _this.showLoading = false
  }
 
  function pushToschedule(_this, selected_day){

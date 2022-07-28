@@ -38,6 +38,14 @@ def format_date(data):
 
 def format_hour(data):
     data = data['date']
-    print(data)
     hour = str(data)[11:13]
     return hour
+
+def format_data(data):
+    new_data = []
+
+    for item in data:
+        row = {"day": format_date(item), "hour": int(format_hour(item))}
+        new_data.append(row)
+
+    return new_data
