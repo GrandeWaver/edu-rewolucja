@@ -84,6 +84,9 @@ async function getData(_this, url = ''){
     headers: headersAuth,
   })
     _this.showLoading = false
+    if(response.status == 204){
+      return response
+    }
     return response.json()
 }
 
@@ -95,8 +98,19 @@ async function getData(_this, url = ''){
   for (const e of list_id){
     await getData(_this, url+"classes/schedules/"+_this.classes[i].id)
       .then(data => {
-        _this.schedules.push(data)
-        i++
+        if(data.status == 204){
+          _this.schedules.push([{day: 'Brak nadchodzących lekcji'}])
+          i++
+        }
+        else{
+          new_data = []
+          data.forEach(element => {
+            new_element = JSON.parse(`{"day": "${element.day}", "hour": "${element.hour}:00"}`)
+            new_data.push(new_element)
+          });
+          _this.schedules.push(new_data)
+          i++
+        }
       })
   }
  }

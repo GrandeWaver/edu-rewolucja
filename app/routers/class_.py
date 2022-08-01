@@ -13,11 +13,11 @@ router = APIRouter(
 @router.get("/schedules/{class_id}", response_model=List[schemas.Schedule])
 def get_posts(class_id: int, user_data = Depends(oauth2.get_current_user)):
     cursor.execute("""
-            SELECT date FROM lessons WHERE class_id = %s
+            SELECT date FROM lessons WHERE class_id = %s AND status = 'planned' ORDER BY date
     """, (class_id,))
     data = cursor.fetchall()
 
-    if data == None:
+    if len(data) == 0:
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"You have no scheduled lessons")
 
     data = format_data(data)
@@ -47,6 +47,10 @@ def get_posts(user_data = Depends(oauth2.get_current_user)):
         WHERE student_id = %s""",
         (user_data.id,))
         classes = cursor.fetchall()
+
+        if len(classes) == 0:
+            raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"You have no classes")
+
         return classes
 
 @router.get("/details/{class_id}", response_model=List[schemas.ClassDetails])

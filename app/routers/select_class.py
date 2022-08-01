@@ -35,6 +35,9 @@ def get_tutors(subject: str, user_data = Depends(oauth2.get_current_user)):
     # order by count_lessons
     tutors = cursor.fetchall()
 
+    if len(tutors) == 0:
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"No tutors available")
+
     return tutors
 
 @router.get("/schedules/{available_class_id}") #, response_model=List[schemas.Tutor]
@@ -43,7 +46,7 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
     months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień", ]
 
     cursor.execute("""
-        SELECT available_tutor_schedule_id FROM available_classes WHERE id = %s
+        SELECT available_tutor_schedule_id, tutor_id FROM available_classes WHERE id = %s
     """, (available_class_id,))
     available_tutor_schedule_id = cursor.fetchone()
 
@@ -108,6 +111,22 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
   
     working_months = remove_repetitions(working_months)
 
+    cursor.execute("""
+        SELECT date 
+        FROM lessons, classes 
+        WHERE lessons.class_id = classes.id
+        AND classes.tutor_id = %s
+    """, (available_tutor_schedule_id['tutor_id'],))
+    busy_days = cursor.fetchall()
+
+    busy = []
+    for day in busy_days:
+        day_number = str(day['date'])[8:10]
+        month = months[int(str(day['date'])[5:7])-1]
+        hour = int(str(day['date'])[11:13])
+        row = {'month': month, 'date': day_number, 'hour': hour}
+        busy.append(row)
+
     dict = []
     month_index = -1
     for month in working_months:
@@ -120,7 +139,15 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
                 for schedule in working_hours:
                     if schedule['day'] == day['day']:
                         day_index = day_index + 1
+                        # skasuj wszystkie godziny w które tutor ma już zaplanowane lekcje
+                        # print(f"{day['month']} {day['date']} {day['day']}: {schedule['working_hours']}")
+                        for element in busy:
+                            if day['month'] == element['month']:
+                                if day['date'] == element['date']:
+                                    for item in schedule['working_hours']:
+                                        if item == element['hour']:
+                                            schedule['working_hours'].remove(item)
                         day_row = {'day': day['date'], 'day_index': day_index, 'name': day['day'], 'working_hours': schedule['working_hours']}
                         dict[month_index]['days'].append(day_row)
-
+    # print(busy)
     return dict

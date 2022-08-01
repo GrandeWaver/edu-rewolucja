@@ -1,7 +1,12 @@
+from ast import While
 from fastapi import FastAPI, APIRouter
+from fastapi_utils.tasks import repeat_every
 
 from app.routers.auth import auth
 from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson
+from datetime import datetime, date
+import time
+from .database import *
 
 
 app = FastAPI()
@@ -22,4 +27,41 @@ def helloWorld():
 
 
 
+# cron
+    # sprawdz czy lessons tego usera mają datę która już jest przeszłościa i jeżeli tak to:
+    # jeśli mniej niż 45 minut to zmień na now
+    # jeśli więcej to zmień na canceled
+
+@app.on_event("startup")
+@repeat_every(seconds=3599, wait_first=False)
+def check_lessons():
+    zero = datetime.now().minute
+    while zero != 0:
+        print('Debug: konfigurowanie równej godziny')
+        time.sleep(1)
+        zero = datetime.now().minute
+
+    print(f'check lessons: {datetime.now()}')
+
+    cursor.execute("""
+        SELECT * FROM lessons
+    """)
+    lessons = cursor.fetchall()
+
+    now = datetime.now()
+    now = datetime.fromisoformat(str(now)[0:19])
+
+    for i in lessons:
+        lesson_time = datetime.fromisoformat(str(i['date'])[0:19])
+        print(now)
+        print(lesson_time)
+        if lesson_time == now:
+            cursor.execute("""
+                UPDATE lessons SET status = 'now' WHERE id = %s
+            """, (i['id'],))
+        if lesson_time < now:
+            cursor.execute("""
+                UPDATE lessons SET status = 'canceled' WHERE id = %s
+            """, (i['id'],))
+    conn.commit()
 

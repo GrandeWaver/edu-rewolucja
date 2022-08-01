@@ -26,7 +26,8 @@ const app = new Vue({
       available_tutors: [],
       available_schedules: [],
       select_first_lesson: {day: undefined, month: undefined, month_index: 0, day_index: 0, hour: undefined},
-      BuyLessonVariables: {} 
+      BuyLessonVariables: {},
+      no_content: {}
       // messages: [],
     },
     mounted : function() {
@@ -42,6 +43,7 @@ const app = new Vue({
           _this.showScreen(url)
        },
        showScreen: function(screen) {
+        console.log(history)
           const _this = this
           var url = window.location.href
           var hash = url.split('#')[1]
@@ -49,15 +51,19 @@ const app = new Vue({
             _this.showLoading = false
             screen = 'show'+hash
 
-            class_id = url.split('Class')[1] // numer zajęć, które klient chce zobaczyć
+            class_id = url.split('Class')[1]
             if(class_id){
-              screen = 'showClass' // wyczyszczenie numeru, po to aby wyświetlić screen
+              screen = 'showClass'
             }
 
-            post_id = url.split('Post')[1] // numer posta, który klient chce zobaczyć
+            post_id = url.split('Post')[1]
             if(post_id){
               _this.currPost.post_id = post_id
-              screen = 'showPost' // wyczyszczenie numeru, po to aby wyświetlić screen
+              screen = 'showPost'
+            }
+            buy_lesson_id =  url.split('BuyLesson')[1]
+            if(buy_lesson_id){
+              screen = 'showBuyLesson'
             }
           }
           console.log(screen + ' opening')
@@ -137,9 +143,10 @@ const app = new Vue({
           _this.loadSchedules()
         }
         else if(screen == 'showBuyLesson'){
-          window.location.href = '/#BuyLesson'
+          window.location.href = '/#BuyLesson'+buy_lesson_id
           resetScreens(_this.sc)
           _this.sc.showBuyLesson = true
+          _this.BuyLesson(buy_lesson_id)
         }
       },
       init: function(){
@@ -197,13 +204,13 @@ const app = new Vue({
       backArrowFunc: function(){
         const _this = this
         var url = window.location.href
-        post = url.split('Post')[1]
-        if(post){
-          _this.href('Class'+_this.currPost[0].class_id)
-        }
-        else {
-          _this.href('Panel')
-        }
+        // post = url.split('Post')[1]
+        // if(post){
+        //   _this.href('Class'+_this.currPost[0].class_id)
+        // }
+        // else {
+          history.back()
+        // }
       },
       logout: function(){
           deleteCookie('auth')
@@ -338,7 +345,15 @@ const app = new Vue({
           _this.currClass = data
           getData(_this, url+"posts/"+class_id)
             .then(data => {
-              _this.posts = data
+              if(data.status == 204){
+                _this.no_content.no_posts = true
+                console.log(data)
+              }
+              else{
+                console.log(data)
+                _this.posts = data
+                _this.no_content.no_posts = false
+              }
               getData(_this, url+"classes/schedules/"+class_id)
                 .then(data => {
                   _this.currSchedules = data
@@ -352,6 +367,12 @@ const app = new Vue({
         url = splitUrl(document.URL)
         getData(_this, url+"classes/")
           .then(data => {
+            if(data.status == 204){
+              _this.no_content.classes = true
+            }
+            else{
+              _this.no_content.classes = false
+            }
             _this.classes = data
             getSchedules(_this, data)
           })
@@ -384,6 +405,9 @@ const app = new Vue({
           url = splitUrl(document.URL)
           getData(_this, url+"select_class/"+subject)
           .then(data => {
+            if(data.status == 204){
+              _this.no_content.available_tutors = true
+            }
             _this.available_tutors = data
             console.log(data)
             _this.available_tutors.forEach(function (value, index) {
@@ -453,6 +477,7 @@ const app = new Vue({
       BuyLesson(class_id){
         const _this = this
         console.log(class_id)
+        url = splitUrl(document.URL)
         // wyślij class_id i otrzymaj available_class_id
         // get-available-class-id
         getData(_this, url+"lesson/get-available-class-id/"+class_id)
@@ -471,7 +496,6 @@ const app = new Vue({
             _this.select_first_lesson.year = data[_this.select_first_lesson.month_index].year
         })
         })
-        _this.href('BuyLesson')
       },
       BuyLessonSubmit(){
         const _this = this

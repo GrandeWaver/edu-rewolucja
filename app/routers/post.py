@@ -13,6 +13,10 @@ router = APIRouter(
 def get_posts_for_class(class_id: int, user_data = Depends(oauth2.get_current_user)):
     cursor.execute("""SELECT id, title, content, created_at FROM posts WHERE class_id = %s AND published = true order by created_at desc""", [class_id])
     posts = cursor.fetchall()
+
+    if len(posts) == 0:
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"No posts to send")
+
     return posts
 
 @router.get("/details/{post_id}", response_model=List[schemas.PostDetails])

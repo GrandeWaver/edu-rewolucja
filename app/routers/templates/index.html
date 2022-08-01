@@ -113,6 +113,9 @@
         <i class="footerItem" @click="href('Contact')" id="Contact">Kontakt</i>
         <i class="footerItem" @click="href('PrivacyPolicy')">Polityka Prywatności</i>
         <i class="footerItem" @click="href('TermsAndConditions')" id="TermsAndConditions">Watunki korzystania z aplikacji</i>
+        <i class="footerItem" @click="href('Newclass1')" id="Newclass1">&nbsp</i>
+        <i class="footerItem" @click="href('Newclass2')" id="Newclass2">&nbsp</i>
+        <i class="footerItem" @click="href('Newclass3')" id="Newclass3">&nbsp</i>
     </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -132,19 +135,19 @@
 <!-- ---------------------------------------------------------------------------------------------------- -->
 
     <div v-if="sc.showPanel" id="panel" class="panel">
-        Twoje zajęcia
-            <div v-for="(class_,index) in classes" :key="index" class="class"  v-bind:id="'Class'+class_.id">
-                <div v-if="userData.account_type == 'student'" @click="BuyLesson(class_.id)">Dokup lekcje</div>
-                <div @click="href('Class'+class_.id)">
-                    <h5> przedmiot: {{class_.subject}}</h5>
-                    <h5 v-if="userData.account_type == 'tutor'"> uczeń: {{class_.firstname}} {{class_.lastname}}</h5>
-                    <h5 v-if="userData.account_type == 'student'"> nauczyciel: {{class_.firstname}} {{class_.lastname}}</h5>
-                    <div v-for="schedule in schedules[index]"> 
-                        {{schedule.day}} {{schedule.hour}}:00<br>
-                    </div>
+        <div v-for="(class_,index) in classes" :key="index" class="class"  v-bind:id="'Class'+class_.id">
+            <div v-if="userData.account_type == 'student'" @click="href('BuyLesson'+class_.id)">Zaplanuj lekcje</div>
+            <div @click="href('Class'+class_.id)">
+                <h5> przedmiot: {{class_.subject}}</h5>
+                <h5 v-if="userData.account_type == 'tutor'"> uczeń: {{class_.firstname}} {{class_.lastname}}</h5>
+                <h5 v-if="userData.account_type == 'student'"> nauczyciel: {{class_.firstname}} {{class_.lastname}}</h5>
+                <div v-for="schedule in schedules[index]"> 
+                    {{schedule.day}} {{schedule.hour}}<br>
                 </div>
             </div>
-            <img @click="href('Newclass1')" id="Newclass1" class="plusIcon" src="https://cdn0.iconfinder.com/data/icons/very-basic-2-android-l-lollipop-icon-pack/24/plus-512.png">
+        </div>
+        <div v-if="no_content.classes" class="plusIcon text"><h2>Dodaj nowe zajęcia!</h2></div>
+        <img @click="href('Newclass1')" id="Newclass1" class="plusIcon" src="https://cdn0.iconfinder.com/data/icons/very-basic-2-android-l-lollipop-icon-pack/24/plus-512.png">
     </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -169,6 +172,7 @@
         <h5> data: {{post.created_at}}</h5>
         <h5> content: {{post.content}}</h5>
     </div>
+    <div v-if="no_content.no_posts">Brak postów</div>
 </div>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
@@ -222,6 +226,7 @@
             </div>
             <br>
         </div>
+        <div v-if="no_content.available_tutors"><br>Brak dostępnych nauczycieli :(</div>
     </div>
     <div v-if="userData.account_type == 'tutor'">
         <b>Jakiego stopnia nauki chcesz uczyć?</b>
@@ -369,10 +374,12 @@
     // odczytywanie z linku który screen aplikacja ma otworzyć
     // a gdybym w przyszłości zrobił screen który nie ma przycisku który przeniósłby na odpowiedni ->
     // -> screen to zawsze można zrobić ukrytą listę stron i z niej "klikać" 
+
     window.onhashchange = function(){
         var url = window.location.href
         hash = url.split('#')[1];
         if (hash) {
+            // showScreen(hash)
             document.getElementById(hash).click();
         } 
     }

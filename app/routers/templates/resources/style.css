@@ -169,6 +169,16 @@ button{
     border-radius: 50%;
     text-align: center;
 }
+.plusIcon.text{
+    background-color: #c4c4c4;
+    font-size: smaller;
+    position: fixed;
+    left: 14%;
+    bottom: 14%;
+    width: 200px;
+    border-radius: 0%;
+    text-align: center;
+}
 .choose{
     cursor: pointer;
     height: 50px;
