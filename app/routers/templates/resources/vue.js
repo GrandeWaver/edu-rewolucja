@@ -204,13 +204,14 @@ const app = new Vue({
       backArrowFunc: function(){
         const _this = this
         var url = window.location.href
-        // post = url.split('Post')[1]
-        // if(post){
-        //   _this.href('Class'+_this.currPost[0].class_id)
-        // }
-        // else {
-          history.back()
-        // }
+        post = url.split('Post')[1]
+        if(post){
+          _this.href('Class'+_this.currPost[0].class_id)
+        }
+        else {
+          _this.href('Panel')
+        //   history.back()
+        }
       },
       logout: function(){
           deleteCookie('auth')
