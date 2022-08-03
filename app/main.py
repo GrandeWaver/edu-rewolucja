@@ -23,6 +23,7 @@ app.include_router(resources.router)
 
 origins = [
     "http://localhost:8080",
+    "https://korki.edu-rewolucja.pl/"
 ]
 app.add_middleware(
     CORSMiddleware,
