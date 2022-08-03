@@ -7,6 +7,7 @@ from .routers import create_class, select_class, frontend, resources, user, post
 from datetime import datetime, date
 import time
 from .database import *
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
@@ -20,17 +21,21 @@ app.include_router(auth.router)
 app.include_router(lesson.router)
 app.include_router(resources.router)
 
+origins = [
+    "http://localhost:8080",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/root")
 def helloWorld():
     return """Hello World!"""
 
-
-
-# cron
-    # sprawdz czy lessons tego usera mają datę która już jest przeszłościa i jeżeli tak to:
-    # jeśli mniej niż 45 minut to zmień na now
-    # jeśli więcej to zmień na canceled
 
 @app.on_event("startup")
 @repeat_every(seconds=3599, wait_first=False)

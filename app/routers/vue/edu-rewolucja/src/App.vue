@@ -1,22 +1,41 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  {{ title }}
-  <TestItem />
+  <Header 
+    :loading="loading" 
+    :isAuthenticated="isAuthenticated" 
+    :userData="userData"
+  />
+  <br><br>
+  <router-view />
+  <Footer />
 </template>
 
 <script>
-import TestItem from './components/test-item.vue'
+import Header from './components/Header-Item.vue'
+import Footer from './components/Footer-Item.vue'
+import auth from './scripts/utils'
 
 export default {
   name: 'App',
   components: {
-    TestItem
-},
+    Header, Footer
+  },
   data() {
     return {
-      title: 'My first title'
+        loading: true,
+        isAuthenticated: undefined,
+        userData: [
+          {'id': undefined, 'account_type': undefined}
+        ]
+      }
+  },
+  mounted : async function() {
+    await auth.isAuthenticatedFunc(this)
+    // if ciasteczko jest podrobione => usuń je i odswież stronę lub przenies na login
+    if(!this.isAuthenticated){
+      this.$router.push({ name: 'Login', query: { redirect: '/login' } })
     }
-  }
+    console.log(this.userData)
+  },
 }
 </script>
 
@@ -27,6 +46,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

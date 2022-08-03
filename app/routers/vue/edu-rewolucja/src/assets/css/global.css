@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    padding: 0;
+    height:100vh;
+  }
+a {
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 5px;
+}
+
+a:hover {
+    color:#00A0C6; 
+    text-decoration:none; 
+    cursor:pointer;  
+}
