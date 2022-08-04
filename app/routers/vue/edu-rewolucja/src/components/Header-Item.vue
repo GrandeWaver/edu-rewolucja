@@ -69,6 +69,10 @@ export default {
     opacity: 0.5;
 }
 @media only screen and (max-width: 500px) {
+    .header {
+        top:5px;
+        left: 10px;
+    }
   .user.info {
     display: none;
   }

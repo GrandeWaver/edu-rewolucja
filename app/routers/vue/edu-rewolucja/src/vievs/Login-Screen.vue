@@ -49,7 +49,7 @@ export default {
         }
     },
     methods: {
-        async handleResponse(response){
+        handleResponse(response){
             nProgress.start()
             callback(response, this)
         },
