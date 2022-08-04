@@ -31,10 +31,11 @@ def verify_access_token(token: str, credentials_exeption):
         payload = jwt.decode(token, secret.SECRET_KEY, algorithms=[secret.ALGORITHM])
         id: str = payload.get("user_id")
         account_type: str = payload.get("account_type")
+        picture: str = payload.get("picture")
 
         if id is None:
             raise credentials_exeption
-        token_data = schemas.TokenData(id=id, account_type=account_type)
+        token_data = schemas.TokenData(id=id, account_type=account_type, picture=picture)
     except JWTError:
         raise credentials_exeption
     

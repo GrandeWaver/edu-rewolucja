@@ -4,6 +4,10 @@
 
 <script>
 export default {
-
+mounted: function () {
+    // auth.isAuthenticatedFunc(this)
+},
+methods: {
+}
 }
 </script>

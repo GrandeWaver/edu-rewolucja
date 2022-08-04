@@ -12,8 +12,9 @@
 <script>
 import Header from './components/Header-Item.vue'
 import Footer from './components/Footer-Item.vue'
-import auth from './scripts/utils'
+import auth from './scripts/auth.js'
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
+import getData from './scripts/getData'
 
 export default {
   name: 'App',
@@ -24,17 +25,20 @@ export default {
     return {
       isAuthenticated: false,
       userData: [
-          {'id': undefined, 'account_type': undefined}
+          {'id': undefined, 'account_type': undefined, 'picture': undefined}
         ]
       }
   },
-  mounted : async function() {
-    await auth.isAuthenticatedFunc(this)
-    // if ciasteczko jest podrobione => usuń je i odswież stronę lub przenies na login
-    if(!this.isAuthenticated){
-      this.$router.push({ name: 'Login', query: { redirect: '/login' } })
+  mounted: async function() {
+    this.userData = await auth.isAuthenticatedFunc(this)
+    if(!String(this.userData.picture).startsWith('https://')){
+      this.userData.picture = getData.url()+this.userData.picture
     }
-    console.log(this.userData)
+      // if ciasteczko jest podrobione => usuń je i odswież stronę lub przenies na login
+      if(!this.isAuthenticated){
+        this.$router.push({ name: 'Login', query: { redirect: '/login' } })
+      }
+      console.log(this.userData)
   },
 }
 </script>

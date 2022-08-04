@@ -3,21 +3,27 @@
     <router-link to="/" class="logo">edu-rewolucja</router-link>
     <!-- Gdy user nie jest zalogowany -->
     <div v-if="!isAuthenticated" class="right">
-        <router-link :to="{ name: 'Login' }">Zaloguj się</router-link>
-        <router-link :to="{ name: 'Register' }">Zarejestruj</router-link>
+        <div class="right unauthorized">
+            <router-link :to="{ name: 'Login' }">Zaloguj się</router-link>
+            <router-link :to="{ name: 'Register' }">Zarejestruj</router-link>
+        </div>
     </div>
 
     <!-- Gdy user jest zalogowany -->
     <div v-if="isAuthenticated" class="right">
-        <a class="userinfo">id: {{ userData.id }} typ: {{ userData.account_type }} </a>
+    <div class="user container">
+        <a class="user info">id: {{ userData.id }} typ: {{ userData.account_type }}</a>
         <a @click="logout"> wyloguj</a>
-        <!-- <img v-bind:src="'/users/picture/'+userData.id" height="40"> ta metoda nie wczytuje zdjęcia za pierwszym razem :/ -->
+    </div>
+    <div>
+        <img :src=userData.picture class="user picture">
+    </div>
     </div>
 </div>
 </template>
 
 <script>
-import utils from '../scripts/utils'
+import auth from '../scripts/auth'
 import nProgress from 'nprogress';
 
 export default {
@@ -25,7 +31,7 @@ export default {
     methods: {
         logout() {
             nProgress.start()
-            utils.logoutFunc()
+            auth.logoutFunc()
             this.$root.isAuthenticated = false
             this.$router.push({ name: 'Login', query: { redirect: '/login' } })
         },
@@ -44,14 +50,35 @@ export default {
 }
 .right{
     float: right;
-    margin-right: 0;
     text-align: right;
-    margin-top: 1vh;
+}
+.right > div{
+    display: table-cell;
+}
+.right.unauthorized{
+    padding: 10px;
 }
 .logo{
     font-size: 30px;
 }
-.userinfo{
+.user.container {
+    position: relative;
+    top: -25px;
+}
+.user.info{
     opacity: 0.5;
+}
+@media only screen and (max-width: 500px) {
+  .user.info {
+    display: none;
+  }
+  .right.unauthorized {
+    display: none;
+  }
+}
+.user.picture{
+    margin: 5px;
+    height: 40px;
+    border-radius: 16px;
 }
 </style>

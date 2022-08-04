@@ -68,6 +68,12 @@ def get_photo(id: int):
     photo_link = cursor.fetchone()
     return RedirectResponse(photo_link["picture"])
 
+@router.get('/picture-from-email/{email}')
+def get_photo(email: EmailStr):
+    cursor.execute("""SELECT picture FROM users WHERE email = %s""", (email,))
+    photo_link = cursor.fetchone()
+    return {"picture": photo_link["picture"]}
+
 
 @router.get("/defaultpicture")
 def image_endpoint():

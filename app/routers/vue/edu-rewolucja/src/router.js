@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Login from './vievs/Login-Screen.vue';
+import WelcomeBack from './vievs/WelcomeBack-Screen.vue'
 import Register from './vievs/Register-Screen.vue';
 import Dashboard from './vievs/Dashboard-Screen.vue'
 import cookies from './scripts/cookies';
@@ -21,6 +22,11 @@ import nProgress from 'nprogress';
         path: '/login',
         name: 'Login',
         component: Login,
+      },
+      {
+        path: '/welcome-back',
+        name: 'WelcomeBack',
+        component: WelcomeBack,
       },
       {
         path: '/register',
@@ -59,12 +65,14 @@ import nProgress from 'nprogress';
     if (to.name == 'RegisterTutor' || to.name == 'Contact' || to.name == 'PrivacyPolicy' || to.name == 'TermsAndConditions'){
       next()
       return
-    } if (cookies.getCookie('auth') == undefined && to.name !== 'Login' && to.name !== 'Register') {
-      next('/login')
+    } if (cookies.getCookie('auth') == undefined && to.name == 'Login' || to.name == 'Register') {
+      next()
       return
     } if (cookies.getCookie('auth') != undefined && to.name == 'Login' || to.name == 'Register') {
       next('/')
-    } else {
+    } if (cookies.getCookie('auth') == undefined && to.name == 'Dashboard') {
+      next('/login')
+    }else {
       next()
     }
   });
