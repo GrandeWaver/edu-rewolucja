@@ -38,7 +38,7 @@ export default {
                     return response.json()
             })
             .then((responseJSON) => {
-                    this.user_picture = getData.url()+responseJSON.picture
+                    this.user_picture = getData.url()+"/"+responseJSON.picture
             })
             .catch((error) => {
                 alert(error)
