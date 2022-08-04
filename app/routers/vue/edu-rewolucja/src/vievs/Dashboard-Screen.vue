@@ -1,5 +1,6 @@
 <template>
     <h1>Twoje zajęcia</h1>
+    <div class="box"> </div>
 </template>
 
 <script>
@@ -11,3 +12,9 @@ methods: {
 }
 }
 </script>
+
+<style>
+.box{
+    height: 100vh;
+}
+</style>
