@@ -1,6 +1,6 @@
 <template>
+  <nprogress-container></nprogress-container>
   <Header 
-    :loading="loading" 
     :isAuthenticated="isAuthenticated" 
     :userData="userData"
   />
@@ -13,17 +13,17 @@
 import Header from './components/Header-Item.vue'
 import Footer from './components/Footer-Item.vue'
 import auth from './scripts/utils'
+import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 
 export default {
   name: 'App',
   components: {
-    Header, Footer
+    NprogressContainer, Header, Footer
   },
   data() {
     return {
-        loading: true,
-        isAuthenticated: undefined,
-        userData: [
+      isAuthenticated: false,
+      userData: [
           {'id': undefined, 'account_type': undefined}
         ]
       }
@@ -46,5 +46,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+#nprogress .spinner {
+  display: none;
 }
 </style>

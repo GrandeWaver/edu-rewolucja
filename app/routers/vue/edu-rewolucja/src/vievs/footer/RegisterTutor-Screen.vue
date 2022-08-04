@@ -1,6 +1,6 @@
 <template>
     <h1>Zostań korepetytorem</h1>
-    <b>Aby założyć konto nauczyciela </b>wystarczy, że napiszesz do mnie na 
+    Aby założyć konto nauczyciela wystarczy, że napiszesz do mnie na 
     <br><br>
     <a href="mailto:edurewolucja@gmail.com" class="email">edurewolucja@gmail.com</a>
     <br><br><br><br>

@@ -15,12 +15,10 @@ const headersAuth = {
     },
 
     async getData(_this, url = ''){
-        _this.loading = true
         const response = await fetch(url, {
         dataType: "json",
         headers: headersAuth,
         })
-        _this.loading = false
         if(response.status == 204){
             return response
         }

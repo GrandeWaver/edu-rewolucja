@@ -9,6 +9,8 @@ import Contact from './vievs/footer/Contact-Screen.vue'
 import PrivacyPolicy from './vievs/footer/PrivacyPolicy-Screen.vue'
 import TermsAndConditions from './vievs/footer/TermsAndConditions-Screen.vue'
 
+import nProgress from 'nprogress';
+
   const routes = [
       {
         path: '/',
@@ -53,6 +55,7 @@ import TermsAndConditions from './vievs/footer/TermsAndConditions-Screen.vue'
   })
 
   router.beforeEach((to, from, next) => {
+    nProgress.start()
     if (to.name == 'RegisterTutor' || to.name == 'Contact' || to.name == 'PrivacyPolicy' || to.name == 'TermsAndConditions'){
       next()
       return
@@ -65,5 +68,9 @@ import TermsAndConditions from './vievs/footer/TermsAndConditions-Screen.vue'
       next()
     }
   });
+
+  router.afterEach(() => {
+    nProgress.done()
+  })
 
   export default router;

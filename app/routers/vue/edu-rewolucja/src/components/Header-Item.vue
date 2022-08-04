@@ -9,28 +9,26 @@
 
     <!-- Gdy user jest zalogowany -->
     <div v-if="isAuthenticated" class="right">
-        <a @click="test" class="userinfo">id: {{ userData.id }} typ: {{ userData.account_type }} </a>
+        <a class="userinfo">id: {{ userData.id }} typ: {{ userData.account_type }} </a>
         <a @click="logout"> wyloguj</a>
         <!-- <img v-bind:src="'/users/picture/'+userData.id" height="40"> ta metoda nie wczytuje zdjęcia za pierwszym razem :/ -->
     </div>
-    <div v-if="loading" class="loading"></div>
 </div>
 </template>
 
 <script>
 import utils from '../scripts/utils'
+import nProgress from 'nprogress';
 
 export default {
-    props: ['loading', 'isAuthenticated', 'userData'],
+    props: ['isAuthenticated', 'userData'],
     methods: {
         logout() {
-            console.log(this.isAuthenticated)
+            nProgress.start()
             utils.logoutFunc()
-            window.location.reload()
+            location.reload();
+            // this.$router.push({ name: 'Login', query: { redirect: '/login' } })
         },
-        test(){
-            console.log(this.userData)
-        }
 }
 }
 </script>

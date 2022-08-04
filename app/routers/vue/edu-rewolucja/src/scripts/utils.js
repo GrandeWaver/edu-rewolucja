@@ -6,7 +6,6 @@ var auth = {
         var url = getData.url()
         if (cookies.getCookie('auth') == undefined){
           _this.isAuthenticated = false
-          _this.loading = false
           _this.$router.push({ name: 'Login', query: { redirect: '/login' } })
         } else {
           await getData.getData(_this, url+"/auth/")
@@ -17,7 +16,6 @@ var auth = {
           .catch(() => {
             cookies.deleteCookie('auth')
             _this.isAuthenticated = false
-            _this.loading = false
             _this.$router.push({ name: 'Login', query: { redirect: '/login' } })
           })
         }
