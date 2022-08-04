@@ -44,11 +44,19 @@ export default {
 
 <style>
 .login.wrapper{
-    background-color: beige;
+    margin-top: 20px;
     width: 400px;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
+
+    border-radius: 16px;
+    border: 1px solid #ccc;
+}
+@media only screen and (max-width: 420px) {
+  .login.wrapper {
+    width: 280px;
+  }
 }
 .login.container{
     padding: 20px;

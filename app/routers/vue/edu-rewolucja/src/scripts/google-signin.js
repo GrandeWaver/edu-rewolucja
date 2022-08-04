@@ -1,9 +1,9 @@
 import getData from "./getData"
+import nProgress from 'nprogress';
 
 const callback = (response, _this) => {
     // This callback will be triggered when the user selects or login to
     // his Google account from the popup
-    console.log("Handle the response", response)
 
         // $.ajax({
         //     url: "/auth/googleuser",
@@ -35,8 +35,8 @@ const callback = (response, _this) => {
             headers: {"Content-Type": "application/json",},
           })
             .then((response) => {
-                console.log(response.status)
                 if(response.status == 400){
+                    nProgress.done()
                     alert('Zaloguj się przez email, a nie przez Google')
                     return
                 } if(response.status == 200){
@@ -54,7 +54,6 @@ const callback = (response, _this) => {
                 }
             })
             .catch((error) => {
-                console.log(error)
                 alert(error)
               })
   }
