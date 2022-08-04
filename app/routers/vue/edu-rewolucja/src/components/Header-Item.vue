@@ -26,8 +26,8 @@ export default {
         logout() {
             nProgress.start()
             utils.logoutFunc()
-            location.reload();
-            // this.$router.push({ name: 'Login', query: { redirect: '/login' } })
+            this.$root.isAuthenticated = false
+            this.$router.push({ name: 'Login', query: { redirect: '/login' } })
         },
 }
 }

@@ -1,6 +1,6 @@
 import getData from "./getData"
 
-const callback = (response) => {
+const callback = (response, _this) => {
     // This callback will be triggered when the user selects or login to
     // his Google account from the popup
     console.log("Handle the response", response)
@@ -48,8 +48,9 @@ const callback = (response) => {
                     let access_token = responseJSON.access_token
                     var expire_date = new Date(new Date().getTime()+60*60*1000*720).toGMTString(); // 720h
                     document.cookie = "auth="+access_token+"; expires="+expire_date+"; path=/";
-                    location.reload();
-                    // _this.$router.push({ name: 'Dashboard' })
+                    // location.reload();
+                    _this.$root.isAuthenticated = true
+                    _this.$router.push({ name: 'Dashboard' })
                 }
             })
             .catch((error) => {

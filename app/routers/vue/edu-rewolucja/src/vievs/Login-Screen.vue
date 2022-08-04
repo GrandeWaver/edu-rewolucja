@@ -37,7 +37,6 @@ export default {
         handleResponse(response){
             nProgress.start()
             callback(response, this)
-            this.$parent.isAuthenticated = 'dupa'
         }
     }
 }
