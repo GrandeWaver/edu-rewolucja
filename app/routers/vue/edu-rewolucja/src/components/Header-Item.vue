@@ -72,6 +72,7 @@ export default {
     .header {
         top:5px;
         left: 10px;
+        right: 10px;
     }
   .user.info {
     display: none;
