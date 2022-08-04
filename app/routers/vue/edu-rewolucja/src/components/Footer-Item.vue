@@ -9,8 +9,7 @@
 
 <style>
 footer {
-    position:absolute;
-    bottom:0;
+    margin-top: 200px;
     height:20px;
     width:100%;
 }
