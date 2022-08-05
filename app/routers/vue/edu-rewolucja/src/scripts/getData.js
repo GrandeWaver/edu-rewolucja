@@ -14,6 +14,10 @@ const headersAuth = {
         }
     },
 
+    getHeaders () {
+        return headersAuth
+    },
+
     async getData(_this, url = ''){
         const response = await fetch(url, {
         dataType: "json",
