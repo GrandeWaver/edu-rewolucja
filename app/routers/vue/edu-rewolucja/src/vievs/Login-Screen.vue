@@ -3,7 +3,7 @@
     <div class="login container">
         <h1>Zaloguj się</h1>
         Nowy użytkownik? 
-        <router-link :to="{ name: 'Register' }">Utwórz konto</router-link>
+        <router-link :to="{ name: 'Register' }" class="textcolor blue">Utwórz konto</router-link>
         
         <br><br>
         <div class="login opacity">Kontynuuj z Google</div>
@@ -81,6 +81,10 @@ export default {
                     if (responseJSON.response == 'false'){
                         this.alert1 = true
                         nProgress.done()
+                    } if (responseJSON.response == 'google_user'){
+                        this.alert1 = false
+                        alert('Zaloguj się używając logowania z Google, a nie email')
+                        nProgress.done()
                     } if (responseJSON.response == 'true'){
                         this.alert1 = false
                         nProgress.done()
@@ -123,9 +127,9 @@ export default {
 .login.redWarning{
     padding-top: 5px;
     padding-bottom: 5px;
-    color: rgb(255, 55, 55);
+    color: rgb(255, 92, 92);
 }
 .login.blueWarning{
-    color: rgb(49, 49, 255);
+    color: #0055c4;
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="login container">
         <h1>Załóż konto</h1>
         Masz już konto?
-        <router-link :to="{ name: 'Login' }">Zaloguj się</router-link>
+        <router-link :to="{ name: 'Login' }" class="textcolor blue">Zaloguj się</router-link>
         
         <br><br>
         <div class="login opacity">Zarejestruj się z Google</div>

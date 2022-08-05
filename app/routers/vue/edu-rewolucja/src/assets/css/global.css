@@ -38,3 +38,9 @@ button{
     border-radius: 25px;
     margin: 5px;
 }
+.textcolor.blue{
+    color: #00A0C6;
+}
+.textcolor.blue:hover{
+    color: #0055c4;
+}

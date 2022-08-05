@@ -50,7 +50,10 @@ def check_email(email: schemas.Email):
     cursor.execute("""SELECT * FROM users WHERE email = %s""", (email.email,))
     user = cursor.fetchone()
     if user:
-        return {'response': 'true'}
+        if user['sub'] != None:
+            return {'response': 'google_user'}
+        else:
+            return {'response': 'true'}
     else:
         return {'response': 'false'}
 
