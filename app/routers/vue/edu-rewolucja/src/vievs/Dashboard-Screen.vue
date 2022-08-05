@@ -14,7 +14,5 @@ methods: {
 </script>
 
 <style>
-.box{
-    height: 100vh;
-}
+
 </style>

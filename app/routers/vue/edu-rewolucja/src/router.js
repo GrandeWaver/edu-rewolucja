@@ -72,7 +72,7 @@ import nProgress from 'nprogress';
       next('/')
     } if (cookies.getCookie('auth') == undefined && to.name == 'Dashboard') {
       next('/login')
-    }else {
+    } else {
       next()
     }
   });

@@ -4,8 +4,10 @@
     :isAuthenticated="isAuthenticated" 
     :userData="userData"
   />
-  <br><br>
-  <router-view />
+  <div class="page-container">
+    <br><br>
+    <router-view />
+  </div>
   <Footer />
 </template>
 
@@ -14,7 +16,6 @@ import Header from './components/Header-Item.vue'
 import Footer from './components/Footer-Item.vue'
 import auth from './scripts/auth.js'
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
-import getData from './scripts/getData'
 
 export default {
   name: 'App',
@@ -25,20 +26,16 @@ export default {
     return {
       isAuthenticated: false,
       userData: [
-          {'id': undefined, 'account_type': undefined, 'picture': undefined}
+          {
+            'id': undefined, 
+            'account_type': undefined, 
+            'picture': undefined
+          }
         ]
       }
   },
   mounted: async function() {
     this.userData = await auth.isAuthenticatedFunc(this)
-    if(!String(this.userData.picture).startsWith('https://')){
-      this.userData.picture = getData.url()+this.userData.picture
-    }
-      // if ciasteczko jest podrobione => usuń je i odswież stronę lub przenies na login
-      if(!this.isAuthenticated){
-        this.$router.push({ name: 'Login', query: { redirect: '/login' } })
-      }
-      console.log(this.userData)
   },
 }
 </script>
@@ -53,5 +50,13 @@ export default {
 }
 #nprogress .spinner {
   display: none;
+}
+.page-container {
+    min-height: 98vh;
+}
+@media only screen and (max-width: 440px) {
+.page-container {
+    min-height: 94vh;
+}
 }
 </style>
