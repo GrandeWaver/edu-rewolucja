@@ -10,6 +10,8 @@ import Contact from './vievs/footer/Contact-Screen.vue'
 import PrivacyPolicy from './vievs/footer/PrivacyPolicy-Screen.vue'
 import TermsAndConditions from './vievs/footer/TermsAndConditions-Screen.vue'
 
+import BuyLesson from './vievs/BuyLesson-Screen.vue'
+
 import nProgress from 'nprogress';
 
   const routes = [
@@ -52,6 +54,12 @@ import nProgress from 'nprogress';
         path: '/terms-and-conditions',
         name: 'TermsAndConditions',
         component: TermsAndConditions,
+      },
+      {
+        path: '/buy-lesson/:id',
+        name: 'BuyLesson',
+        component: BuyLesson,
+        props: true
       },
   ]
   

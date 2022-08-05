@@ -1,11 +1,17 @@
 <template>
+<Suspense>
+  <template #default>
+    {{posts}}
+  </template>
+  <template #fallback>loading...</template>
+</Suspense>
+
     <h1>Twoje zajęcia</h1>
     <!-- {{ $root.userData.account_type }} -->
     <br><br>
     <div v-if="no_classes">Brak zajęć</div>
     <div v-for="(class_, index) in classes" :key="class_.id" class="dashboard class">
         <div class="dashboard classWrapper">
-            <img src="@/assets/icons8-more-64.png" class="dashboard more">
             <img :src=class_.picture class="dashboard picture">
 
             <div class="dashboard subject">{{ class_.subject }}</div>
@@ -14,14 +20,36 @@
         <div v-for="(schedule, schedule_index) in schedules[index]" :key="schedule_index" class="dashboard schedules"> 
             <div class="dashboard schedule">{{schedule.day}} {{schedule.hour}}</div>
         </div>
+        <router-link :to="{ name: 'BuyLesson', params: { id: class_.id } }" class="textcolor blue dashboard schedules">Zaplanuj lekcje</router-link>
     </div>
 </template>
 
+<!-- <script setup>
+// import PostsTest from '../components/Posts-Test.vue'
+
+
+// const res = await fetch(getData.url()+'/classes/', {headers: getData.getHeaders()})
+// const posts = await res.json()
+</script> -->
+
 <script>
-import getData from '@/scripts/getData'
+import getData from '../scripts/getData'
+import { ref } from "vue";
 import nProgress from 'nprogress'
 
 export default {
+ setup() {
+    let dataReady = ref(false);
+    let posts
+    dataReady.value = Promise.resolve(true).then(() => {
+      const res = fetch(getData.url()+'/classes/', {headers: getData.getHeaders()})
+      posts = res.json()
+      dataReady.value = true
+    });
+    return {
+      dataReady, posts
+    };
+  },
 data(){
     return {
         no_classes: undefined,
@@ -78,8 +106,6 @@ mounted: async function () {
             }
         })
 },
-methods: {
-}
 }
 </script>
 
@@ -113,16 +139,7 @@ methods: {
     float: right;
     height: 80px;
     border-radius: 50%;
-    transform: translateX(8px);
-}
-.dashboard.more{
-    float: right;
-    height: 30px;
-    transform: translateX(10px);
-    opacity: 0.7;
-}
-.dashboard.more:hover{
-    cursor: pointer;
+    /* transform: translateX(-px); */
 }
 .dashboard.subject{
     font-size: larger;
