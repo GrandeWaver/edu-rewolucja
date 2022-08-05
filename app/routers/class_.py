@@ -44,7 +44,7 @@ def get_posts(user_data = Depends(oauth2.get_current_user)):
         subject, 
         (SELECT firstname from users where id = classes.tutor_id), 
         (SELECT lastname from users where id = classes.tutor_id),
-        (SELECT picture from users where id = classes.student_id)
+        (SELECT picture from users where id = classes.tutor_id)
         FROM classes
         WHERE student_id = %s""",
         (user_data.id,))
