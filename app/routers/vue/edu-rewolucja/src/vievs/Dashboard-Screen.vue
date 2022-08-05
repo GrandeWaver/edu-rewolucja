@@ -5,6 +5,9 @@
     <div v-if="no_classes">Brak zajęć</div>
     <div v-for="(class_, index) in classes" :key="class_.id" class="dashboard class">
         <div class="dashboard classWrapper">
+            <img src="@/assets/icons8-more-64.png" class="dashboard more">
+            <img :src=class_.picture class="dashboard picture">
+
             <div class="dashboard subject">{{ class_.subject }}</div>
             <div class="dashboard name">{{class_.firstname}} {{class_.lastname}}</div>
         </div>
@@ -105,6 +108,21 @@ methods: {
     border: 1px solid #ccc;
     background-color: rgb(9, 131, 80);
     color: white;
+}
+.dashboard.picture{
+    float: right;
+    height: 80px;
+    border-radius: 50%;
+    transform: translateX(8px);
+}
+.dashboard.more{
+    float: right;
+    height: 30px;
+    transform: translateX(10px);
+    opacity: 0.7;
+}
+.dashboard.more:hover{
+    cursor: pointer;
 }
 .dashboard.subject{
     font-size: larger;

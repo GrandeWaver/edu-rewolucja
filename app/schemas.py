@@ -68,6 +68,7 @@ class Class(BaseModel):
     subject: str
     firstname: str
     lastname: str
+    picture: str
 
 class ClassDetails(BaseModel):
     subject: str

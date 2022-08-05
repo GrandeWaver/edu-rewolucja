@@ -83,6 +83,6 @@ export default {
 .user.picture{
     margin: 5px;
     height: 40px;
-    border-radius: 20px;
+    border-radius: 50%;
 }
 </style>
