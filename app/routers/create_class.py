@@ -21,7 +21,6 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
 
     cursor.execute("""SELECT id FROM available_classes WHERE tutor_id = %s AND subject = %s""", (tutor_id, subject))
     is_already = cursor.fetchone()
-    print(is_already)
     if is_already != None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"You have already created this class")
 
@@ -32,12 +31,6 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
             available_check.append('.')
     if len(available_check) == 7:
         raise HTTPException(status_code=status.HTTP_418_IM_A_TEAPOT, detail=f"You are very lazy :p")
-
-
-    print(f"tutor_id: {tutor_id}")
-    print(f"subject: {subject}")
-    print(f"rank: {rank}")
-
 
     cursor.execute("""SELECT week_id as max_week_id FROM join_tutor_week ORDER BY max_week_id desc LIMIT 1""", []) # INIT: musi być pierwszy wiersz
     max_week_id = cursor.fetchone()
@@ -63,14 +56,12 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
             cursor.execute("""INSERT INTO available_tutor_schedules (day, schedule_id) VALUES (%s, %s) RETURNING * """,
             (day, start_end_id['schedule_id']))
             array_id = cursor.fetchone()
-            print(f'available_tutor_schedules: {array_id}')
 
             available_day_id = array_id['id']
             cursor.execute("""INSERT INTO join_tutor_week (week_id, available_day_id) VALUES (%s, %s) RETURNING * """,
             (max_week_id, available_day_id))
 
             available_tutor_schedule_id = cursor.fetchone() # POTEM WYKORZYSTAMY GO W INNYCH DNIACH TYGODNIA
-            print(f'available_tutor_schedule_id: {available_tutor_schedule_id}')
 
     cursor.execute("""INSERT INTO available_classes (subject, rank, tutor_id, available_tutor_schedule_id) VALUES (%s, %s, %s, %s) RETURNING * """,
     (subject, rank, tutor_id, available_tutor_schedule_id['week_id']))
@@ -83,7 +74,6 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
 
 @router.post("/student", status_code=status.HTTP_201_CREATED)
 def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2.get_current_user)):
-    print(data)
 
     # konwertowanie tego na date
     months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień", ]
@@ -97,15 +87,12 @@ def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2
         SELECT * FROM available_classes WHERE id = %s
     """,(data.available_class_id,))
     available_class = cursor.fetchone()
-    print(available_class)
-    print(user_data.id)
 
     # szybki check czy ten tutor nie ma już zajęć z tym uczniem i z tym przedmiotem
     cursor.execute("""
         SELECT * FROM classes WHERE subject = %s AND tutor_id = %s AND student_id = %s
     """, (available_class['subject'], available_class['tutor_id'], user_data.id,))
     is_already = cursor.fetchone()
-    print(is_already)
 
     if is_already != None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"You already have this class")
@@ -116,7 +103,6 @@ def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2
     """, (available_class['subject'], available_class['tutor_id'], user_data.id, available_class['rank'], available_class['id']))
 
     new_class = cursor.fetchone()
-    print(f'new_class: {new_class}')
     
     # INSERT INTO LESSONS
     cursor.execute("""

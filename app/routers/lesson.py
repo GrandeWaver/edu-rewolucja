@@ -26,7 +26,7 @@ def get_available_class_id(class_id: int, user_data = Depends(oauth2.get_current
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.get_current_user)):
-    print(data)
+    print(f'-----------------------------{data}------------------------------')
     
     # konwertowanie tego na date
     months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień", ]
@@ -35,6 +35,8 @@ def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.g
 
     date_str = str(data.day)+'/'+str(month)+'/'+str(data.year)+' '+str(data.hour)+':00:00'
     date = datetime.strptime(date_str, "%d/%m/%y %H:%M:%S")
+
+    print(f'**************************{date}***************************')
 
     # INSERT INTO LESSONS
     cursor.execute("""

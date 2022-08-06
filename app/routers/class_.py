@@ -81,8 +81,6 @@ def get_classses_v2(user_data = Depends(oauth2.get_current_user)):
         (user_data.id,))
         classes = cursor.fetchall()
 
-    print(classes)
-
     if len(classes) == 0:
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"You have no classes")
     else:
@@ -105,8 +103,6 @@ def get_classses_v2(user_data = Depends(oauth2.get_current_user)):
             class_['schedules'] = schedule
 
             new_classes.append(class_)
-
-            print(new_classes)
         
         return new_classes
 

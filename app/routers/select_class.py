@@ -1,3 +1,4 @@
+from ast import Constant
 from re import X
 from app import oauth2
 from app.utils import *
@@ -81,12 +82,12 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
 
         working_hours[day_index]['working_hours'].pop()
 
-        
+
     # dni tygodnia ORAZ daty 90 dni
     ninety_days = []
     today = datetime.now()
     count = 0
-    for n in range(90):
+    for n in range(14):
         day = (today+timedelta(days=1)) + timedelta(days=count)
         week_day = days[day.weekday()]
         date = day.isoformat()
@@ -134,20 +135,23 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
         month_row = {'month': month['month'], 'month_index': month_index, 'year': month['year'], 'days': []}
         dict.append(month_row)
         day_index = -1
+        
         for day in working_90_days:
             if month['month'] == day['month']:
                 for schedule in working_hours:
                     if schedule['day'] == day['day']:
                         day_index = day_index + 1
                         # skasuj wszystkie godziny w które tutor ma już zaplanowane lekcje
-                        # print(f"{day['month']} {day['date']} {day['day']}: {schedule['working_hours']}")
+                        copy_schedule = schedule['working_hours'].copy()
                         for element in busy:
                             if day['month'] == element['month']:
                                 if day['date'] == element['date']:
                                     for item in schedule['working_hours']:
+                                        
                                         if item == element['hour']:
-                                            schedule['working_hours'].remove(item)
-                        day_row = {'day': day['date'], 'day_index': day_index, 'name': day['day'], 'working_hours': schedule['working_hours']}
+
+
+                                            copy_schedule.remove(item)
+                        day_row = {'day': day['date'], 'day_index': day_index, 'name': day['day'], 'working_hours': copy_schedule}
                         dict[month_index]['days'].append(day_row)
-    # print(busy)
     return dict

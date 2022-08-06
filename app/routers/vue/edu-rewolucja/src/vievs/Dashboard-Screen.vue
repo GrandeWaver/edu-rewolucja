@@ -1,11 +1,13 @@
 
 
 <template>
-    <!-- {{ $root.userData.account_type }} -->
+
      <h1>Twoje zajęcia</h1>
 
      <br><br>
+
     <div v-if="no_classes">Brak zajęć</div>
+
     <div v-for="class_ in classes" :key="class_.id" class="dashboard class">
         <div class="dashboard classWrapper">
             <img :src=class_.picture class="dashboard picture">
@@ -16,14 +18,15 @@
         <div v-for="(schedule, schedule_index) in class_.schedules" :key="schedule_index" class="dashboard schedules"> 
             <div class="dashboard schedule">{{schedule.day}} {{schedule.hour}}</div>
         </div>
-        <div class="dashboard buyLesson">
+        <div v-if="$root.userData.account_type == 'student'" class="dashboard buyLesson">
             <router-link :to="{ name: 'BuyLesson', params: { id: class_.id } }" class="textcolor blue">Zaplanuj lekcje</router-link>
         </div>
     </div>
+
  </template>
 <script>
 import getData from '../scripts/getData'
-import { onMounted, ref } from "vue";
+import { onMounted, ref  } from "vue";
 import nProgress from 'nprogress';
 
 export default {
@@ -47,6 +50,7 @@ setup() {
             .then(data => {classes.value = data})
     })
     nProgress.done()
+
     return { classes, no_classes };
   },
  }
