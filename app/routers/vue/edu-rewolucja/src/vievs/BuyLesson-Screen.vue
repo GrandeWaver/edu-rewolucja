@@ -119,4 +119,9 @@ export default {
     border-radius: 16px;
     border: 1px solid #ccc;
 }
+@media only screen and (max-width: 440px) {
+  .buyLesson.wrapper {
+    width: 360px;
+  }
+}
 </style>
