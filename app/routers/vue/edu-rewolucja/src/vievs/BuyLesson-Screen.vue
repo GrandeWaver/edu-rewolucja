@@ -79,9 +79,8 @@ export default {
     },
     methods: {
         submit () {
-            // alert('jeszcze niedziałam :)')
+            nProgress.start()
             console.log(this.select_first_lesson.hour)
-            //if(1+2 === 3){
             fetch(getData.url()+"/lesson/", {
                 method: "POST",
                 dataType: "json",
@@ -97,14 +96,13 @@ export default {
             })
             .then(response => {
                 if(response.status == 201){
-                alert('zadziałało')
+                    this.$router.push({ name: 'Dashboard' })
                 }
                 if(response.status == 500){
                 alert('error: błąd połączenia z bazą danych... \nkod błędu: 500')
                 }
             })
-            console.log('wysyłanie do /lesson')
-            //}
+            nProgress.done()
         }
     }
 }

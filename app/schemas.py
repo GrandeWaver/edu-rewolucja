@@ -61,7 +61,7 @@ class GoogleToken(BaseModel):
 
 class Schedule(BaseModel):
     day: str
-    hour: int
+    hour: str
 
 class Class(BaseModel):
     id: int
@@ -69,6 +69,14 @@ class Class(BaseModel):
     firstname: str
     lastname: str
     picture: str
+
+class ClassV2(BaseModel):
+    id: int
+    subject: str
+    firstname: str
+    lastname: str
+    picture: str
+    schedules: List[Schedule]
 
 class ClassDetails(BaseModel):
     subject: str
