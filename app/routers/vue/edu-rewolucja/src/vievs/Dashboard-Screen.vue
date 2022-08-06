@@ -98,7 +98,7 @@ setup() {
     padding: 10px;
 }
 .dashboard.buyLesson {
-    padding: 10px;
-    padding-left: 5px;
+    margin: 10px;
+    margin-left: 5px;
 }
 </style>
