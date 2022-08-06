@@ -87,7 +87,7 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
     ninety_days = []
     today = datetime.now()
     count = 0
-    for n in range(14):
+    for n in range(90):
         day = (today+timedelta(days=1)) + timedelta(days=count)
         week_day = days[day.weekday()]
         date = day.isoformat()
