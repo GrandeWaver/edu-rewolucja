@@ -31,6 +31,8 @@
         <div class="selectClass details">chemia</div>
     </div>
 
+    <div style="display:initial"></div>
+
 </div>
 
 
