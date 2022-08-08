@@ -30,17 +30,11 @@
             <img src="@/assets/icons8-atom-64.png" class="selectClass icon">
         <div class="selectClass details">chemia</div>
     </div>
-
-    <div style="display:block"></div>
-    <br><br>
-
+    <h1 v-if="$root.userData.account_type == 'tutor'">Czego chcesz uczyć?</h1>
 </div>
 
 
 
-
-
-<h1 v-if="$root.userData.account_type == 'tutor'">Czego chcesz uczyć?</h1>
 </template>
 
 <script>
