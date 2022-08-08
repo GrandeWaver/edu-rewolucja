@@ -81,6 +81,9 @@ setup() {
   .dashboard.class{
     width: 300px;
   }
+  .plusIcon{
+    width: 65px;
+  }
 }
 .dashboard.classWrapper{
     padding: 10px;

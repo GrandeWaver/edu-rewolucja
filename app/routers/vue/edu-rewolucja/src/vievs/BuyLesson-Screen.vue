@@ -138,7 +138,7 @@ export default {
 @media only screen and (max-width: 440px) {
   .buyLesson.wrapper {
     width: 360px;
-    height: 350px;
+    height: 380px;
   }
 }
 .buyLesson.clock {
