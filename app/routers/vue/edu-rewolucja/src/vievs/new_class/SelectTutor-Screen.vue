@@ -85,7 +85,7 @@ export default {
   }
 }
 .selectTutor.tutor{
-    padding: 20px;
+    padding: 10px;
     padding-top: 10px;
     height: fit-content;
     margin-top: 20px;
@@ -94,12 +94,13 @@ export default {
     background-color: rgba(204, 204, 204, 0.671);
 }
 .selectTutor.picture{
-    padding: 10px;
+    margin: 10px;
     margin-right: 25px;
     float: left;
     border-radius: 50%;
     height: 90px;
-    transform: translateY(-12px);
+    margin-top: auto;
+    margin-bottom: auto;
 }
 .selectTutor.details{
     display: block;

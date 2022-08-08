@@ -166,8 +166,10 @@ export default {
     float: initial;
     background-color: #FF6E6E;
     color: white;
-    border-radius: 10px;
-    font-size: 12px;
+    border-radius: 16px;
+    font-size: 18px;
+    height: 35px;
+    width: 160px;
 }
 .submit:hover{
     background-color: #ff5252;
