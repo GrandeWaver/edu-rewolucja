@@ -7,10 +7,10 @@
             <router-link :to="{ name: 'NewClass-date', params: { class_id: tutor.class_id, subject: subject} }">
                 <img :src=tutor.picture class="selectTutor picture">
                 <div class="selectTutor details">
-                    <div class="selectTutor price">50 zł</div>
                     <div class="selectTutor name">{{ tutor.firstname }} {{ tutor.lastname }}</div>
                     <!-- <div>lekcji: 0</div> -->
                     <div>{{ tutor.encoded }}</div>
+                    <div class="selectTutor price">50 zł</div>
                 </div>
             </router-link>
         </div>
@@ -79,15 +79,10 @@ export default {
     border-radius: 16px;
     border: 1px solid #ccc;
 }
-@media only screen and (max-width: 440px) {
-  .selectTutor.wrapper {
-    width: 360px;
-  }
-}
 .selectTutor.tutor{
     padding: 10px;
     padding-top: 10px;
-    height: fit-content;
+    height: 100px;
     margin-top: 20px;
 }
 .selectTutor.tutor:hover{
@@ -98,12 +93,14 @@ export default {
     margin-right: 25px;
     float: left;
     border-radius: 50%;
-    height: 90px;
+    height: 100px;
     margin-top: auto;
     margin-bottom: auto;
 }
 .selectTutor.details{
     display: block;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 .selectTutor.name{
     margin-bottom: 10px;
@@ -113,6 +110,16 @@ export default {
 .selectTutor.price{
     float: right;
     opacity: 0.7;
+}
+@media only screen and (max-width: 440px) {
+  .selectTutor.wrapper {
+    width: 360px;
+  }
+  .selectTutor.price{
+    margin-top: 10px;
+    float: left;
+    opacity: 0.7;
+}
 }
 
 </style>
