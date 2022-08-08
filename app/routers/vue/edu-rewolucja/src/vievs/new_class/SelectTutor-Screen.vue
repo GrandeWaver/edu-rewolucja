@@ -2,7 +2,7 @@
 <h1>Wybierz nauczyciela</h1>
 
 <div class="selectTutor wrapper">
-    <div v-for="tutor in tutors" :key="tutor.tutor_id">
+    <div v-if="!no_tutors" v-for="tutor in tutors" :key="tutor.tutor_id">
         <div class="selectTutor tutor">
             <router-link :to="{ name: 'NewClass-date', params: { class_id: tutor.class_id, subject: subject} }">
                 <img :src=tutor.picture class="selectTutor picture">
@@ -15,6 +15,7 @@
             </router-link>
         </div>
     </div>
+    <div v-if="no_tutors">Brak dostępnych nauczycieli</div>
     <br>
 </div>
 
