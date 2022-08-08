@@ -29,6 +29,7 @@
     <div class="selectClass subject unavailable">
             <img src="@/assets/icons8-atom-64.png" class="selectClass icon">
         <div class="selectClass details">chemia</div>
+        <div>&nbsp;</div>
     </div>
     <h1 v-if="$root.userData.account_type == 'tutor'">Czego chcesz uczyć?</h1>
 </div>
@@ -50,7 +51,6 @@ components: {
 <style>
 .selectClass.wrapper{
     margin-top: 20px;
-    height: 445px;
     width: 410px;
     margin-left: auto;
     margin-right: auto;
@@ -61,7 +61,6 @@ components: {
 @media only screen and (max-width: 440px) {
   .selectClass.wrapper {
     width: 360px;
-    height: 445px;
   }
 }
 .selectClass.subject{
