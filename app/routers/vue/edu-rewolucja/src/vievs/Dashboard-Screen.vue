@@ -1,7 +1,4 @@
-
-
 <template>
-
      <h1>Twoje zajęcia</h1>
 
      <br><br>
@@ -23,6 +20,9 @@
         </div>
     </div>
 
+    <router-link :to="{ name: 'NewClass-subject' }">
+        <img class="plusIcon" src="https://cdn0.iconfinder.com/data/icons/very-basic-2-android-l-lollipop-icon-pack/24/plus-512.png">
+    </router-link>
  </template>
 <script>
 import getData from '../scripts/getData'
@@ -111,5 +111,14 @@ setup() {
 .dashboard.buyLesson {
     margin: 10px;
     margin-left: 5px;
+}
+.plusIcon{
+    background-color: #55c8fa;
+    position: fixed;
+    left: 5%;
+    bottom: 5%;
+    width: 85px;
+    border-radius: 50%;
+    text-align: center;
 }
 </style>

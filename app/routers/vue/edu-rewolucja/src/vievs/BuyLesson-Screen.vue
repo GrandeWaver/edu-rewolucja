@@ -86,7 +86,6 @@ export default {
             })
             .then((responseJSON) => {
                 nProgress.done()
-                console.log(responseJSON)
                 this.available_schedules = responseJSON
                 this.select_first_lesson.day = responseJSON[this.select_first_lesson.month_index].days[this.select_first_lesson.day_index].day
                 this.select_first_lesson.month = responseJSON[this.select_first_lesson.month_index].month

@@ -12,6 +12,8 @@ import TermsAndConditions from './vievs/footer/TermsAndConditions-Screen.vue'
 
 import BuyLesson from './vievs/BuyLesson-Screen.vue'
 
+import SelectSubject from './vievs/new_class/SelectSubject-Screen.vue'
+
 import nProgress from 'nprogress';
 
   const routes = [
@@ -61,6 +63,11 @@ import nProgress from 'nprogress';
         component: BuyLesson,
         props: true
       },
+      {
+        path: '/new-class/select-subject',
+        name: 'NewClass-subject',
+        component: SelectSubject,
+      }
   ]
   
   const router = createRouter({
