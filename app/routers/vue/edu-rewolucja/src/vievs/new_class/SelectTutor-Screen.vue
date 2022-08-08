@@ -104,6 +104,7 @@ export default {
     margin-left: auto;
     margin-right: auto;
     width: auto;
+    height: 100px;
 }
 .selectTutor.name{
     margin-bottom: 10px;
