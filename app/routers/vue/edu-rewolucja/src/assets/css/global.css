@@ -1,6 +1,9 @@
 body {
     margin: 0;
     padding: 0;
+    display: -webkit-box;
+    -webkit-box-pack: center; /* justify-content */
+    -webkit-box-align: center; /* align-items */
   }
 a {
     color: #2c3e50;
