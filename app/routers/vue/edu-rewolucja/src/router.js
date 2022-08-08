@@ -14,6 +14,8 @@ import BuyLesson from './vievs/BuyLesson-Screen.vue'
 
 import SelectSubject from './vievs/new_class/SelectSubject-Screen.vue'
 import SelectTutor from './vievs/new_class/SelectTutor-Screen.vue'
+import SelectRank from './vievs/new_class/SelectRank-Screen.vue'
+import SelectDate from './vievs/new_class/SelectDate-Screen.vue'
 
 import nProgress from 'nprogress';
 
@@ -73,6 +75,19 @@ import nProgress from 'nprogress';
         path: '/new-class/tutor/:subject',
         name: 'NewClass-tutor',
         component: SelectTutor,
+        props: true
+      },
+      {
+        path: '/new-class/rank/:subject',
+        name: 'NewClass-rank',
+        component: SelectRank,
+        props: true
+      },
+      {
+        path: '/new-class/date',
+        name: 'NewClass-date',
+        component: SelectDate,
+        props: true
       },
   ]
   
