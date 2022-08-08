@@ -44,3 +44,12 @@ button{
 .textcolor.blue:hover{
     color: #0055c4;
 }
+select{
+    border: 1px solid rgb(122, 122, 122);
+    font-size: medium;
+    border-radius: 25px;
+    height: 25px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin: 10px;
+}

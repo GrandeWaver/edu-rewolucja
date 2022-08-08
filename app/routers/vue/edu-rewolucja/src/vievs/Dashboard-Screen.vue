@@ -47,7 +47,14 @@ setup() {
                     return r.json()
                 }
             })
-            .then(data => {classes.value = data})
+            .then(data => {
+                data.forEach((element, index) => {
+                    let picture = element.picture
+                    if(!picture.startsWith('https://')){
+                        data[index].picture = getData.url()+picture}
+                });
+                classes.value = data
+                })
     })
     nProgress.done()
 
