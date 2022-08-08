@@ -13,6 +13,7 @@ import TermsAndConditions from './vievs/footer/TermsAndConditions-Screen.vue'
 import BuyLesson from './vievs/BuyLesson-Screen.vue'
 
 import SelectSubject from './vievs/new_class/SelectSubject-Screen.vue'
+import SelectTutor from './vievs/new_class/SelectTutor-Screen.vue'
 
 import nProgress from 'nprogress';
 
@@ -64,10 +65,15 @@ import nProgress from 'nprogress';
         props: true
       },
       {
-        path: '/new-class/select-subject',
+        path: '/new-class/subject',
         name: 'NewClass-subject',
         component: SelectSubject,
-      }
+      },
+      {
+        path: '/new-class/tutor/:subject',
+        name: 'NewClass-tutor',
+        component: SelectTutor,
+      },
   ]
   
   const router = createRouter({
