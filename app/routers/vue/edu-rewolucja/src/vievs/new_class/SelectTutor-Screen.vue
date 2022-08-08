@@ -40,7 +40,6 @@ export default {
             .then(r => {
                 if(r.status == 204){
                     no_tutors.value = true
-                    nProgress.done()
                     return
                 } if(r.status == 200){
                     no_tutors.value = false
@@ -57,6 +56,7 @@ export default {
                     if(!picture.startsWith('https://')){
                         tutors.value[index].picture = getData.url()+picture
                         }
+                    nProgress.done()
                     })
                 })
     })
@@ -101,6 +101,7 @@ export default {
     display: block;
     margin-top: auto;
     margin-bottom: auto;
+    width: auto;
 }
 .selectTutor.name{
     margin-bottom: 10px;
