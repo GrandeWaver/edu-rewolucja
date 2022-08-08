@@ -44,6 +44,7 @@ def get_tutors(subject: str, user_data = Depends(oauth2.get_current_user)):
 @router.get("/schedules/{available_class_id}") #, response_model=List[schemas.Tutor]
 def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_current_user)):
     days = ["Pn","Wt","Śr","Cz","Pt","Sb","Nd"]
+    days_full_name = ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"]
     months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień", ]
 
     cursor.execute("""
@@ -130,11 +131,13 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
 
     dict = []
     month_index = -1
+
     for month in working_months:
         month_index = month_index + 1
         month_row = {'month': month['month'], 'month_index': month_index, 'year': month['year'], 'days': []}
         dict.append(month_row)
         day_index = -1
+        
         
         for day in working_90_days:
             if month['month'] == day['month']:
@@ -149,9 +152,15 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
                                     for item in schedule['working_hours']:
                                         
                                         if item == element['hour']:
-
-
                                             copy_schedule.remove(item)
-                        day_row = {'day': day['date'], 'day_index': day_index, 'name': day['day'], 'working_hours': copy_schedule}
+                                            
+                        new_mini_dict = []
+                        hour_index = 0
+                        for h in copy_schedule:
+                            row = {"hour": h, "id": hour_index}
+                            hour_index = hour_index + 1
+                            new_mini_dict.append(row)
+
+                        day_row = {'day': day['date'], 'day_index': day_index, 'name': day['day'], 'full_name': days_full_name[days.index(day['day'])], 'working_hours': new_mini_dict}
                         dict[month_index]['days'].append(day_row)
     return dict

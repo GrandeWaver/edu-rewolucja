@@ -6,7 +6,10 @@
     <div class="buyLesson miniheader">
         <img src="@/assets/casual-life-3d-clock-with-blue-arrow.png" class="buyLesson clock">
         <div class="buyLesson subject">{{ subject }}</div>
-        dzień tygodnia: {{available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].name}}
+        {{ available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].full_name }},
+        {{ select_first_lesson.day }}
+        {{ select_first_lesson.month }}
+        {{ select_first_lesson.hour }}:00-{{ select_first_lesson.hour }}:55
     </div>
 
     <br><br>
@@ -15,7 +18,9 @@
 
     <div class="buyLesson select">
         <select v-model="select_first_lesson.day_index" 
-            @change="select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day">
+            @change="
+            select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day;
+            select_first_lesson.hour = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours[select_first_lesson.hour_index].hour">
             <option 
                 v-for="day in available_schedules[select_first_lesson.month_index].days" 
                 v-bind:value="day.day_index" :key="day.day_index">
@@ -28,13 +33,15 @@
                 select_first_lesson.month = available_schedules[select_first_lesson.month_index].month
                 select_first_lesson.day = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].day
                 select_first_lesson.year = available_schedules[select_first_lesson.month_index].year
+                select_first_lesson.hour = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours[select_first_lesson.hour_index].hour
             ">
             <option v-for="month in available_schedules" v-bind:value="month.month_index" :key="month.month_index">{{month.month}}</option>
         </select>
-        <select v-model="select_first_lesson.hour" id="select_hour_buy">
+        <select v-model="select_first_lesson.hour_index" 
+        @change="select_first_lesson.hour = available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours[select_first_lesson.hour_index].hour">
             <option 
-                v-for="( hour, hour_index ) in available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours" 
-                v-bind:value="hour" :key="hour_index">{{hour}}:00
+                v-for="hour in available_schedules[select_first_lesson.month_index].days[select_first_lesson.day_index].working_hours" 
+                v-bind:value="hour.id" :key="hour.id">{{hour.hour}}:00
             </option>
         </select>
         </div>
@@ -57,7 +64,7 @@ export default {
             class_id: undefined,
             subject: undefined,
             available_schedules: [],
-            select_first_lesson: {day: undefined, month: undefined, month_index: 0, day_index: 0, hour: undefined},
+            select_first_lesson: {day: undefined, month: undefined, month_index: 0, day_index: 0, hour_index: 0, hour: undefined},
         }
     },
     mounted: function () {
@@ -79,10 +86,12 @@ export default {
             })
             .then((responseJSON) => {
                 nProgress.done()
+                console.log(responseJSON)
                 this.available_schedules = responseJSON
                 this.select_first_lesson.day = responseJSON[this.select_first_lesson.month_index].days[this.select_first_lesson.day_index].day
                 this.select_first_lesson.month = responseJSON[this.select_first_lesson.month_index].month
                 this.select_first_lesson.year = responseJSON[this.select_first_lesson.month_index].year
+                this.select_first_lesson.hour = responseJSON[this.select_first_lesson.month_index].days[this.select_first_lesson.day_index].working_hours[this.select_first_lesson.hour_index].hour
             })
         })
     },
@@ -111,8 +120,8 @@ export default {
                 }
             })
             nProgress.done()
-        }
-    }
+        },
+    },
 }
 </script>
 
@@ -136,7 +145,7 @@ export default {
 .buyLesson.clock {
     float: left;
     width: 100px;
-    padding-left: 15px;
+    padding-left: 10px;
     padding-right: 20px;
 }
 .buyLesson.miniheader{
@@ -159,7 +168,7 @@ export default {
     background-color: #FF6E6E;
     color: white;
     border-radius: 10px;
-    font-size: medium;
+    font-size: 12px;
 }
 .submit:hover{
     background-color: #ff5252;
