@@ -121,7 +121,7 @@ setup() {
     width: 300px;
   }
   .plusIcon{
-    width: 45px;
+    width: 65px;
   }
 }
 </style>
