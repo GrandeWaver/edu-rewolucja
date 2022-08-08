@@ -82,7 +82,7 @@ setup() {
     width: 300px;
   }
   .plusIcon{
-    width: 65px;
+    width: 45px;
   }
 }
 .dashboard.classWrapper{
