@@ -122,6 +122,7 @@ export default {
   .selectTutor.price{
     margin-top: 10px;
     float: left;
+    display: block;
     opacity: 0.7;
   }
   .selectTutor.details{
