@@ -58,9 +58,11 @@ export default {
                         }
                     nProgress.done()
                     })
+            .catch((error) => {
+                alert('Error: '+error);
+                })
                 })
     })
-    nProgress.done()
 
     return { tutors, no_tutors };
   },
@@ -81,7 +83,6 @@ export default {
 }
 .selectTutor.tutor{
     padding: 10px;
-    padding-top: 10px;
     height: 100px;
     margin-top: 20px;
 }
