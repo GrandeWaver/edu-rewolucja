@@ -64,7 +64,7 @@ components: {
 @media only screen and (max-width: 440px) {
   .selectClass.wrapper {
     width: 360px;
-    height: 380px;
+    height: 445px;
   }
 }
 .selectClass.subject{
