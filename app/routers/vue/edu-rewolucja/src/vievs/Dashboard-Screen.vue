@@ -77,14 +77,6 @@ setup() {
 
     margin-bottom: 50px;
 }
-@media only screen and (max-width: 440px) {
-  .dashboard.class{
-    width: 300px;
-  }
-  .plusIcon{
-    width: 45px;
-  }
-}
 .dashboard.classWrapper{
     padding: 10px;
 
@@ -123,5 +115,13 @@ setup() {
     width: 85px;
     border-radius: 50%;
     text-align: center;
+}
+@media only screen and (max-width: 440px) {
+  .dashboard.class{
+    width: 300px;
+  }
+  .plusIcon{
+    width: 45px;
+  }
 }
 </style>
