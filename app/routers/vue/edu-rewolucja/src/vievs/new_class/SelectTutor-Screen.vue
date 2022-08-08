@@ -125,9 +125,11 @@ export default {
     float: left;
     display: block;
     opacity: 0.7;
+
+    display: none;
   }
   .selectTutor.details{
-    transform: translateY(-8px);
+    /* transform: translateY(-8px); */
   }
 }
 
