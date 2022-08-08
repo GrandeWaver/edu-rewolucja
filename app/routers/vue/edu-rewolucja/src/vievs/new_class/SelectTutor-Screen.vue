@@ -101,6 +101,8 @@ export default {
     display: block;
     margin-top: auto;
     margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
     width: auto;
 }
 .selectTutor.name{
