@@ -123,7 +123,10 @@ export default {
     margin-top: 10px;
     float: left;
     opacity: 0.7;
-}
+  }
+  .selectTutor.details{
+    transform: translateY(-8px);
+  }
 }
 
 </style>
