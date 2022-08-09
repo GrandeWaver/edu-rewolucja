@@ -106,6 +106,8 @@ export default {
     float: right;
     margin-left: auto;
     margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
     width: 255px;
     height: 100px;
 }
@@ -121,6 +123,8 @@ export default {
 }
 .selectTutor.detailsWrapper{
     text-align: left;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 .selectTutor.countLessons{
      margin-bottom: 10px;
