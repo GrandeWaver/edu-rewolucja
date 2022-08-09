@@ -54,12 +54,13 @@ import nProgress from 'nprogress'
 import StrikeItem from '../../components/Strike-Item.vue'
 
 export default {
-    props: ['class_id', 'subject'],
+    props: ['subject'],
     components: {
         StrikeItem
     },
     data () {
         return {
+            class_id: this.$route.query.class_id,
             available_schedules: [],
             select_first_lesson: {day: undefined, month: undefined, month_index: 0, day_index: 0, hour_index: 0, hour: undefined},
         }

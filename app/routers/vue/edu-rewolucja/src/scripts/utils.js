@@ -24,7 +24,25 @@ var utils = {
         }
       
         return rank_encoded.join(", ")
-    }
+    },
+    codeRank(rank_encoded){
+      let rank_coded = ''
+    
+      if(rank_encoded.includes("początkujący")){
+        rank_coded += '1'
+      }
+      if(rank_encoded.includes("podstawowy")){
+        rank_coded += '2'
+      }
+      if(rank_encoded.includes("średni")){
+        rank_coded += '3'
+      }
+      if(rank_encoded.includes("zaawansowany")){
+        rank_coded += '4'
+      }
+      
+      return rank_coded
+     }
 }
 
 export default utils

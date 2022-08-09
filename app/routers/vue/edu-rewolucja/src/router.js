@@ -16,6 +16,7 @@ import SelectSubject from './vievs/new_class/SelectSubject-Screen.vue'
 import SelectTutor from './vievs/new_class/SelectTutor-Screen.vue'
 import SelectRank from './vievs/new_class/SelectRank-Screen.vue'
 import SelectDate from './vievs/new_class/SelectDate-Screen.vue'
+import SelectSchedule from './vievs/new_class/SelectSchedule-Screen.vue'
 
 import nProgress from 'nprogress';
 
@@ -84,9 +85,15 @@ import nProgress from 'nprogress';
         props: true
       },
       {
-        path: '/new-class/date',
+        path: '/new-class/date/:subject',
         name: 'NewClass-date',
         component: SelectDate,
+        props: true
+      },
+      {
+        path: '/new-class/schedule/:subject',
+        name: 'NewClass-schedule',
+        component: SelectSchedule,
         props: true
       },
   ]

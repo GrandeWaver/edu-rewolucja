@@ -13,7 +13,8 @@ var auth = {
             _this.isAuthenticated = true
             userData = data
           })
-          .catch(() => {
+          .catch((err) => {
+            alert('Error: '+ err)
             cookies.deleteCookie('auth')
             _this.isAuthenticated = false
             _this.$router.push({ name: 'Login', query: { redirect: '/login' } })

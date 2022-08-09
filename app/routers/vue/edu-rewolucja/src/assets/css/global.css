@@ -53,3 +53,19 @@ select{
     padding-right: 8px;
     margin: 10px;
 }
+.wrapper{
+    margin-top: 20px;
+    width: 410px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    
+
+    border-radius: 16px;
+    border: 1px solid #ccc;
+}
+@media only screen and (max-width: 440px) {
+    .wrapper {
+      width: 360px;
+    }
+}

@@ -3,7 +3,7 @@
 
 <div v-if="!no_tutors" class="selectTutor wrapper">
     <div v-for="tutor in tutors" :key="tutor.tutor_id">
-    <router-link :to="{ name: 'NewClass-date', params: { class_id: tutor.class_id, subject: subject} }">
+    <router-link :to="{ name: 'NewClass-date', params: { subject: subject}, query: { class_id: tutor.class_id } }">
         <div class="selectTutor tutor">
             
                 <img :src=tutor.picture class="selectTutor picture">
@@ -44,6 +44,7 @@ export default {
             .then(r => {
                 if(r.status == 204){
                     no_tutors.value = true
+                    nProgress.done()
                     return
                 } if(r.status == 200){
                     no_tutors.value = false
@@ -62,10 +63,10 @@ export default {
                         }
                     nProgress.done()
                     })
+                })
             .catch((error) => {
                 alert('Error: '+error);
-                })
-                })
+            })
     })
 
     return { tutors, no_tutors };
