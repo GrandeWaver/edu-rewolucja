@@ -102,7 +102,7 @@ export default {
 }
 .selectTutor.details{
     float: right;
-    margin-top: auto;
+
     margin-bottom: auto;
     margin-left: auto;
     margin-right: auto;
@@ -116,6 +116,7 @@ export default {
 }
 .selectTutor.price{
     float: right;
+    margin-top: 10px;
     opacity: 0.7;
 }
 .selectTutor.detailsWrapper{
@@ -126,7 +127,6 @@ export default {
     width: 360px;
   }
   .selectTutor.price{
-    margin-top: 10px;
     float: left;
     display: block;
     opacity: 0.7;
