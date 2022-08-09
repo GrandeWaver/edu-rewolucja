@@ -35,6 +35,7 @@ var auth = {
     },
     logoutFunc(){
         cookies.deleteCookie('auth')
+        window.location.replace("/")
     }
 }
 
