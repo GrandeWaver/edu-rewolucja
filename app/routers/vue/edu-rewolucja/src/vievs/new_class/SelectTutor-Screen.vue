@@ -102,8 +102,6 @@ export default {
 }
 .selectTutor.details{
     float: right;
-
-    margin-bottom: auto;
     margin-left: auto;
     margin-right: auto;
     width: 255px;
@@ -134,6 +132,7 @@ export default {
   }
   .selectTutor.details{
     width: 205px;
+    transform: translateY(-10px);
   }
 }
 
