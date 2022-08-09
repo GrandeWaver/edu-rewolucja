@@ -3,19 +3,21 @@
 
 <div v-if="!no_tutors" class="selectTutor wrapper">
     <div v-for="tutor in tutors" :key="tutor.tutor_id">
+    <router-link :to="{ name: 'NewClass-date', params: { class_id: tutor.class_id, subject: subject} }">
         <div class="selectTutor tutor">
-            <router-link :to="{ name: 'NewClass-date', params: { class_id: tutor.class_id, subject: subject} }">
+            
                 <img :src=tutor.picture class="selectTutor picture">
                 <div class="selectTutor details">
                     <div class="selectTutor detailsWrapper">
                         <div class="selectTutor name">{{ tutor.firstname }} {{ tutor.lastname }}</div>
-                        <!-- <div>lekcji: 0</div> -->
+                        <div class="selectTutor countLessons">lekcji: 0</div>
                         <div>{{ tutor.encoded }}</div>
                         <div class="selectTutor price">50 zł</div>
                     </div>
                 </div>
-            </router-link>
+            
         </div>
+        </router-link>
     </div>
     <br>
 </div>
@@ -120,6 +122,9 @@ export default {
 .selectTutor.detailsWrapper{
     text-align: left;
 }
+.selectTutor.countLessons{
+     margin-bottom: 10px;
+}
 @media only screen and (max-width: 440px) {
   .selectTutor.wrapper {
     width: 360px;
@@ -132,7 +137,7 @@ export default {
   }
   .selectTutor.details{
     width: 205px;
-    transform: translateY(-10px);
+
   }
 }
 
