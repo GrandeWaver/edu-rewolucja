@@ -133,16 +133,28 @@ export default {
     float: left;
     display: block;
     opacity: 0.7;
-    margin-top: 6px;
+    margin-top: 4px;
   }
   .selectTutor.details{
     width: 205px;
   }
   .selectTutor.countLessons{
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
   .selectTutor.name{
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+  }
+  .selectTutor.picture{
+    margin: 6px;
+    margin-right: 15px;
+  }
+}
+@media not all and (min-resolution:.001dpcm) { 
+  @supports (-webkit-appearance: none) {
+    /* Safari Only CSS here */
+    .selectTutor.details{
+        transform: translateY(-5px);
+    }
   }
 }
 
