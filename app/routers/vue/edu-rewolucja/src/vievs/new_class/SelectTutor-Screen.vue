@@ -7,10 +7,12 @@
             <router-link :to="{ name: 'NewClass-date', params: { class_id: tutor.class_id, subject: subject} }">
                 <img :src=tutor.picture class="selectTutor picture">
                 <div class="selectTutor details">
-                    <div class="selectTutor name">{{ tutor.firstname }} {{ tutor.lastname }}</div>
-                    <!-- <div>lekcji: 0</div> -->
-                    <div>{{ tutor.encoded }}</div>
-                    <div class="selectTutor price">50 zł</div>
+                    <div class="selectTutor detailsWrapper">
+                        <div class="selectTutor name">{{ tutor.firstname }} {{ tutor.lastname }}</div>
+                        <!-- <div>lekcji: 0</div> -->
+                        <div>{{ tutor.encoded }}</div>
+                        <div class="selectTutor price">50 zł</div>
+                    </div>
                 </div>
             </router-link>
         </div>
@@ -99,12 +101,12 @@ export default {
     margin-bottom: auto;
 }
 .selectTutor.details{
-    display: block;
+    float: right;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: auto;
     margin-right: auto;
-    width: auto;
+    width: 255px;
     height: 100px;
 }
 .selectTutor.name{
@@ -116,6 +118,9 @@ export default {
     float: right;
     opacity: 0.7;
 }
+.selectTutor.detailsWrapper{
+    text-align: left;
+}
 @media only screen and (max-width: 440px) {
   .selectTutor.wrapper {
     width: 360px;
@@ -126,10 +131,9 @@ export default {
     display: block;
     opacity: 0.7;
 
-    display: none;
   }
   .selectTutor.details{
-    /* transform: translateY(-8px); */
+    width: 205px;
   }
 }
 
