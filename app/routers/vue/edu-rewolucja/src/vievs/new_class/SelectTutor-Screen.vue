@@ -50,7 +50,7 @@ export default {
                     no_tutors.value = false
                     return r.json()
                 } else {
-                    alert('Error: '+error);
+                    alert('Error: '+r.status);
                 }
             })
             .then(data => {
