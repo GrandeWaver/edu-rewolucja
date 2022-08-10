@@ -127,7 +127,6 @@ export default {
 <style>
 .buyLesson.wrapper{
     margin-top: 20px;
-    height: 330px;
     width: 410px;
     margin-left: auto;
     margin-right: auto;
@@ -138,7 +137,6 @@ export default {
 @media only screen and (max-width: 440px) {
   .buyLesson.wrapper {
     width: 360px;
-    height: 380px;
   }
 }
 .buyLesson.clock {
