@@ -1,8 +1,6 @@
 <template>
 <h1>W jakie dni chcesz mieć zajęcia?</h1>
 
-{{ subject }} {{ $store.state.select_rank.data }}
-
 <div class="wrapper selectSchedule">
     <div class="selectSchedule mini-wrapper">
         <div v-for="(day, index) in days" :key="index">
@@ -219,5 +217,9 @@ export default {
 .selectSchedule.rule-wrapper{
     font-size: medium;
 }
-
+@media only screen and (max-width: 440px) {
+    .wrapper.selectSchedule {
+      margin-bottom: 100px;
+    }
+}
 </style>
