@@ -13,7 +13,7 @@ router = APIRouter(
 @router.post("/tutor", status_code=status.HTTP_201_CREATED)
 def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_current_user)):
 
-    tutor_id = data.tutor_id
+    tutor_id = user_data.id
     subject = data.subject
     rank = data.rank
     availability = data.availability #potrzebne w eval()

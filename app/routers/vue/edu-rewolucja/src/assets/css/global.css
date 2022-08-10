@@ -69,3 +69,9 @@ select{
       width: 360px;
     }
 }
+.padding20{
+    padding: 20px;
+}
+.opacity55{
+    opacity: 0.55;
+}

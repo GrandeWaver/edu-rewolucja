@@ -42,7 +42,46 @@ var utils = {
       }
       
       return rank_coded
-     }
+     },
+
+     pushToschedule(availability, selected_day){
+      let last_index = Object.keys(availability[selected_day][0].schedule).length
+      if(last_index == 0){
+          availability[selected_day][0].schedule.push(
+          {
+              start: 11,
+              end: 16
+          }
+          )
+          return availability
+      }
+      // let last_hour_start = parseInt(_this.availability[selected_day][0].schedule[last_index-1].start)
+      let last_hour_end = parseInt(availability[selected_day][0].schedule[last_index-1].end)
+      // walidacja 24 godzin
+      if(last_hour_end >= 24){
+          return availability
+      }
+      else{
+          if(last_hour_end + 3 > 24){
+          last_hour_end = 24
+          availability[selected_day][0].schedule.push(
+              {
+              start: last_hour_end - 1,
+              end: last_hour_end
+              }
+          )
+          }
+          else{
+          availability[selected_day][0].schedule.push(
+              {
+              start: last_hour_end + 1,
+              end: last_hour_end + 3
+              }
+          )
+          }
+      }
+      return availability
+      }
 }
 
 export default utils

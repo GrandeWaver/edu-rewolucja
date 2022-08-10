@@ -106,7 +106,7 @@ class WeekModel(BaseModel):
 class CreateNewClass(BaseModel):
     subject: str
     rank: str
-    tutor_id: int
+    tutor_id: Optional[int] = None
     availability: WeekModel
 
 class Tutor(BaseModel):
