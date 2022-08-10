@@ -46,9 +46,11 @@ export default {
                     no_tutors.value = true
                     nProgress.done()
                     return
-                } if(r.status == 200){
+                } else if(r.status == 200){
                     no_tutors.value = false
                     return r.json()
+                } else {
+                    alert('Error: '+error);
                 }
             })
             .then(data => {
@@ -64,9 +66,6 @@ export default {
                     nProgress.done()
                     })
                 })
-            .catch((error) => {
-                alert('Error: '+error);
-            })
     })
 
     return { tutors, no_tutors };
