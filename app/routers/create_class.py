@@ -16,6 +16,9 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
     tutor_id = user_data.id
     subject = data.subject
     rank = data.rank
+    price_tutor = data.price
+    price_netto = price_tutor # + 10
+
     availability = data.availability #potrzebne w eval()
     days = ["Pn","Wt","Śr","Cz","Pt","Sb","Nd"]
 
@@ -63,8 +66,8 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
 
             available_tutor_schedule_id = cursor.fetchone() # POTEM WYKORZYSTAMY GO W INNYCH DNIACH TYGODNIA
 
-    cursor.execute("""INSERT INTO available_classes (subject, rank, tutor_id, available_tutor_schedule_id) VALUES (%s, %s, %s, %s) RETURNING * """,
-    (subject, rank, tutor_id, available_tutor_schedule_id['week_id']))
+    cursor.execute("""INSERT INTO available_classes (subject, rank, tutor_id, available_tutor_schedule_id, price_tutor, price_netto) VALUES (%s, %s, %s, %s, %s, %s) RETURNING * """,
+    (subject, rank, tutor_id, available_tutor_schedule_id['week_id'], price_tutor, price_netto))
 
     conn.commit()
     new_available_class = cursor.fetchone()

@@ -10,9 +10,9 @@
                 <div class="selectTutor details">
                     <div class="selectTutor detailsWrapper">
                         <div class="selectTutor name">{{ tutor.firstname }} {{ tutor.lastname }}</div>
-                        <div class="selectTutor countLessons">lekcji: <span class="opacity55">?</span></div>
+                        <div class="selectTutor countLessons">lekcji: {{ tutor.lessons }}</div>
                         <div>{{ tutor.encoded }}</div>
-                        <div class="selectTutor price">50 zł</div>
+                        <div class="selectTutor price">{{ tutor.price_netto }} zł</div>
                     </div>
                 </div>
             

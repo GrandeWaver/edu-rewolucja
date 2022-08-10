@@ -16,6 +16,7 @@ router = APIRouter(
 
 @router.get("/{subject}", response_model=List[schemas.Tutor])
 def get_tutors(subject: str, user_data = Depends(oauth2.get_current_user)):
+
     cursor.execute("""
     SELECT 
     tutor_id,
@@ -23,7 +24,8 @@ def get_tutors(subject: str, user_data = Depends(oauth2.get_current_user)):
     firstname,
     lastname,
     picture,
-    ac.rank
+    ac.rank,
+    ac.price_netto
     FROM 
     available_classes as ac, 
     users as u 
@@ -39,7 +41,25 @@ def get_tutors(subject: str, user_data = Depends(oauth2.get_current_user)):
     if len(tutors) == 0:
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"No tutors available")
 
-    return tutors
+
+    [json.dumps(dict(record)) for record in tutors]
+
+    new_tutors = []
+
+    for tutor in tutors:
+        cursor.execute(""" SELECT id FROM classes WHERE tutor_id = %s """, (int(tutor['tutor_id']),))
+        classes_ids = cursor.fetchall()
+        tutor_lessons = 0
+        for class_id in classes_ids:
+            cursor.execute(""" SELECT count(id) as lessons FROM lessons WHERE status = 'after' AND class_id = %s """, (class_id['id'],))
+            lessons = cursor.fetchone()
+            tutor_lessons = tutor_lessons + int(lessons['lessons'])
+
+        new_row = {'tutor_id': tutor['tutor_id'], 'class_id': tutor['class_id'], 'firstname': tutor['firstname'], 'lastname': tutor['lastname'], 
+        'picture': tutor['picture'], 'rank': tutor['rank'], 'price_netto': tutor['price_netto'], 'lessons': tutor_lessons} # ostatnie najważniejsze
+        new_tutors.append(new_row)
+
+    return new_tutors
 
 @router.get("/schedules/{available_class_id}") #, response_model=List[schemas.Tutor]
 def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_current_user)):

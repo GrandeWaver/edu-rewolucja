@@ -27,6 +27,13 @@
         </label>
 
         <br><br>
+        
+        <label>
+            <div class="margin-bottom15">Kwota za lekcje, którą chcesz otrzymać:</div>
+            <input type="number" min="0" max="100" v-model="price" placeholder="35" class="selectSchedule inputNumber"/>zł
+        </label>
+
+        <br><br>
         <button @click="submit" class="submit">Dalej</button>
     </div>
 </div>
@@ -39,14 +46,17 @@ export default {
     props: ['subject'],
     data () {
         return {
-            rank: []
+            rank: [],
+            price: undefined
         }
     },
     mounted: function () {
-        if(this.$store.state.select_rank.data == undefined){
+        if(this.$store.state.select_rank.rank == undefined || this.$store.state.select_rank.price == undefined){
             this.rank = ["początkujący"]
+            this.price = 35
         } else {
-            let array = utils.encodeRank(this.$store.state.select_rank.data).split(', ')
+            this.price = this.$store.state.select_rank.price
+            let array = utils.encodeRank(this.$store.state.select_rank.rank).split(', ')
             array.forEach(element => {
                 this.rank.push(element)
             })
@@ -55,8 +65,9 @@ export default {
     methods: {
         submit(){
             let coded_rank = utils.codeRank(this.rank)
-            this.$store.commit('set', coded_rank)
-            this.$router.push({ name: 'NewClass-schedule', params: { subject: this.subject}, query: { rank: coded_rank } })
+            this.$store.commit('set_rank', coded_rank)
+            this.$store.commit('set_price', this.price)
+            this.$router.push({ name: 'NewClass-schedule', params: { subject: this.subject}, query: { rank: coded_rank, price: this.price } })
         },
     }
 }

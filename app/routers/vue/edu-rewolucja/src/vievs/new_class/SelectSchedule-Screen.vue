@@ -74,7 +74,8 @@ export default {
         }
     },
     mounted: function () {
-        this.$store.commit('set', this.$route.query.rank)
+        this.$store.commit('set_rank', this.$route.query.rank)
+        this.$store.commit('set_price', this.$route.query.price)
     },
     methods: {
         changeClass(index) {
@@ -131,8 +132,9 @@ export default {
                 dataType: "json",
                 body: JSON.stringify({
                     subject: this.subject,
-                    rank: this.$store.state.select_rank.data,
-                    availability: this.availability
+                    rank: this.$store.state.select_rank.rank,
+                    availability: this.availability,
+                    price: parseInt(this.$store.state.select_rank.price)
             }),
                 headers: getData.getHeaders(),
             })

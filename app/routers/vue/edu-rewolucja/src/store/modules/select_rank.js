@@ -1,11 +1,15 @@
 
 const state = () => ({
-    data: undefined
+    rank: undefined,
+    price: undefined
   })
 
 const mutations = {
-    set (state, data) {
-        state.data = data
+    set_rank (state, data) {
+        state.rank = data
+    },
+    set_price (state, data) {
+        state.price = data
     }
 }
 

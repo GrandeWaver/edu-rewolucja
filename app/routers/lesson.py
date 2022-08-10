@@ -36,8 +36,6 @@ def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.g
     date_str = str(data.day)+'/'+str(month)+'/'+str(data.year)+' '+str(data.hour)+':00:00'
     date = datetime.strptime(date_str, "%d/%m/%y %H:%M:%S")
 
-    print(f'**************************{date}***************************')
-
     # INSERT INTO LESSONS
     cursor.execute("""
         INSERT INTO lessons (date, status, class_id) VALUES(%s, %s, %s) RETURNING *

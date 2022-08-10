@@ -108,6 +108,7 @@ class CreateNewClass(BaseModel):
     rank: str
     tutor_id: Optional[int] = None
     availability: WeekModel
+    price: Optional[int] = None
 
 class Tutor(BaseModel):
     tutor_id: int
@@ -117,6 +118,8 @@ class Tutor(BaseModel):
     picture: str
     # count_lessons: int
     rank: str
+    price_netto: int
+    lessons: int
 
 class CreateNewClassStudent(BaseModel):
     month: str
