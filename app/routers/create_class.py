@@ -106,11 +106,14 @@ def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2
     """, (available_class['subject'], available_class['tutor_id'], user_data.id, available_class['rank'], available_class['id']))
 
     new_class = cursor.fetchone()
+
+    cursor.execute("""SELECT now() AT TIME ZONE 'Europe/Warsaw'""")
+    create_at_date = cursor.fetchone()
     
     # INSERT INTO LESSONS
     cursor.execute("""
-        INSERT INTO lessons (date, status, class_id) VALUES(%s, %s, %s) RETURNING *
-    """, (first_lesson_date, 'planned', new_class['id']))
+        INSERT INTO lessons (date, created_at, status, class_id) VALUES(%s, %s, %s, %s) RETURNING *
+    """, (first_lesson_date, create_at_date['timezone'], 'planned', new_class['id']))
 
     conn.commit()
     return data
