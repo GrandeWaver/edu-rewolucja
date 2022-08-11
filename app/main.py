@@ -39,10 +39,10 @@ def helloWorld():
 
 
 @app.on_event("startup")
-@repeat_every(seconds=5, wait_first=False)
+@repeat_every(seconds=60, wait_first=False)
 def check_lessons():
-
-    zero = datetime.now().minute
+    
+    # zero = datetime.now().minute
     # while zero != 0:
     #     print('Debug: konfigurowanie równej godziny')
     #     time.sleep(1)
