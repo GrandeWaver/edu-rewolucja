@@ -38,36 +38,37 @@ def helloWorld():
     return """Hello World!"""
 
 
-# @app.on_event("startup")
-# @repeat_every(seconds=3599, wait_first=False)
-# def check_lessons():
-#     zero = datetime.now().minute
-#     while zero != 0:
-#         print('Debug: konfigurowanie równej godziny')
-#         time.sleep(1)
-#         zero = datetime.now().minute
+@app.on_event("startup")
+@repeat_every(seconds=5, wait_first=False)
+def check_lessons():
 
-#     print(f'check lessons: {datetime.now()}')
+    zero = datetime.now().minute
+    # while zero != 0:
+    #     print('Debug: konfigurowanie równej godziny')
+    #     time.sleep(1)
+    #     zero = datetime.now().minute
 
-#     cursor.execute("""
-#         SELECT * FROM lessons
-#     """)
-#     lessons = cursor.fetchall()
+    print(f'check lessons: {datetime.now()}')
 
-#     now = datetime.now()
-#     now = datetime.fromisoformat(str(now)[0:19])
+    cursor.execute("""d
+        SELECT * FROM lessons
+    """)
+    lessons = cursor.fetchall()
 
-#     for i in lessons:
-#         lesson_time = datetime.fromisoformat(str(i['date'])[0:19])
-#         print(now)
-#         print(lesson_time)
-#         if lesson_time == now:
-#             cursor.execute("""
-#                 UPDATE lessons SET status = 'now' WHERE id = %s
-#             """, (i['id'],))
-#         if lesson_time < now:
-#             cursor.execute("""
-#                 UPDATE lessons SET status = 'canceled' WHERE id = %s
-#             """, (i['id'],))
-#     conn.commit()
+    now = datetime.now()
+    now = datetime.fromisoformat(str(now)[0:19])
+
+    for i in lessons:
+        lesson_time = datetime.fromisoformat(str(i['date'])[0:19])
+        print(now)
+        print(lesson_time)
+        if lesson_time == now:
+            cursor.execute("""
+                UPDATE lessons SET status = 'now' WHERE id = %s
+            """, (i['id'],))
+        if lesson_time < now:
+            cursor.execute("""
+                UPDATE lessons SET status = 'canceled' WHERE id = %s
+            """, (i['id'],))
+    conn.commit()
 
