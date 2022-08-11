@@ -172,7 +172,10 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
                                     for item in schedule['working_hours']:
                                         
                                         if item == element['hour']:
-                                            copy_schedule.remove(item)
+                                            try:
+                                                copy_schedule.remove(item)
+                                            except:
+                                                print('Error: Nie udało się wykonać: copy_schedule.remove(item) \n select_class.py linijka: 178, x = '+str(item))
                                             
                         new_mini_dict = []
                         hour_index = 0

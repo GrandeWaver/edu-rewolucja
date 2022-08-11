@@ -7,6 +7,7 @@ from typing import List
 from ..database import *
 from datetime import datetime, timedelta
 import json
+from ..emails.lesson_created import mail_lesson_created
 
 router = APIRouter(
     prefix="/lesson",
@@ -45,5 +46,10 @@ def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.g
     """, (date, create_at_date['timezone'], 'planned', data.class_id))
 
     conn.commit()
+
+    cursor.execute("""SELECT email, firstname FROM users WHERE id = %s """, (user_data.id,))
+    receiver_email = cursor.fetchone()
+
+    mail_lesson_created(receiver_email['email'], receiver_email['firstname'], data)
 
     return data
