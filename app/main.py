@@ -50,7 +50,7 @@ def check_lessons():
 
     print(f'check lessons: {datetime.now()}')
 
-    cursor.execute("""d
+    cursor.execute("""
         SELECT * FROM lessons
     """)
     lessons = cursor.fetchall()
