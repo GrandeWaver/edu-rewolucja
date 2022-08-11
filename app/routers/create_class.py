@@ -1,9 +1,10 @@
 from hashlib import new
 from app import oauth2
 from .. import schemas
-from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi import Depends, HTTPException, status, APIRouter, BackgroundTasks
 from ..database import *
 from datetime import datetime
+from ..emails.class_created import mail_student, mail_tutor
 
 router = APIRouter(
     prefix="/create_class",
@@ -76,7 +77,7 @@ def create_posts(data: schemas.CreateNewClass, user_data = Depends(oauth2.get_cu
     return new_available_class
 
 @router.post("/student", status_code=status.HTTP_201_CREATED)
-def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2.get_current_user)):
+def create_posts(background_tasks: BackgroundTasks, data: schemas.CreateNewClassStudent, user_data = Depends(oauth2.get_current_user)):
 
     # konwertowanie tego na date
     months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień", ]
@@ -116,4 +117,26 @@ def create_posts(data: schemas.CreateNewClassStudent, user_data = Depends(oauth2
     """, (first_lesson_date, create_at_date['timezone'], 'planned', new_class['id']))
 
     conn.commit()
+
+    #emails
+    cursor.execute("""SELECT email, firstname, lastname FROM users WHERE id = %s """, (user_data.id,))
+    student = cursor.fetchone()
+
+    cursor.execute("""SELECT subject FROM classes WHERE id = %s""", (new_class['id'],))
+    subject = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT  email, firstname, lastname
+    FROM users, classes
+    WHERE classes.tutor_id = users.id
+    AND classes.id = %s
+    """, (new_class['id'],))
+
+    tutor = cursor.fetchone()
+
+
+    background_tasks.add_task(mail_student, student['email'], student['firstname'], tutor['firstname'], tutor['lastname'], data, subject['subject'])
+    background_tasks.add_task(mail_tutor, tutor['email'], tutor['firstname'], student['firstname'], student['lastname'], data, subject['subject'])
+
+
     return data

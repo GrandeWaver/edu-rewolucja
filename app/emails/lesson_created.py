@@ -1,6 +1,7 @@
 from pkgutil import ImpImporter
 from re import sub
 import sys, os
+from app.emails.utils import change_last_letter, change_subject
 sys.path.append(os.path.abspath('../../../'))
 import secret
 from email.header import Header
@@ -11,12 +12,7 @@ import smtplib, ssl
 
 def mail_student(receiver_email, receiver_firstname, tutor_firstname, tutor_lastname, data, subject):
 
-    if subject == 'matematyka':
-        subject_changed = 'matematyki'
-    elif subject == 'angielski':
-        subject_changed = 'angielskiego'
-    else:
-        subject_changed = subject
+    subject_changed = change_subject(subject)
 
     port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
@@ -41,24 +37,16 @@ def mail_student(receiver_email, receiver_firstname, tutor_firstname, tutor_last
 
 def mail_tutor(receiver_email, receiver_firstname, student_firstname, student_lastname, data, subject):
 
-    if subject == 'matematyka':
-        subject_changed = 'matematyki'
-    elif subject == 'angielski':
-        subject_changed = 'angielskiego'
-    else:
-        subject_changed = subject
+    subject_changed = change_subject(subject)
 
     port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
     sender_email = secret.EMAIL  # Enter your address
     password = secret.EMAIL_PASSWORD
 
-    if student_lastname[-1] == 'a':
-        a = 'a'
-    else:
-        a = ''
+    a = change_last_letter(student_firstname)
 
-    msg = MIMEText(f'Cześć {receiver_firstname}!\n{student_firstname} {student_lastname} właśnie zaplanował{a} z tobą lekcje {subject_changed}!\n\nJej termin to {data.day} {data.month} o {data.hour}:00\n \nPozdrawiamy!\nZaspół korki.edu-rewolucja.pl')
+    msg = MIMEText(f'Cześć {receiver_firstname}!\n{student_firstname} {student_lastname} właśnie zaplanował{a} z Tobą lekcje {subject_changed}!\n\nJej termin to {data.day} {data.month} o {data.hour}:00\n \nPozdrawiamy!\nZaspół korki.edu-rewolucja.pl')
 
     msg['Subject'] = f'{student_firstname} zaplanował{a} lekcje {subject_changed}'
     msg['From'] = formataddr((str(Header("korki.edu-rewolucja.pl", 'utf-8')), sender_email))

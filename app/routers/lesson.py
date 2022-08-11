@@ -47,6 +47,7 @@ async def get_available_class_id(background_tasks: BackgroundTasks, data: schema
 
     conn.commit()
 
+    # emails
     cursor.execute("""SELECT email, firstname, lastname FROM users WHERE id = %s """, (user_data.id,))
     student = cursor.fetchone()
 
