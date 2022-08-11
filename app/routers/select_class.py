@@ -156,14 +156,13 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
         month_index = month_index + 1
         month_row = {'month': month['month'], 'month_index': month_index, 'year': month['year'], 'days': []}
         dict.append(month_row)
-        day_index = -1
+        day_index = 0
         
         
         for day in working_90_days:
             if month['month'] == day['month']:
                 for schedule in working_hours:
                     if schedule['day'] == day['day']:
-                        day_index = day_index + 1
                         # skasuj wszystkie godziny w które tutor ma już zaplanowane lekcje
                         copy_schedule = schedule['working_hours'].copy()
                         for element in busy:
@@ -183,7 +182,8 @@ def get_schedules(available_class_id: int, user_data = Depends(oauth2.get_curren
                             row = {"hour": h, "id": hour_index}
                             hour_index = hour_index + 1
                             new_mini_dict.append(row)
-
-                        day_row = {'day': day['date'], 'day_index': day_index, 'name': day['day'], 'full_name': days_full_name[days.index(day['day'])], 'working_hours': new_mini_dict}
-                        dict[month_index]['days'].append(day_row)
+                        if len(new_mini_dict) != 0:
+                            day_row = {'day': day['date'], 'day_index': day_index, 'name': day['day'], 'full_name': days_full_name[days.index(day['day'])], 'working_hours': new_mini_dict}
+                            dict[month_index]['days'].append(day_row)
+                            day_index = day_index + 1
     return dict

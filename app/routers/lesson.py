@@ -7,7 +7,7 @@ from typing import List
 from ..database import *
 from datetime import datetime, timedelta
 import json
-from ..emails.lesson_created import mail_lesson_created
+from ..emails.lesson_created import mail_student, mail_tutor
 
 router = APIRouter(
     prefix="/lesson",
@@ -47,9 +47,24 @@ async def get_available_class_id(background_tasks: BackgroundTasks, data: schema
 
     conn.commit()
 
-    cursor.execute("""SELECT email, firstname FROM users WHERE id = %s """, (user_data.id,))
-    receiver_email = cursor.fetchone()
+    cursor.execute("""SELECT email, firstname, lastname FROM users WHERE id = %s """, (user_data.id,))
+    student = cursor.fetchone()
 
-    background_tasks.add_task(mail_lesson_created, receiver_email['email'], receiver_email['firstname'], data)
+    cursor.execute("""SELECT subject FROM classes WHERE id = %s""", (data.class_id,))
+    subject = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT  email, firstname, lastname
+    FROM users, classes
+    WHERE classes.tutor_id = users.id
+    AND classes.id = %s
+    """, (data.class_id,))
+
+    tutor = cursor.fetchone()
+
+
+
+    background_tasks.add_task(mail_student, student['email'], student['firstname'], tutor['firstname'], tutor['lastname'], data, subject['subject'])
+    background_tasks.add_task(mail_tutor, tutor['email'], tutor['firstname'], student['firstname'], student['lastname'], data, subject['subject'])
 
     return data
