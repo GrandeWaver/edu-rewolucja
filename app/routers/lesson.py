@@ -2,7 +2,7 @@ from re import X
 from app import oauth2
 from app.utils import *
 from .. import schemas
-from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi import Depends, HTTPException, status, APIRouter, BackgroundTasks
 from typing import List
 from ..database import *
 from datetime import datetime, timedelta
@@ -26,7 +26,7 @@ def get_available_class_id(class_id: int, user_data = Depends(oauth2.get_current
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.get_current_user)):
+async def get_available_class_id(background_tasks: BackgroundTasks, data: schemas.BuyLesson, user_data = Depends(oauth2.get_current_user)):
     print(f'-----------------------------{data}------------------------------')
     
     # konwertowanie tego na date
@@ -50,6 +50,6 @@ def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.g
     cursor.execute("""SELECT email, firstname FROM users WHERE id = %s """, (user_data.id,))
     receiver_email = cursor.fetchone()
 
-    mail_lesson_created(receiver_email['email'], receiver_email['firstname'], data)
+    background_tasks.add_task(mail_lesson_created, receiver_email['email'], receiver_email['firstname'], data)
 
     return data

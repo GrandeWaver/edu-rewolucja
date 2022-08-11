@@ -17,7 +17,7 @@ def mail_lesson_created(receiver_email, receiver_firstname, data):
     smtp_server = "smtp.gmail.com"
     sender_email = secret.EMAIL  # Enter your address
     password = secret.EMAIL_PASSWORD
-    msg = MIMEText(str('Cześć {}!\nCieszymy się, że zaplanowałeś lekcje dla siebie! \nPrzypominamy, że jej termin to {} {} o {}:00\n \nPozdrawiamy!\nZaspół {}'
+    msg = MIMEText(str('Cześć {}!\nCieszymy się, że zaplanowałeś lekcje dla siebie! \n\nPrzypominamy, że jej termin to {} {} o {}:00\n \nPozdrawiamy!\nZaspół {}'
     .format(receiver_firstname, data.day, data.month, data.hour, "korki")))
 
     msg['Subject'] = "Zaplanowałeś lekcje"
