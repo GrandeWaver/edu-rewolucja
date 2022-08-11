@@ -30,7 +30,7 @@
         
         <label>
             <div class="margin-bottom15">Kwota, którą chcesz otrzymać za lekcję:</div>
-            <input type="number" min="0" max="100" v-model="price" placeholder="35" class="selectSchedule inputNumber"/>zł
+            <input type="number" min="0" max="250" v-model="price" placeholder="35" class="selectSchedule inputNumber"/>zł
         </label>
 
         <br><br>
