@@ -41,7 +41,7 @@ def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.g
 
     # INSERT INTO LESSONS
     cursor.execute("""
-        INSERT INTO lessons (date, created_at status, class_id) VALUES(%s, %s, %s, %s) RETURNING *
+        INSERT INTO lessons (date, created_at, status, class_id) VALUES(%s, %s, %s, %s) RETURNING *
     """, (date, create_at_date['timezone'], 'planned', data.class_id))
 
     conn.commit()
