@@ -36,10 +36,13 @@ def get_available_class_id(data: schemas.BuyLesson, user_data = Depends(oauth2.g
     date_str = str(data.day)+'/'+str(month)+'/'+str(data.year)+' '+str(data.hour)+':00:00'
     date = datetime.strptime(date_str, "%d/%m/%y %H:%M:%S")
 
+    cursor.execute("""SELECT now() AT TIME ZONE 'Europe/Warsaw'""")
+    create_at_date = cursor.fetchone()
+
     # INSERT INTO LESSONS
     cursor.execute("""
-        INSERT INTO lessons (date, status, class_id) VALUES(%s, %s, %s) RETURNING *
-    """, (date, 'planned', data.class_id))
+        INSERT INTO lessons (date, created_at status, class_id) VALUES(%s, %s, %s, %s) RETURNING *
+    """, (date, create_at_date, 'planned', data.class_id))
 
     conn.commit()
 
