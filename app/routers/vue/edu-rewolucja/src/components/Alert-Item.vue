@@ -13,7 +13,7 @@ export default {
     // props: ['isAuthenticated', 'userData'],
     data() {
         return {
-            show: true
+            show: false // zmień na true gdy naprawisz ;)
         }
     },
     methods: {
