@@ -6,6 +6,7 @@
   />
   <div class="page-container">
     <br><br>
+    <Alert />
     <router-view />
   </div>
   <Footer />
@@ -16,11 +17,12 @@ import Header from './components/Header-Item.vue'
 import Footer from './components/Footer-Item.vue'
 import auth from './scripts/auth.js'
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
+import Alert from './components/Alert-Item.vue'
 
 export default {
   name: 'App',
   components: {
-    NprogressContainer, Header, Footer
+    NprogressContainer, Header, Footer, Alert
   },
   data() {
     return {

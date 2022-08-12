@@ -53,7 +53,7 @@ def testing():
     file_path = os.path.join(path, 'testing.html')
     if os.path.exists(file_path):
 
-        pusher_client.trigger('my-channel', 'my-event', {'message': 'hello Kacper'})
+        # pusher_client.trigger('my-channel', 'my-event', {'message': 'hello Kacper'})
 
         return FileResponse(file_path)
     else:
@@ -93,7 +93,7 @@ def signup():
 # testing pushera
 @router.get("/privacy-policy")
 def testing():
-    pusher_client.trigger('frontend', 'privacy-policy', {'message': 'hello'})
+    pusher_client.trigger('my-channel', 'my-event', {'message': 'hello'})
 
 
 

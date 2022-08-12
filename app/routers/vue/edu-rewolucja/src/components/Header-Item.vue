@@ -63,7 +63,7 @@ export default {
 }
 .user.container {
     position: relative;
-    top: -25px;
+    top: -14px;
 }
 .user.info{
     opacity: 0.5;
@@ -82,7 +82,7 @@ export default {
 }
 .user.picture{
     margin: 5px;
-    height: 40px;
+    height: 27px;
     border-radius: 50%;
 }
 </style>

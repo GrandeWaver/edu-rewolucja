@@ -64,6 +64,8 @@ def check_lessons():
         if now == (lesson_time - timedelta(minutes=10)):
             student, tutor, subject = get_email_data(class_id = lesson['class_id'])
 
+            # pusher-> alert "Za 10 minut zaczynasz lekcję matematyki"
+
             mail_student_func = functools.partial(mail_student, student['email'], student['firstname'], tutor['firstname'], tutor['lastname'], subject['subject'], lesson_time)
             mail_tutor_func = functools.partial(mail_tutor, tutor['email'], tutor['firstname'], student['firstname'], student['lastname'], subject['subject'], lesson_time)
 
