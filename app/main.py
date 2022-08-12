@@ -74,14 +74,18 @@ def check_lessons():
         # start lesson
         if now == lesson_time:
             print(f'Rozpoczyna się lekcja {lesson["id"]}')
-
-
-        # cancel lesson
-        if lesson_time < now and lesson['status'] != 'after' and lesson['status'] != 'canceled':
             cursor.execute("""
-                UPDATE lessons SET status = 'canceled' WHERE id = %s
+                UPDATE lessons SET status = 'now' WHERE id = %s
             """, (lesson['id'],))
-            print(f'Anulowano lekcje o id: {lesson["id"]}')
+
+    
+
+        # end lesson
+        if (lesson_time + timedelta(minutes=55)) < now and lesson['status'] == 'now':
+            cursor.execute("""
+                UPDATE lessons SET status = 'after' WHERE id = %s
+            """, (lesson['id'],))
+            print(f'Zakończono lekcje o id: {lesson["id"]}')
 
     conn.commit()
 
