@@ -1,13 +1,18 @@
 from ast import While
-from fastapi import FastAPI, APIRouter
+from multiprocessing import Pool
+import functools
+from fastapi import FastAPI, APIRouter, BackgroundTasks
 from fastapi_utils.tasks import repeat_every
 
 from app.routers.auth import auth
+from app.utils import smap
 from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import time
 from .database import *
 from fastapi.middleware.cors import CORSMiddleware
+from .emails.lesson_ten_minutes import mail_student, mail_tutor
+from .emails.email_data import get_email_data
 
 
 app = FastAPI()
@@ -39,36 +44,47 @@ def helloWorld():
 
 
 @app.on_event("startup")
-@repeat_every(seconds=60, wait_first=False)
+@repeat_every(seconds=59, wait_first=False)
 def check_lessons():
-    
-    # zero = datetime.now().minute
-    # while zero != 0:
-    #     print('Debug: konfigurowanie równej godziny')
-    #     time.sleep(1)
-    #     zero = datetime.now().minute
+    if datetime.now().second != 0:
+        # print(f'I am waiting until second == 0; now: {datetime.now().second}')
+        time.sleep(60 - datetime.now().second)
+        now = datetime.now()
+        now = datetime.fromisoformat(str(now)[0:19])
 
-    print(f'check lessons: {datetime.now()}')
+    # print(f'Check lessons - { datetime.now() }')
 
-    cursor.execute("""
-        SELECT * FROM lessons
-    """)
+    cursor.execute("""SELECT * FROM lessons""")
     lessons = cursor.fetchall()
 
-    now = datetime.now()
-    now = datetime.fromisoformat(str(now)[0:19])
+    for lesson in lessons:
+        lesson_time = datetime.fromisoformat(str(lesson['date'])[0:19])
 
-    for i in lessons:
-        lesson_time = datetime.fromisoformat(str(i['date'])[0:19])
-        print(now)
-        print(lesson_time)
-        if lesson_time == now:
-            cursor.execute("""
-                UPDATE lessons SET status = 'now' WHERE id = %s
-            """, (i['id'],))
-        if lesson_time < now:
+        # 10 minuts before lesson
+        if now == (lesson_time - timedelta(minutes=10)):
+            student, tutor, subject = get_email_data(class_id = lesson['class_id'])
+
+            mail_student_func = functools.partial(mail_student, student['email'], student['firstname'], tutor['firstname'], tutor['lastname'], subject['subject'], lesson_time)
+            mail_tutor_func = functools.partial(mail_tutor, tutor['email'], tutor['firstname'], student['firstname'], student['lastname'], subject['subject'], lesson_time)
+
+            with Pool() as pool:
+                pool.map(smap, [mail_student_func, mail_tutor_func])
+                print('wysłano powiadomienia o lekcjach')
+        
+        # start lesson
+        if now == lesson_time:
+            print(f'Rozpoczyna się lekcja {lesson["id"]}')
+
+
+        # cancel lesson
+        if lesson_time < now and lesson['status'] != 'after' and lesson['status'] != 'canceled':
             cursor.execute("""
                 UPDATE lessons SET status = 'canceled' WHERE id = %s
-            """, (i['id'],))
+            """, (lesson['id'],))
+            print(f'Anulowano lekcje o id: {lesson["id"]}')
+
     conn.commit()
 
+# cursor.execute("""
+#     UPDATE lessons SET status = 'now' WHERE id = %s
+# """, (lesson['id'],))

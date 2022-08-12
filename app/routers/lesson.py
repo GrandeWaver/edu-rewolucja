@@ -27,8 +27,7 @@ def get_available_class_id(class_id: int, user_data = Depends(oauth2.get_current
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def get_available_class_id(background_tasks: BackgroundTasks, data: schemas.BuyLesson, user_data = Depends(oauth2.get_current_user)):
-    print(f'-----------------------------{data}------------------------------')
-    
+
     # konwertowanie tego na date
     months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień", ]
     month = months.index(data.month)

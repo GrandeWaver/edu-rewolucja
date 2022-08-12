@@ -49,3 +49,6 @@ def format_data(data):
         new_data.append(row)
 
     return new_data
+
+def smap(f):
+    return f()
