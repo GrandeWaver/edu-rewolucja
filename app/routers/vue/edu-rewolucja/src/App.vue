@@ -21,6 +21,7 @@ import auth from './scripts/auth.js'
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import Alert from './components/Alert-Item.vue'
 import cookies from './scripts/cookies'
+import getData from './scripts/getData'
 
 export default {
   name: 'App',
@@ -49,7 +50,7 @@ export default {
     //   this.alerts.push(JSON.stringify(data));
     // });
 
-    this.connection = new WebSocket(`ws://localhost:3000/${this.userData.id}?token=${cookies.getCookie('auth')}`)
+    this.connection = new WebSocket(`${getData.webSocketUrl()}${this.userData.id}?token=${cookies.getCookie('auth')}`)
 
     // this.connection.onopen = function(event) {
     // }
