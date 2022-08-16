@@ -39,19 +39,18 @@ export default {
     width: 90%;
     margin-right: auto;
     margin-left: auto;
-    transform: translateY(-28px);
+    float: left;
+    transform: translateY(-10px);
 }
 .alertcancel{
     text-align: right;
     padding: 6px;
     cursor: pointer;
+    height: 1px;
 }
 @media only screen and (max-width: 540px) {
   .alert{
     height: 47px;
-  }
-  .textdetails{
-    transform: translateY(-47px);
   }
 }
 </style>
