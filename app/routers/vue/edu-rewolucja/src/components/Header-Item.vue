@@ -16,7 +16,7 @@
         <a @click="logout"> wyloguj</a>
     </div>
     <div>
-        <img :src=userData.picture class="user picture">
+        <img :src=userData.picture class="user picture" referrerpolicy="no-referrer">
     </div>
     </div>
 </div>

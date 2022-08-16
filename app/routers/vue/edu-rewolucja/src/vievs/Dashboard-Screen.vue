@@ -1,13 +1,11 @@
 <template>
      <h1>Twoje zajęcia</h1>
 
-     <br><br>
-
     <div v-if="no_classes">Brak zajęć</div>
 
     <div v-for="class_ in classes" :key="class_.id" class="dashboard class">
         <div class="dashboard classWrapper">
-            <img :src=class_.picture class="dashboard picture">
+            <img :src=class_.picture class="dashboard picture" referrerpolicy="no-referrer">
 
             <div class="dashboard subject">{{ class_.subject }}</div>
             <div class="dashboard name">{{class_.firstname}} {{class_.lastname}}</div>
@@ -115,6 +113,11 @@ setup() {
     width: 85px;
     border-radius: 50%;
     text-align: center;
+}
+@media only screen and (max-width: 540px) {
+  .dashboard.class{
+    width: 450px;
+  }
 }
 @media only screen and (max-width: 440px) {
   .dashboard.class{

@@ -6,7 +6,8 @@
   />
   <div class="page-container">
     <br><br>
-    <Alert />
+    <Alert text="Strona w trakcie budowy. Nie wszystko może działać poprawnie." />
+    <Alert text="O godzinie 00:00 odbędzie się lekcja przedmiotu z Imie Nazwisko." />
     <router-view />
   </div>
   <Footer />

@@ -1,19 +1,18 @@
 <template>
     <div v-if="show" class="alert">
-        <div class="textdetails">
-            Strona w trakcie budowy. Nie wszystko może działać poprawnie :(
-        </div>
         <div @click="closeAlert" class="alertcancel">X</div>
+        <div class="textdetails">
+            {{ text }}
+        </div>
     </div>
-    <br v-if="show">
 </template>
 
 <script>
 export default {
-    // props: ['isAuthenticated', 'userData'],
+    props: ['text'],
     data() {
         return {
-            show: false // zmień na true gdy naprawisz ;)
+            show: true // zmień na true gdy naprawisz ;)
         }
     },
     methods: {
@@ -26,24 +25,29 @@ export default {
 
 <style>
 .alert{
-    position:absolute;
-    top:35px;
     text-align: center;
     color: white;
     width: 100%;
     margin: 0;
+    background-color: #FF6E6E;
+    height: 28px;
 }
 .textdetails{
-    background-color: #FF6E6E;
-    float: left;
     padding: 4px;
     text-align: center;
-    width: 100%;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+    transform: translateY(-28px);
 }
 .alertcancel{
     text-align: right;
     padding: 6px;
-    transform: translateY(-22px);
     cursor: pointer;
+}
+@media only screen and (max-width: 540px) {
+  .alert{
+    height: 47px;
+  }
 }
 </style>
