@@ -15,3 +15,10 @@ def change_last_letter(name):
     else:
         a = ''
     return a
+
+def change_minute(minute):
+    if minute == 0:
+        minute == '00'
+    else:
+        minute = minute
+    return minute
