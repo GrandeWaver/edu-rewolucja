@@ -1,9 +1,9 @@
 <template>
     <div v-if="show" class="alert">
-        <div @click="closeAlert" class="alertcancel">X</div>
         <div class="textdetails">
             {{ text }}
         </div>
+        <div @click="closeAlert" class="alertcancel">X</div>
     </div>
 </template>
 
@@ -29,7 +29,6 @@ export default {
     color: white;
     width: 100%;
     background-color: #FF6E6E;
-    height: 28px;
     padding: 0;
     margin: 0;
 }
@@ -39,18 +38,12 @@ export default {
     width: 90%;
     margin-right: auto;
     margin-left: auto;
-    float: left;
-    transform: translateY(-10px);
+    display:inline-block;
 }
 .alertcancel{
-    text-align: right;
     padding: 6px;
     cursor: pointer;
-    height: 1px;
-}
-@media only screen and (max-width: 540px) {
-  .alert{
-    height: 47px;
-  }
+    display:inline-block;
+    vertical-align:top;
 }
 </style>
