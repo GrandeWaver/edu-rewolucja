@@ -50,5 +50,8 @@ export default {
   .alert{
     height: 47px;
   }
+  .textdetails{
+    transform: translateY(-47px);
+  }
 }
 </style>
