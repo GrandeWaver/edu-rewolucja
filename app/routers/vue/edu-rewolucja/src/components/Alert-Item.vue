@@ -25,7 +25,6 @@ export default {
 
 <style>
 .alert{
-    text-align: center;
     color: white;
     width: 100%;
     background-color: #FF6E6E;
@@ -42,8 +41,20 @@ export default {
 }
 .alertcancel{
     padding: 6px;
+    width: 1%;
     cursor: pointer;
     display:inline-block;
     vertical-align:top;
+    text-align: right;
+}
+@media only screen and (min-width: 1000px) {
+.textdetails {
+    width: 95%;
+}
+}
+@media only screen and (min-width: 1600px) {
+.textdetails {
+    width: 97%;
+}
 }
 </style>

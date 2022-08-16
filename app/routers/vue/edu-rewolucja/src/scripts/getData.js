@@ -14,6 +14,14 @@ const headersAuth = {
         }
     },
 
+    webSocketUrl(){
+        if (window.location.hostname == 'localhost'){
+            return 'ws://localhost:3000/'
+        } if (window.location.hostname == 'korki.edu-rewolucja.pl'){
+            return 'ws://app.edu-rewolucja.pl/'
+        }
+    },
+
     getHeaders () {
         return headersAuth
     },

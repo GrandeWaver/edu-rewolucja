@@ -95,5 +95,10 @@ def signup():
 def testing():
     pusher_client.trigger('my-channel', 'my-event', {'message': 'hello'})
 
+# testing pushera
+@router.get("/alert")
+def testing():
+    pusher_client.trigger('my-channel', 'my-event', {'text': 'hello'})
+
 
 

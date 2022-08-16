@@ -6,8 +6,9 @@
   />
   <div class="page-container">
     <br><br>
-    <Alert text="Strona w trakcie budowy. Nie wszystko może działać poprawnie." />
-    <Alert text="O godzinie 00:00 odbędzie się lekcja przedmiotu z Imie Nazwisko." />
+    <div v-for="(alert, index) in alerts" :key="index">
+        <Alert :text=alert.text />
+    </div>
     <router-view />
   </div>
   <Footer />
@@ -19,6 +20,7 @@ import Footer from './components/Footer-Item.vue'
 import auth from './scripts/auth.js'
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import Alert from './components/Alert-Item.vue'
+import cookies from './scripts/cookies'
 
 export default {
   name: 'App',
@@ -34,11 +36,31 @@ export default {
             'account_type': undefined, 
             'picture': undefined
           }
-        ]
+        ],
+        alerts: []
       }
   },
   mounted: async function() {
-    this.userData = await auth.isAuthenticatedFunc(this)
+    this.userData = await auth.isAuthenticatedFunc(this),
+    // this.Alerts.push({"text": "Aplikacja nie działa w twoim kraju. (Problemy ze strefą czasową)"})
+
+    // var channel = this.$pusher.subscribe('my-channel');
+    // channel.bind('my-event', function(data) {
+    //   this.alerts.push(JSON.stringify(data));
+    // });
+
+    this.connection = new WebSocket(`ws://localhost:3000/${this.userData.id}?token=${cookies.getCookie('auth')}`)
+
+    // this.connection.onopen = function(event) {
+    // }
+
+    const _this = this
+    this.connection.onmessage = function(event) {
+      _this.alerts.push({"text": event.data})
+    }
+    
+    this.alerts.push({"text": "Strona w trakcie budowy. Nie wszystko może działać poprawnie."})
+
   },
 }
 </script>

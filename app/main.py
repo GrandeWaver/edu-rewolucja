@@ -6,7 +6,7 @@ from fastapi_utils.tasks import repeat_every
 
 from app.routers.auth import auth
 from app.utils import smap
-from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson
+from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson, websocket
 from datetime import datetime, date, timedelta
 import time
 from .database import *
@@ -25,6 +25,7 @@ app.include_router(select_class.router)
 app.include_router(auth.router)
 app.include_router(lesson.router)
 app.include_router(resources.router)
+app.include_router(websocket.router)
 
 origins = [
     "http://localhost:8080",
@@ -42,17 +43,13 @@ app.add_middleware(
 def helloWorld():
     return """Hello World!"""
 
-
 @app.on_event("startup")
 @repeat_every(seconds=59, wait_first=False)
 def check_lessons():
     if datetime.now().second != 0:
-        # print(f'I am waiting until second == 0; now: {datetime.now().second}')
         time.sleep(60 - datetime.now().second)
         now = datetime.now()
         now = datetime.fromisoformat(str(now)[0:19])
-
-    # print(f'Check lessons - { datetime.now() }')
 
     cursor.execute("""SELECT * FROM lessons""")
     lessons = cursor.fetchall()
@@ -65,6 +62,8 @@ def check_lessons():
             student, tutor, subject = get_email_data(class_id = lesson['class_id'])
 
             # pusher-> alert "Za 10 minut zaczynasz lekcję matematyki"
+            # ten_to_lesson.append(student['id'])
+
 
             mail_student_func = functools.partial(mail_student, student['email'], student['firstname'], tutor['firstname'], tutor['lastname'], subject['subject'], lesson_time)
             mail_tutor_func = functools.partial(mail_tutor, tutor['email'], tutor['firstname'], student['firstname'], student['lastname'], subject['subject'], lesson_time)
@@ -79,8 +78,9 @@ def check_lessons():
             cursor.execute("""
                 UPDATE lessons SET status = 'now' WHERE id = %s
             """, (lesson['id'],))
+            # ten_minutes_to_lesson.remove(student['id'])
+            # lesson.append(student['id'])
 
-    
 
         # end lesson
         if (lesson_time + timedelta(minutes=55)) < now and lesson['status'] == 'now':
