@@ -28,9 +28,10 @@ export default {
     text-align: center;
     color: white;
     width: 100%;
-    margin: 0;
     background-color: #FF6E6E;
     height: 28px;
+    padding: 0;
+    margin: 0;
 }
 .textdetails{
     padding: 4px;
