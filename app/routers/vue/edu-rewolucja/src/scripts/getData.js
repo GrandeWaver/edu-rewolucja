@@ -18,7 +18,7 @@ const headersAuth = {
         if (window.location.hostname == 'localhost'){
             return 'ws://localhost:3000/'
         } if (window.location.hostname == 'korki.edu-rewolucja.pl'){
-            return 'ws://app.edu-rewolucja.pl/'
+            return 'wss://app.edu-rewolucja.pl/'
         }
     },
 
