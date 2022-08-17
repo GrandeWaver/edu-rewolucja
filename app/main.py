@@ -1,18 +1,15 @@
-from ast import While
-from multiprocessing import Pool
-import functools
-from fastapi import FastAPI, APIRouter, BackgroundTasks
+from fastapi import FastAPI
 from fastapi_utils.tasks import repeat_every
 
 from app.routers.auth import auth
-from app.utils import smap
-from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson, websocket
-from datetime import datetime, date, timedelta
+from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson
+from datetime import datetime, timedelta
 import time
 from .database import *
 from fastapi.middleware.cors import CORSMiddleware
-from .emails.lesson_ten_minutes import mail_student, mail_tutor
+
 from .emails.email_data import get_email_data
+from app.registry import registry
 
 
 app = FastAPI()
@@ -25,7 +22,6 @@ app.include_router(select_class.router)
 app.include_router(auth.router)
 app.include_router(lesson.router)
 app.include_router(resources.router)
-app.include_router(websocket.router)
 
 origins = [
     "http://localhost:8080",
@@ -59,18 +55,22 @@ def check_lessons():
 
         # 10 minuts before lesson
         if now == (lesson_time - timedelta(minutes=10)):
-            student, tutor, subject = get_email_data(class_id = lesson['class_id'])
+            print(f'Lekcja o id: {lesson["id"]} zacznie się za 10 minut')
 
-            # pusher-> alert "Za 10 minut zaczynasz lekcję matematyki"
-            # ten_to_lesson.append(student['id'])
+            student, tutor, subject = get_email_data(lesson['class_id'])
 
-
-            mail_student_func = functools.partial(mail_student, student['email'], student['firstname'], tutor['firstname'], tutor['lastname'], subject['subject'], lesson_time)
-            mail_tutor_func = functools.partial(mail_tutor, tutor['email'], tutor['firstname'], student['firstname'], student['lastname'], subject['subject'], lesson_time)
-
-            with Pool() as pool:
-                pool.map(smap, [mail_student_func, mail_tutor_func])
-                print('wysłano powiadomienia o lekcjach')
+            registry.add_ten_to_lesson(
+                tutor['id'], 
+                tutor['email'],
+                tutor['firstname'], 
+                tutor['lastname'], 
+                student['id'], 
+                student['email'],
+                student['firstname'], 
+                student['lastname'],
+                lesson_time, 
+                subject['subject']
+            )
         
         # start lesson
         if now == lesson_time:
@@ -88,6 +88,13 @@ def check_lessons():
                 UPDATE lessons SET status = 'after' WHERE id = %s
             """, (lesson['id'],))
             print(f'Zakończono lekcje o id: {lesson["id"]}')
+        
+        # cancel lesson
+        if (lesson_time + timedelta(minutes=55)) < now and lesson['status'] == 'planned':
+            cursor.execute("""
+                UPDATE lessons SET status = 'canceled' WHERE id = %s
+            """, (lesson['id'],))
+            print(f'Anulowano lekcje o id: {lesson["id"]}')
 
     conn.commit()
 

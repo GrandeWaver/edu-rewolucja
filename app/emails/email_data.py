@@ -1,7 +1,7 @@
 from ..database import *
 
 def get_email_data(class_id: int):
-    cursor.execute("""SELECT email, firstname, lastname FROM users, classes
+    cursor.execute("""SELECT users.id, email, firstname, lastname FROM users, classes
     WHERE classes.student_id = users.id
     AND classes.id = %s
     """, (class_id,))
@@ -11,7 +11,7 @@ def get_email_data(class_id: int):
     subject = cursor.fetchone()
 
     cursor.execute("""
-    SELECT  email, firstname, lastname
+    SELECT  users.id, email, firstname, lastname
     FROM users, classes
     WHERE classes.tutor_id = users.id
     AND classes.id = %s

@@ -4,6 +4,7 @@ import router from './router'
 import "./assets/css/global.css"
 import vue3GoogleLogin from 'vue3-google-login'
 import { store } from './store/index'
+import PusherPlugin from './plugins/pusher'
 
 const app = createApp(App)
 
@@ -13,6 +14,13 @@ app.use(
 
 app.use(
   store
+)
+
+app.use(
+  PusherPlugin, {
+    apiKey: '94fb841a5b6a5b0fd651', 
+    cluster: 'eu'
+  }
 )
 
 app.use(vue3GoogleLogin, {

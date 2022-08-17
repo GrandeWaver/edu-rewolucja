@@ -20,8 +20,8 @@ import Footer from './components/Footer-Item.vue'
 import auth from './scripts/auth.js'
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import Alert from './components/Alert-Item.vue'
-import cookies from './scripts/cookies'
-import getData from './scripts/getData'
+// import cookies from './scripts/cookies'
+// import getData from './scripts/getData'
 
 export default {
   name: 'App',
@@ -41,28 +41,40 @@ export default {
         alerts: []
       }
   },
-  mounted: async function() {
-    this.userData = await auth.isAuthenticatedFunc(this),
-    // this.Alerts.push({"text": "Aplikacja nie działa w twoim kraju. (Problemy ze strefą czasową)"})
-
-    // var channel = this.$pusher.subscribe('my-channel');
-    // channel.bind('my-event', function(data) {
-    //   this.alerts.push(JSON.stringify(data));
-    // });
-
-    this.connection = new WebSocket(`${getData.webSocketUrl()}${this.userData.id}?token=${cookies.getCookie('auth')}`)
-
-    // this.connection.onopen = function(event) {
-    // }
-
-    const _this = this
-    this.connection.onmessage = function(event) {
-      _this.alerts.push({"text": event.data})
+  created: async function() {
+    this.userData = await auth.isAuthenticatedFunc(this)
+    if(this.isAuthenticated){
+      this.alerts.push({"text": "Strona w trakcie budowy. Nie wszystko może działać poprawnie."})
     }
-    
-    this.alerts.push({"text": "Strona w trakcie budowy. Nie wszystko może działać poprawnie."})
 
-  },
+
+  // pusher
+  const _this = this
+    var channel = this.$pusher.subscribe('alerts');
+    channel.bind('main', function(data) {
+      console.log(data)
+      _this.alerts.push(data);
+    })
+    channel.bind(_this.userData.id, function(data) {
+      console.log(data)
+      _this.alerts.push(data);
+    })
+
+
+    // if(this.isAuthenticated){
+    //   this.connection = new WebSocket(`${getData.webSocketUrl()}${this.userData.id}?token=${cookies.getCookie('auth')}`)
+
+    //   // handle websocket
+    //   const _this = this
+    //   this.connection.onmessage = function(event) {
+    //     if(event.data.startsWith("alert: ")){
+    //       _this.alerts.push({"text": event.data.replace('alert: ','')})
+    //     } else {
+    //       return
+    //     }
+    //   }
+    // }
+  }
 }
 </script>
 
