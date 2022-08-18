@@ -7,13 +7,14 @@ from app import oauth2
 from ..database import *
 from fastapi.responses import FileResponse
 import pusher
+from app.registry import registry
 
 BASE_DIR = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates')))
 
 router = APIRouter(
     prefix="",
-    tags=['undefined']
+    tags=['Frontend (umownie)']
 )
 
 @router.get("/favicon.ico")
@@ -29,6 +30,16 @@ def favicon():
 @router.post("/alert")
 def testing(message: str):
     pusher_client.trigger('alerts', 'main', {'text': message})
+
+@router.get("/active-lessons")
+def testing():
+    active_lessons = registry.return_active_lessons()
+    return {"active_lessons": active_lessons}
+
+@router.get("/ten-to-lesson")
+def testing():
+    ten_to_lesson = registry.return_ten_to_lesson()
+    return {"ten_to_lesson": ten_to_lesson}
 
 
 # @router.get("/admin")

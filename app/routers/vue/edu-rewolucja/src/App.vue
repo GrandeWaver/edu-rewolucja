@@ -81,6 +81,7 @@ export default {
         _this.videocall = true
         _this.videocall_data = data
       }
+      // zakończ viedeocall jakoś
     })
   }
 }

@@ -117,7 +117,6 @@ def check_lessons():
             for i in active_lessons:
                 if i['lesson_id'] == lesson["id"]:
                     ten_to_lesson.remove(i)
-                    print(f'usuwam z rejestru ten_to_ lesson: {i["lesson_id"]}')
         
         # cancel lesson
         if (lesson_time + timedelta(minutes=55)) < now and lesson['status'] == 'planned':
