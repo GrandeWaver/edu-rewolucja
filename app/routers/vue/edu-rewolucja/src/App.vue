@@ -57,7 +57,7 @@ export default {
                 if(r.status != 200){
                     alert('Error: cannot check notifications')
                     return r
-                } else { return response.json() }
+                } else { return r.json() }
             })
     }
 
