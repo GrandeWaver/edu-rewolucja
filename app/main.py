@@ -116,7 +116,7 @@ def check_lessons():
             active_lessons = registry.return_active_lessons()
             for i in active_lessons:
                 if i['lesson_id'] == lesson["id"]:
-                    ten_to_lesson.remove(i)
+                    registry.remove_active_lessons(lesson)
         
         # cancel lesson
         if (lesson_time + timedelta(minutes=55)) < now and lesson['status'] == 'planned':

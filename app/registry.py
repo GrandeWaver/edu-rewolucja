@@ -69,6 +69,11 @@ class Registry():
         pusher_client.trigger('videocall', str(student_id), notification)
         pusher_client.trigger('videocall', str(tutor_id), notification)
 
+        # remove z ten_to_lesson TODO
+    
+    def remove_active_lessons(self, lesson):
+        self.active_lessons.remove(lesson)
+
 
 registry = Registry()
 registry.reset()
