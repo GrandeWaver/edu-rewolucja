@@ -11,7 +11,7 @@ router = APIRouter(
     )
 
 @router.get('/')
-def get_user(user_data = Depends(oauth2.get_current_user)):
+def get_notifications(user_data = Depends(oauth2.get_current_user)):
         # check from registry czy nie ma jakiś powiadomień. które powinien zwrócić
         start_notification = registry.return_start_notification()
         ten_to_lesson = registry.return_ten_to_lesson()
