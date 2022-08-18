@@ -9,6 +9,9 @@
     <div v-for="(alert, index) in alerts" :key="index">
         <Alert :text=alert.text />
     </div>
+    <div v-if="videocall">
+        <VideoCall :data=videocall_data />
+    </div>
     <router-view />
   </div>
   <Footer />
@@ -20,13 +23,14 @@ import Footer from './components/Footer-Item.vue'
 import auth from './scripts/auth.js'
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import Alert from './components/Alert-Item.vue'
-// import cookies from './scripts/cookies'
-// import getData from './scripts/getData'
+import VideoCall from './components/VideoCall-Item.vue'
+
+import getData from './scripts/getData'
 
 export default {
   name: 'App',
   components: {
-    NprogressContainer, Header, Footer, Alert
+    NprogressContainer, Header, Footer, Alert, VideoCall
   },
   data() {
     return {
@@ -38,42 +42,45 @@ export default {
             'picture': undefined
           }
         ],
-        alerts: []
+        alerts: [],
+        videocall: false,
+        videocall_data: []
       }
   },
-  created: async function() {
+  mounted: async function() {
     this.userData = await auth.isAuthenticatedFunc(this)
+
     if(this.isAuthenticated){
-      this.alerts.push({"text": "Strona w trakcie budowy. Nie wszystko może działać poprawnie."})
+      // fetch get check notifications
+      fetch(getData.url()+'/notifications', {headers: getData.getHeaders()})
+            .then(r => {
+                if(r.status != 200){
+                    alert('Error: cannot check notifications')
+                }
+            })
     }
 
 
-  // pusher
-  const _this = this
-    var channel = this.$pusher.subscribe('alerts');
-    channel.bind('main', function(data) {
+    // pusher
+    const _this = this
+    var alerts = this.$pusher.subscribe('alerts')
+    alerts.bind('main', function(data) {
       console.log(data)
-      _this.alerts.push(data);
+      _this.alerts.push(data)
     })
-    channel.bind(_this.userData.id, function(data) {
+    alerts.bind(_this.userData.id, function(data) {
       console.log(data)
-      _this.alerts.push(data);
+      _this.alerts.push(data)
     })
 
-
-    // if(this.isAuthenticated){
-    //   this.connection = new WebSocket(`${getData.webSocketUrl()}${this.userData.id}?token=${cookies.getCookie('auth')}`)
-
-    //   // handle websocket
-    //   const _this = this
-    //   this.connection.onmessage = function(event) {
-    //     if(event.data.startsWith("alert: ")){
-    //       _this.alerts.push({"text": event.data.replace('alert: ','')})
-    //     } else {
-    //       return
-    //     }
-    //   }
-    // }
+    var videocall = this.$pusher.subscribe('videocall');
+    videocall.bind(_this.userData.id, function(data) {
+      console.log(data)
+      if(data.notification == 'start'){
+        _this.videocall = true
+        _this.videocall_data = data
+      }
+    })
   }
 }
 </script>

@@ -1,4 +1,3 @@
-from re import X
 from app import oauth2
 from app.utils import *
 from .. import schemas

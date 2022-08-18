@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi_utils.tasks import repeat_every
 
 from app.routers.auth import auth
-from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson
+from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson, notifications
 from datetime import datetime, timedelta
 import time
 from .database import *
@@ -22,6 +22,7 @@ app.include_router(select_class.router)
 app.include_router(auth.router)
 app.include_router(lesson.router)
 app.include_router(resources.router)
+app.include_router(notifications.router)
 
 origins = [
     "http://localhost:8080",
@@ -69,17 +70,40 @@ def check_lessons():
                 student['firstname'], 
                 student['lastname'],
                 lesson_time, 
-                subject['subject']
+                subject['subject'],
+                lesson['id']
             )
         
         # start lesson
-        if now == lesson_time:
-            print(f'Rozpoczyna się lekcja {lesson["id"]}')
-            cursor.execute("""
-                UPDATE lessons SET status = 'now' WHERE id = %s
-            """, (lesson['id'],))
-            # ten_minutes_to_lesson.remove(student['id'])
-            # lesson.append(student['id'])
+        if (lesson_time + timedelta(minutes=55)) > now and lesson_time <= now:
+            active_lessons = registry.return_active_lessons()
+
+            if not any(l['lesson_id'] == lesson['id'] for l in active_lessons):
+                print(f'Rozpoczyna się lekcja {lesson["id"]}')
+
+                cursor.execute("""
+                    UPDATE lessons SET status = 'now' WHERE id = %s
+                """, (lesson['id'],))
+
+                # usun sie z registry ten_to_lesson zeby nie dostawać niepotrzebnego powiadomienia w przyszłości
+                ten_to_lesson = registry.return_ten_to_lesson()
+                for i in ten_to_lesson:
+                    if i['lesson_id'] == lesson["id"]:
+                        ten_to_lesson.remove(i)
+
+                # dodaj lekcje do aktywnych lekcji
+                student, tutor, subject = get_email_data(lesson['class_id'])
+                registry.add_active_lessons(
+                    lesson['id'], 
+                    tutor['id'], 
+                    tutor['firstname'], 
+                    tutor['lastname'], 
+                    tutor['picture'], 
+                    student['id'], 
+                    student['firstname'], 
+                    student['lastname'], 
+                    student['picture']
+                )
 
 
         # end lesson
@@ -88,6 +112,12 @@ def check_lessons():
                 UPDATE lessons SET status = 'after' WHERE id = %s
             """, (lesson['id'],))
             print(f'Zakończono lekcje o id: {lesson["id"]}')
+
+            active_lessons = registry.return_active_lessons()
+            for i in active_lessons:
+                if i['lesson_id'] == lesson["id"]:
+                    ten_to_lesson.remove(i)
+                    print(f'usuwam z rejestru ten_to_ lesson: {i["lesson_id"]}')
         
         # cancel lesson
         if (lesson_time + timedelta(minutes=55)) < now and lesson['status'] == 'planned':
