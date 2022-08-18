@@ -26,8 +26,7 @@ app.include_router(notifications.router)
 
 origins = [
     "http://localhost:8080",
-    "https://korki.edu-rewolucja.pl",
-    "http://korki.edu-rewolucja.pl"
+    "https://korki.edu-rewolucja.pl"
 ]
 app.add_middleware(
     CORSMiddleware,
