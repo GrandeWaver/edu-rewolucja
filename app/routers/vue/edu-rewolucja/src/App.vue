@@ -52,7 +52,7 @@ export default {
 
     if(this.isAuthenticated){
       // fetch get check notifications
-      fetch(getData.url()+'/notifications', {headers: getData.getHeaders()})
+      fetch(getData.url()+'/notifications/', {headers: getData.getHeaders()})
             .then(r => {
                 if(r.status != 200){
                     alert('Error: cannot check notifications')
