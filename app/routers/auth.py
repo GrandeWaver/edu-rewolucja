@@ -78,9 +78,10 @@ from app.create_meeting import *
 @router.get('/zoomuser')
 def zoom_user(code: str):
     encoded_authorization_key = base64.b64encode(f'{API_KEY}:{API_SEC}'.encode('ascii'))
+    encoded_authorization_key.decode()
     print(str(encoded_authorization_key))
 
-    headers = { "Authorization": "Basic WXVETUJ1Zm1SbW1TaV9IOGlHeW9OQTpxSEUyNHpVaERmWGxRWWVOcGNvS2lHazBLa0w4YjR5Mg=="}
+    headers = { "Authorization": f"Basic {}"}
     r = requests.post(
         f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser', headers=headers)
 
