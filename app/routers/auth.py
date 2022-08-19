@@ -2,9 +2,15 @@ from os import access
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 
-from app.create_meeting import generateToken
 from ..database import *
 from .. import schemas, utils, oauth2
+import requests
+import json
+import base64
+from app.create_meeting import *
+import sys, os
+sys.path.append(os.path.abspath('../../'))
+import secret
 
 router = APIRouter(
     prefix="/auth",
@@ -70,15 +76,6 @@ def google_user(token: schemas.GoogleToken):
                 raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"database error")
 
 
-import requests
-import json
-import base64
-from app.create_meeting import *
-import sys, os
-sys.path.append(os.path.abspath('../../'))
-import secret
-
-
 @router.get('/zoomuser')
 def zoom_user(code: str):
     encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
@@ -88,7 +85,12 @@ def zoom_user(code: str):
     r = requests.post(
         f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser', headers=headers)
 
-    print("\n creating zoom meeting ... \n")
-    data = json.loads(r.text)
+    oauth = json.loads(r.text)
 
-    return {"code": code, "data": data}
+    r = requests.get('https://api.zoom.us/v2/users/', headers=headers)
+
+    users = json.loads(r.text)
+
+    
+
+    return {"code": code, "data": oauth, "users": users}
