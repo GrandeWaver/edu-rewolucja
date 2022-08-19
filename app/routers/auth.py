@@ -115,7 +115,7 @@ def zoom_user(code: str):
     except:
         users = {"error": "read logs"}
 
-    print(users["users"])
+    print(users["users"][0])
     try:
         print(users["users"][0]["id"])
         headers = {'authorization': 'Bearer %s' % oauth['access_token'],
