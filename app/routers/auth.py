@@ -87,10 +87,10 @@ def zoom_user(code: str):
 
     oauth = json.loads(r.text)
 
-    r = requests.get('https://api.zoom.us/v2/users/', headers=headers)
+    r = requests.get('https://api.zoom.us/v2/users/me', headers=headers)
 
     users = json.loads(r.text)
 
-    
+
 
     return {"code": code, "data": oauth, "users": users}
