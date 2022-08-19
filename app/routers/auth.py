@@ -73,7 +73,7 @@ def google_user(token: schemas.GoogleToken):
 import requests
 import json
 import base64
-from create_meeting import *
+from app.create_meeting import *
 
 @router.get('/zoomuser')
 def zoom_user(code: str):
