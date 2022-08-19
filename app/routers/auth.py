@@ -76,8 +76,9 @@ import base64
 @router.get('/zoomuser')
 def zoom_user(code: str):
     encoded_code = base64.b64encode(code.encode('ascii'))
+    encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
 
-    headers = { "Authorization": f"Basic {encoded_code}"}
+    headers = { "Authorization": f"Basic {encoded_authorization_key}"}
     r = requests.post(
         f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=korki.edu-rewolucja.pl', headers=headers)
 
