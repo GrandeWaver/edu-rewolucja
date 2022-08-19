@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .emails.email_data import get_email_data
 from app.registry import registry
+from app.create_meeting import *
 
 
 app = FastAPI()
@@ -40,9 +41,12 @@ app.add_middleware(
 def helloWorld():
     return """Hello World!"""
 
+
 @app.on_event("startup")
 @repeat_every(seconds=59, wait_first=False)
 def check_lessons():
+    createMeeting('edurewolucja@gmail.com')
+    getUsers()
     if datetime.now().second != 0:
         time.sleep(60 - datetime.now().second)
         now = datetime.now()
@@ -104,6 +108,7 @@ def check_lessons():
                     student['lastname'], 
                     student['picture']
                 )
+                
 
 
         # end lesson

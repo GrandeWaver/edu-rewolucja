@@ -68,3 +68,8 @@ def google_user(token: schemas.GoogleToken):
                 raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"database error")
 
 
+
+@router.post('/zoomuser', response_model=schemas.Token)
+def zoom_user(token: schemas.GoogleToken):
+    print(token)
+    return {"redirect": "?"}
