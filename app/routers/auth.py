@@ -123,7 +123,7 @@ def zoom_user(code: str):
 
     print("\n creating zoom meeting ... \n")
     data = json.loads(r.text)
-    print(data["start_url"])
+    print(data)
     print('\n'+data["join_url"])
     print('\n'+data['password'])
         # print("Error: auth.py -> line: 118-130")
