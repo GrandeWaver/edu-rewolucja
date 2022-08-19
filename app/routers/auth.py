@@ -72,12 +72,14 @@ def google_user(token: schemas.GoogleToken):
 
 import requests
 import json
+import base64
 @router.get('/zoomuser')
 def zoom_user(code: str):
+    encoded_code = base64.b64encode(code.encode('ascii'))
 
     headers = { "Authorization": f"Basic {generateToken()}"}
     r = requests.post(
-        f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=korki.edu-rewolucja.pl', headers=headers)
+        f'https://zoom.us/oauth/token?grant_type=authorization_code&code={encoded_code}&redirect_uri=korki.edu-rewolucja.pl', headers=headers)
 
     print("\n creating zoom meeting ... \n")
     data = json.loads(r.text)
