@@ -69,7 +69,6 @@ def google_user(token: schemas.GoogleToken):
 
 
 
-@router.post('/zoomuser')
-def zoom_user(token: schemas.GoogleToken):
-    print(token)
-    return {"redirect": "?"}
+@router.get('/zoomuser')
+def zoom_user(code: str):
+    return {"code": code}
