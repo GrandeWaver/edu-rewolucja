@@ -74,7 +74,7 @@ import requests
 import json
 import base64
 import sys, os
-sys.path.append(os.path.abspath('../../'))
+sys.path.append(os.path.abspath('../'))
 import secret
 
 @router.get('/zoomuser')
