@@ -116,6 +116,7 @@ def zoom_user(code: str):
         users = {"error": "read logs"}
 
     try:
+        print(users["users"][0]["id"])
         headers = {'authorization': 'Bearer %s' % oauth['access_token'],
                 'content-type': 'application/json'}
         r = requests.post(
