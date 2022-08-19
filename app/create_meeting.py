@@ -15,7 +15,7 @@ meetingId = 83781439159
 userId = 'you can get your user Id by running the getusers()'
 
 # create a function to generate a token using the pyjwt library
-def generateToken():
+def generateToken(api_key = API_KEY):
     token = jwt.encode(
         # Create a payload of the token containing API Key & expiration time
         {'iss': API_KEY, 'exp': time() + 5000},
