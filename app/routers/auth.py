@@ -74,13 +74,15 @@ import requests
 import json
 import base64
 from app.create_meeting import *
+import sys, os
+sys.path.append(os.path.abspath('../../'))
+import secret
+
 
 @router.get('/zoomuser')
 def zoom_user(code: str):
-    encoded_authorization_key = base64.b64encode(f'{API_KEY}:{API_SEC}'.encode('ascii'))
+    encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
     encoded_authorization_key = encoded_authorization_key.decode()
-
-    print(encoded_authorization_key)
 
     headers = { "Authorization": f"Basic {encoded_authorization_key}"}
     r = requests.post(
