@@ -119,7 +119,7 @@ def zoom_user(code: str):
         headers = {'authorization': 'Bearer %s' % oauth['access_token'],
                 'content-type': 'application/json'}
         r = requests.post(
-            f'https://api.zoom.us/v2/users/{users[0]["id"]}/meetings', headers=headers, data=json.dumps(meetingdetails))
+            f'https://api.zoom.us/v2/users/{users["users"][0]["id"]}/meetings', headers=headers, data=json.dumps(meetingdetails))
 
         print("\n creating zoom meeting ... \n")
         data = json.loads(r.text)
