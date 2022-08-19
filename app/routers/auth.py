@@ -128,11 +128,13 @@ def zoom_user(code: str):
             print(data["start_url"])
             print('\n'+data["join_url"])
             print('\n'+data['password'])
+            return {"code": code, "data": oauth, "users": users, "data": data}
         except:
             print(data)
             return {"status": data}
     except:
         print("Error: auth.py -> line: 118-130")
 
-
+    # get join_url and redirect tutor to zoom in new window
+    # get url and redirect student to url in new window
     return {"code": code, "data": oauth, "users": users}
