@@ -115,18 +115,23 @@ def zoom_user(code: str):
     except:
         users = {"error": "read logs"}
 
-    print(users["users"][0]["id"])
-    headers = {'authorization': 'Bearer %s' % oauth['access_token'],
-            'content-type': 'application/json'}
-    r = requests.post(
-        f'https://api.zoom.us/v2/users/{users["users"][0]["id"]}/meetings', headers=headers, data=json.dumps(meetingdetails))
+    try:
+        print(users["users"][0]["id"])
+        headers = {'authorization': 'Bearer %s' % oauth['access_token'],
+                'content-type': 'application/json'}
+        r = requests.post(
+            f'https://api.zoom.us/v2/users/{users["users"][0]["id"]}/meetings', headers=headers, data=json.dumps(meetingdetails))
 
-    print("\n creating zoom meeting ... \n")
-    data = json.loads(r.text)
-    print(data)
-    print('\n'+data["join_url"])
-    print('\n'+data['password'])
-        # print("Error: auth.py -> line: 118-130")
+        print("\n creating zoom meeting ... \n")
+        data = json.loads(r.text)
+        if data["code"] == '429':
+            return{"data": data}
+        else:
+            print(data["start_url"])
+            print('\n'+data["join_url"])
+            print('\n'+data['password'])
+    except:
+        print("Error: auth.py -> line: 118-130")
 
 
     return {"code": code, "data": oauth, "users": users}
