@@ -87,12 +87,14 @@ def zoom_user(code: str):
 
     oauth = json.loads(r.text)
 
+    try:
+        headers = {'authorization': 'Bearer %s' % oauth['access_token'],
+                'content-type': 'application/json'}
+        r = requests.get('https://api.zoom.us/v2/users/', headers=headers)
 
-    headers = {'authorization': 'Bearer %s' % oauth['access_token'],
-            'content-type': 'application/json'}
-    r = requests.get('https://api.zoom.us/v2/users/', headers=headers)
-
-    users = json.loads(r.text)
+        users = json.loads(r.text)
+    except:
+        users = {"error": "read logs"}
 
 
 
