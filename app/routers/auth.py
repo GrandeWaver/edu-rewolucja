@@ -75,6 +75,25 @@ def google_user(token: schemas.GoogleToken):
             else:
                 raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"database error")
 
+meetingdetails = {"topic": "The title of your zoom meeting",
+                  "type": 2,
+                  "start_time": "2019-06-14T10: 21: 57",
+                  "duration": "45",
+                  "timezone": "Europe/Madrid",
+                  "agenda": "test",
+
+                  "recurrence": {"type": 1,
+                                 "repeat_interval": 1
+                                 },
+                  "settings": {"host_video": "true",
+                               "participant_video": "true",
+                               "join_before_host": "False",
+                               "mute_upon_entry": "False",
+                               "watermark": "true",
+                               "audio": "voip",
+                               "auto_recording": "cloud"
+                               }
+                  }
 
 @router.get('/zoomuser')
 def zoom_user(code: str):
@@ -96,6 +115,19 @@ def zoom_user(code: str):
     except:
         users = {"error": "read logs"}
 
+    try:
+        headers = {'authorization': 'Bearer %s' % oauth['access_token'],
+                'content-type': 'application/json'}
+        r = requests.post(
+            f'https://api.zoom.us/v2/users/{users[0]["id"]}/meetings', headers=headers, data=json.dumps(meetingdetails))
+
+        print("\n creating zoom meeting ... \n")
+        data = json.loads(r.text)
+        print(data["start_url"])
+        print('\n'+data["join_url"])
+        print('\n'+data['password'])
+    except:
+        print("Error: auth.py -> line: 118-130")
 
 
     return {"code": code, "data": oauth, "users": users}
