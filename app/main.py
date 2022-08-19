@@ -45,8 +45,6 @@ def helloWorld():
 @app.on_event("startup")
 @repeat_every(seconds=59, wait_first=False)
 def check_lessons():
-    createMeeting('edurewolucja@gmail.com')
-    getUsers()
     if datetime.now().second != 0:
         time.sleep(60 - datetime.now().second)
         now = datetime.now()
