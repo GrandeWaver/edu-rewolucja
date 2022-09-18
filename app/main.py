@@ -4,7 +4,7 @@ from fastapi_utils.tasks import repeat_every
 from app.routers.auth import auth
 from .routers import create_class, select_class, frontend, resources, user, post, auth, class_, lesson, notifications
 from datetime import datetime, timedelta
-import time
+from time import sleep
 from .database import *
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -46,7 +46,7 @@ def helloWorld():
 @repeat_every(seconds=59, wait_first=False)
 def check_lessons():
     if datetime.now().second != 0:
-        time.sleep(60 - datetime.now().second)
+        sleep(60 - datetime.now().second)
         now = datetime.now()
         now = datetime.fromisoformat(str(now)[0:19])
 
@@ -54,6 +54,7 @@ def check_lessons():
     lessons = cursor.fetchall()
 
     for lesson in lessons:
+        print(f'\n{lesson}')
         lesson_time = datetime.fromisoformat(str(lesson['date'])[0:19])
 
         # 10 minuts before lesson
