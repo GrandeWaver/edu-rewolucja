@@ -9,6 +9,8 @@ import RegisterTutor from './vievs/footer/RegisterTutor-Screen.vue'
 import Contact from './vievs/footer/Contact-Screen.vue'
 import PrivacyPolicy from './vievs/footer/PrivacyPolicy-Screen.vue'
 import TermsAndConditions from './vievs/footer/TermsAndConditions-Screen.vue'
+import Configure from './vievs/footer/Configure-Screen.vue'
+import Documendation from './vievs/footer/Documendation-Screen.vue'
 
 import BuyLesson from './vievs/BuyLesson-Screen.vue'
 
@@ -62,6 +64,16 @@ import nProgress from 'nprogress';
         component: TermsAndConditions,
       },
       {
+        path: '/documendation',
+        name: 'Documendation',
+        component: Documendation,
+      },
+      {
+        path: '/configure',
+        name: 'Configure',
+        component: Configure,
+      },
+      {
         path: '/buy-lesson/:id',
         name: 'BuyLesson',
         component: BuyLesson,
@@ -105,7 +117,7 @@ import nProgress from 'nprogress';
 
   router.beforeEach((to, from, next) => {
     nProgress.start()
-    if (to.name == 'RegisterTutor' || to.name == 'Contact' || to.name == 'PrivacyPolicy' || to.name == 'TermsAndConditions'){
+    if (to.name == 'RegisterTutor' || to.name == 'Contact' || to.name == 'PrivacyPolicy' || to.name == 'TermsAndConditions' || to.name == 'Documendation' || to.name == 'Configure'){
       next()
       return
     } if (cookies.getCookie('auth') == undefined && to.name == 'Login' || to.name == 'Register') {
