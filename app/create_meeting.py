@@ -42,7 +42,7 @@ def getUsers():
 # https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingcreate
 
 
-meetingdetails = {"topic": "The title of your zoom meeting",
+meetingdetails = {"topic": "Matematyka",
                   "type": 2,
                   "start_time": "2019-06-14T10: 21: 57",
                   "duration": "45",

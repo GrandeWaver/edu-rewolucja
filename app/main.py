@@ -42,21 +42,6 @@ def helloWorld():
     return """Hello World!"""
 
 
-
-from pathlib import Path
-from fastapi import HTTPException, status
-from fastapi.responses import FileResponse
-BASE_DIR = Path(__file__).resolve().parent
-path =str(Path(BASE_DIR, 'routers/templates/resources'))
-@app.get("/zoomverify/verifyzoom.html")
-def helloWorld():
-    file_path = os.path.join(path, 'verifyzoom.html')
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
-    else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"File not found")
-
-
 @app.on_event("startup")
 @repeat_every(seconds=59, wait_first=False)
 def check_lessons():
