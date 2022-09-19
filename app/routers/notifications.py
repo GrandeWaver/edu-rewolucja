@@ -1,5 +1,6 @@
 from fastapi import Depends, HTTPException, status, APIRouter
 from app.emails.utils import change_minute, change_subject
+from app.emails.zoom_deactivation import zoom_deactivation
 from  app.pusher import pusher_client
 
 from app import oauth2
@@ -32,6 +33,12 @@ def get_notifications(user_data = Depends(oauth2.get_current_user)):
                         pusher_client.trigger('videocall', str(user_id), i['notification'])
 
         # others notifications
+
+        return {"status": "success"}
+
+@router.post('/zoom/deauthorization')
+def get_notifications():
+        zoom_deactivation()
 
         return {"status": "success"}
 

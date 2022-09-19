@@ -7,7 +7,7 @@
             <br>
             Kliknij, aby dołączyć.
         </div>
-        <a href="https://zoom.us/oauth/authorize?client_id=YuDMBufmRmmSi_H8iGyoNA&response_type=code&redirect_uri=https%3A%2F%2Fapp.edu-rewolucja.pl%2Fauth%2Fzoomuser" target="_blank" rel="noopener noreferrer"><img src="https://marketplacecontent.zoom.us/zoom_marketplace/img/add_to_zoom.png" height="32" alt="Dołącz" /></a>
+        <a href="https://zoom.us/oauth/authorize?response_type=code&client_id=YsmfYSibRAOiduiok13lPg&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser" target="_blank" rel="noopener noreferrer"><img src="https://marketplacecontent.zoom.us/zoom_marketplace/img/add_to_zoom.png" height="32" alt="Dołącz" /></a>
     </div>
 </div>
 <!-- {{ data }} -->
