@@ -3,7 +3,7 @@
         <div class="textdetails">
             {{ text }}
         </div>
-        <div @click="closeAlert" class="alertcancel">X</div>
+        <div @click="closeAlert" class="alertcancel pointer">X</div>
     </div>
 </template>
 

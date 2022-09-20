@@ -54,7 +54,6 @@ def check_lessons():
     lessons = cursor.fetchall()
 
     for lesson in lessons:
-        print(f'\n{lesson}')
         lesson_time = datetime.fromisoformat(str(lesson['date'])[0:19])
 
         # 10 minuts before lesson

@@ -1,16 +1,25 @@
 <template>
-<div v-if="show" class="videocall wrapper">
-    <div @click="show = false" class="videocall-cancel">X</div>
+<div v-if="!hide" class="videocall wrapper">
+    <div @click="hide = true" class="videocall-cancel pointer">X</div>
         <div class="videocall wrapper two">
         <div class="videocall-text">
             Twoja lekcja rozpoczęła się.
             <br>
-            Kliknij, aby dołączyć.
+            <span v-if="$root.userData.account_type == 'student'" class="videocall-text-smaller">
+              {{ data.tutor_firstname }} {{ data.tutor_lastname }} za chwilę utworzy spotkanie Zoom.
+            </span>
+            <span v-if="$root.userData.account_type == 'tutor'" class="videocall-text-smaller">
+              Kliknij, aby utworzyć spotkanie z {{ data.student_firstname }} {{ data.student_lastname }}.
+            </span>
         </div>
-        <a href="https://zoom.us/oauth/authorize?response_type=code&client_id=YsmfYSibRAOiduiok13lPg&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser" target="_blank" rel="noopener noreferrer"><img src="https://marketplacecontent.zoom.us/zoom_marketplace/img/add_to_zoom.png" height="32" alt="Dołącz" /></a>
+        <span v-if="$root.userData.account_type == 'student'" class="notAllowed">
+          <img src="@/assets/add_to_zoom-unavailable.png" height="32" alt="Dołącz"/>
+        </span>
+        <span v-if="$root.userData.account_type == 'tutor'" class="pointer">
+          <a href="https://zoom.us/oauth/authorize?response_type=code&client_id=YsmfYSibRAOiduiok13lPg&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser" target="_blank" rel="noopener noreferrer"><img src="@/assets/add_to_zoom.png" height="32" alt="Dołącz" /></a>
+        </span>
     </div>
 </div>
-<!-- {{ data }} -->
 </template>
 
 <script>
@@ -18,7 +27,7 @@ export default {
     props: ['data'],
     data (){
         return {
-            show: true
+          hide: false
         }
     }
 }
@@ -41,6 +50,9 @@ export default {
 .videocall-text{
     padding: 20px;
     font-size: larger;
+}
+.videocall-text-smaller{
+    font-size: medium;
 }
 .videocall-cancel{
   position: absolute;

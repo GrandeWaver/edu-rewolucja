@@ -73,6 +73,13 @@ class Registry():
     
     def remove_active_lessons(self, lesson):
         self.active_lessons.remove(lesson)
+    
+    def add_zoom_links(self, start_url, join_url):
+        # print(self.active_lessons)
+        # print(start_url)
+        # print(join_url)
+        # send pusher new data 
+        return
 
 
 registry = Registry()

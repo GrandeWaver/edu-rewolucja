@@ -4,6 +4,7 @@ from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 
 from ..database import *
 from .. import schemas, utils, oauth2
+from app.registry import registry
 import requests
 import json
 import base64
@@ -128,6 +129,11 @@ def zoom_user(code: str):
             print(data["start_url"])
             print('\n'+data["join_url"])
             print('\n'+data['password'])
+
+            # IMPORTANT
+            # This code is running only on production server becouse zoom auth cannot run on localhost (reason: redirect in "add to zoom" button)
+            registry.add_zoom_links(data["start_url"], data["join_url"])
+
             return {"code": code, "data": oauth, "users": users, "data": data}
         except:
             print(data)

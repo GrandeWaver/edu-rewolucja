@@ -43,7 +43,7 @@ export default {
           }
         ],
         alerts: [],
-        videocall: true, // zmień później
+        videocall: false, // zmień później
         videocall_data: []
       }
   },
