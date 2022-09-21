@@ -29,7 +29,10 @@ def get_notifications(user_data = Depends(oauth2.get_current_user)):
                         pusher_client.trigger('alerts', str(user_id), i['notification'])
 
         for i in active_lessons:
+                print(f'\n{i}')
+                print(f'\n{user_id}')
                 if user_id == i['tutor_id'] or user_id == i['student_id']:
+                        print('Wysłanie pushera')
                         pusher_client.trigger('videocall', str(user_id), i['notification'])
 
         # others notifications

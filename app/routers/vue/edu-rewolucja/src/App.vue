@@ -51,6 +51,29 @@ export default {
     this.userData = await auth.isAuthenticatedFunc(this)
 
     if(this.isAuthenticated){
+
+    // pusher
+    const _this = this
+    var alerts = await this.$pusher.subscribe('alerts')
+    alerts.bind('main', function(data) {
+      console.log(data)
+      _this.alerts.push(data)
+    })
+    alerts.bind(_this.userData.id, function(data) {
+      console.log(data)
+      _this.alerts.push(data)
+    })
+
+    var videocall = await this.$pusher.subscribe('videocall');
+    videocall.bind(_this.userData.id, function(data) {
+      console.log(data)
+      if(data.notification == 'start'){
+        _this.videocall = true
+        _this.videocall_data = data
+      }
+      // zakończ viedeocall jakoś
+    })
+
       // fetch get check notifications
       fetch(getData.url()+'/notifications/', {headers: getData.getHeaders()})
             .then(r => {
@@ -62,27 +85,7 @@ export default {
     }
 
 
-    // pusher
-    const _this = this
-    var alerts = this.$pusher.subscribe('alerts')
-    alerts.bind('main', function(data) {
-      console.log(data)
-      _this.alerts.push(data)
-    })
-    alerts.bind(_this.userData.id, function(data) {
-      console.log(data)
-      _this.alerts.push(data)
-    })
 
-    var videocall = this.$pusher.subscribe('videocall');
-    videocall.bind(_this.userData.id, function(data) {
-      console.log(data)
-      if(data.notification == 'start'){
-        _this.videocall = true
-        _this.videocall_data = data
-      }
-      // zakończ viedeocall jakoś
-    })
   }
 }
 </script>

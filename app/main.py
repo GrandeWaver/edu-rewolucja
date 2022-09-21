@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from time import sleep
 from .database import *
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from .emails.email_data import get_email_data
 from app.registry import registry
@@ -36,6 +37,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def redirect():
+    return RedirectResponse("https://korki.edu-rewolucja.pl")
 
 @app.get("/root")
 def helloWorld():
