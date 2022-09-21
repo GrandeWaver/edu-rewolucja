@@ -79,8 +79,8 @@ class Registry():
         # print(start_url)
         # print(join_url)
         # send pusher new data 
-        print("adding zoom links")
-        self.active_lessons['notification'].append({"start_url": start_url, "join_url": join_url})
+        print("[DEBUG] adding zoom links to notification")
+        self.active_lessons.append({"start_url": start_url, "join_url": join_url})
 
 
 registry = Registry()
