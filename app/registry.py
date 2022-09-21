@@ -79,7 +79,7 @@ class Registry():
         # print(start_url)
         # print(join_url)
         # send pusher new data 
-        return
+        self.active_lessons['notification'].append({"start_url": start_url, "join_url": join_url})
 
 
 registry = Registry()
