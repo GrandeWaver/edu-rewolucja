@@ -19,6 +19,8 @@ def get_notifications(user_data = Depends(oauth2.get_current_user)):
         active_lessons = registry.return_active_lessons()
         user_id = int(user_data.id)
 
+        final_response = {"status": "success"}
+
         if user_id in start_notification:
                 pusher_client.trigger('alerts', str(user_data.id), {"text": f"Strona w trakcie budowy. Nie wszystko może działać poprawnie."})
                 #usun sie z registry jako ze już odebrałeś powiadomienie
@@ -30,11 +32,12 @@ def get_notifications(user_data = Depends(oauth2.get_current_user)):
 
         for i in active_lessons:
                 if user_id == i['tutor_id'] or user_id == i['student_id']:
-                        pusher_client.trigger('videocall', str(user_id), i['notification'])
+                        # pusher_client.trigger('videocall', str(user_id), i['notification'])
+                        final_response = i
 
         # others notifications
 
-        return {"status": "success"}
+        return final_response
 
 @router.post('/zoom/deauthorization')
 def get_notifications():

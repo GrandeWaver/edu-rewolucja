@@ -65,7 +65,6 @@ export default {
     })
 
     var videocall = await _this.$pusher.subscribe('videocall');
-    console.log(_this.userData.id)
     await videocall.bind(_this.userData.id, function(data) {
       console.log(data)
       if(data.notification == 'start'){
@@ -84,6 +83,13 @@ export default {
                     alert('Error: cannot check notifications')
                     return r
                 } else { return r.json() }
+            })
+            .then(r => {
+              if(r.notification.notification == 'start'){
+                _this.videocall = true
+                _this.videocall_data = r
+              }
+              console.log(r)
             })
     }
   }
