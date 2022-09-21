@@ -43,29 +43,30 @@ export default {
           }
         ],
         alerts: [],
-        videocall: false, // zmień później
+        videocall: false,
         videocall_data: []
       }
   },
   mounted: async function() {
-    this.userData = await auth.isAuthenticatedFunc(this)
-
-    if(this.isAuthenticated){
-
-    // pusher
     const _this = this
-    var alerts = await this.$pusher.subscribe('alerts')
-    alerts.bind('main', function(data) {
+    _this.userData = await auth.isAuthenticatedFunc(_this)
+
+
+    // listen to pusher
+    
+    var alerts = await _this.$pusher.subscribe('alerts')
+    await alerts.bind('main', function(data) {
       console.log(data)
       _this.alerts.push(data)
     })
-    alerts.bind(_this.userData.id, function(data) {
+    await alerts.bind(_this.userData.id, function(data) {
       console.log(data)
       _this.alerts.push(data)
     })
 
-    var videocall = await this.$pusher.subscribe('videocall');
-    videocall.bind(_this.userData.id, function(data) {
+    var videocall = await _this.$pusher.subscribe('videocall');
+    console.log(_this.userData.id)
+    await videocall.bind(_this.userData.id, function(data) {
       console.log(data)
       if(data.notification == 'start'){
         _this.videocall = true
@@ -74,6 +75,8 @@ export default {
       // zakończ viedeocall jakoś
     })
 
+
+    if(_this.isAuthenticated){
       // fetch get check notifications
       fetch(getData.url()+'/notifications/', {headers: getData.getHeaders()})
             .then(r => {
@@ -83,9 +86,6 @@ export default {
                 } else { return r.json() }
             })
     }
-
-
-
   }
 }
 </script>
