@@ -76,7 +76,8 @@ class Registry():
     
     def add_zoom_links(self, lesson_id, start_url, join_url):
         for index, element in enumerate(self.active_lessons):
-             if element["lesson_id"] == lesson_id:
+            print(f'{lesson_id} ==? {element["lesson_id"]}')
+            if element["lesson_id"] == lesson_id:
                 print("[DEBUG] adding zoom links to notification")
                 self.active_lessons[index].append({"start_url": start_url, "join_url": join_url, 'lesson_id': lesson_id})
 
