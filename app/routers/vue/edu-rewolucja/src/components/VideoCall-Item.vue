@@ -12,10 +12,10 @@
               Kliknij, aby utworzyć spotkanie z {{ data.notification.student_firstname }} {{ data.notification.student_lastname }}.
             </span>
         </div>
-        <span v-if="$root.userData.account_type == 'student' && data.notification == 'not ready' " class="notAllowed">
+        <span v-if="$root.userData.account_type == 'student' && data.notification.status == 'not ready' " class="notAllowed">
           <img src="@/assets/add_to_zoom-unavailable.png" height="32" alt="Dołącz"/>
         </span>
-        <span v-if="$root.userData.account_type == 'student' && data.notification == 'ready' " class="pointer">
+        <span v-if="$root.userData.account_type == 'student' && data.notification.status == 'ready' " class="pointer">
           <a :href="data.join_url">Dołącz</a>
         </span>
         <span v-if="$root.userData.account_type == 'tutor'" class="pointer">
