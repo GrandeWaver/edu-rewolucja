@@ -96,14 +96,14 @@ meetingdetails = {"topic": "The title of your zoom meeting",
                                }
                   }
 
-@router.get('/zoomuser')
-def zoom_user(code: str, lesson_id: str):
+@router.get('/zoomuser/{lesson_id}')
+def zoom_user(code: str, lesson_id: int):
     encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
     encoded_authorization_key = encoded_authorization_key.decode()
 
     headers = { "Authorization": f"Basic {encoded_authorization_key}"}
     r = requests.post(
-        f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser', headers=headers)
+        f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser/{lesson_id}', headers=headers)
 
     oauth = json.loads(r.text)
 
