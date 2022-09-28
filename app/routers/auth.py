@@ -103,9 +103,9 @@ def zoom_user(code: str, lesson_id: int):
     active_lessons = registry.return_active_lessons()
     for i in active_lessons:
         if i["lesson_id"] == lesson_id:
-            if i["start_url"]:
+            if i["start_url"] != None:
                 return RedirectResponse(data["start_url"])
-                
+
 
     encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
     encoded_authorization_key = encoded_authorization_key.decode()
