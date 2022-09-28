@@ -80,7 +80,7 @@ class Registry():
             print(f'{lesson_id} ==? {element["lesson_id"]}')
             # if element["lesson_id"] == lesson_id:
             #     print("[DEBUG] adding zoom links to notification")
-        self.active_lessons[0].append({"start_url": start_url, "join_url": join_url})
+        self.active_lessons.append({"start_url": start_url, "join_url": join_url})
 
 
 registry = Registry()
