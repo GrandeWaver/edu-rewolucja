@@ -63,6 +63,7 @@ class Registry():
             }
         row = {"lesson_id": lesson_id, "student_id": student_id, "tutor_id": tutor_id, "notification": notification}
         self.active_lessons.append(row)
+        notification = row
 
         print(f'active lessons: {len(self.active_lessons)}')
 
@@ -79,7 +80,7 @@ class Registry():
             print(f'{lesson_id} ==? {element["lesson_id"]}')
             # if element["lesson_id"] == lesson_id:
             #     print("[DEBUG] adding zoom links to notification")
-            self.active_lessons[index].append({"start_url": start_url, "join_url": join_url})
+        self.active_lessons[0].append({"start_url": start_url, "join_url": join_url})
 
 
 registry = Registry()
