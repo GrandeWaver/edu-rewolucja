@@ -13,12 +13,11 @@
             </span>
         </div>
         <span v-if="$root.userData.account_type == 'student'">
-            <span v-if="data.notification.status == 'not ready' " class="pointer">
-              {{ data.join_url }}
-              <a :href="data.join_url">Dołącz</a>
-            </span>
-            <span v-else class="notAllowed">
+            <span v-if="data.notification.status == 'not ready' " class="notAllowed">
               <img src="@/assets/add_to_zoom-unavailable.png" height="32" alt="Dołącz"/>
+            </span>
+            <span v-else class="pointer">
+              <a :href="data.join_url"><img src="@/assets/add_to_zoom.png" height="32" alt="Dołącz"/></a>
             </span>
         </span>
         <span v-if="$root.userData.account_type == 'tutor'" class="pointer">
