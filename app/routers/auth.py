@@ -97,7 +97,7 @@ meetingdetails = {"topic": "The title of your zoom meeting",
                   }
 
 @router.get('/zoomuser')
-def zoom_user(code: str):
+def zoom_user(code: str, lesson_id: str):
     encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
     encoded_authorization_key = encoded_authorization_key.decode()
 
@@ -132,7 +132,7 @@ def zoom_user(code: str):
 
             # IMPORTANT
             # This code is running only on production server becouse zoom auth cannot run on localhost (reason: redirect in "add to zoom" button)
-            registry.add_zoom_links(data["start_url"], data["join_url"])
+            registry.add_zoom_links(lesson_id, data["start_url"], data["join_url"])
 
             return {"code": code, "data": oauth, "users": users, "data": data}
         except:

@@ -6,17 +6,17 @@
             Twoja lekcja rozpoczęła się.
             <br>
             <span v-if="$root.userData.account_type == 'student'" class="videocall-text-smaller">
-              {{ data.tutor_firstname }} {{ data.tutor_lastname }} za chwilę utworzy spotkanie Zoom.
+              {{ data.notification.tutor_firstname }} {{ data.notification.tutor_lastname }} za chwilę utworzy spotkanie Zoom.
             </span>
             <span v-if="$root.userData.account_type == 'tutor'" class="videocall-text-smaller">
-              Kliknij, aby utworzyć spotkanie z {{ data.student_firstname }} {{ data.student_lastname }}.
+              Kliknij, aby utworzyć spotkanie z {{ data.notification.student_firstname }} {{ data.notification.student_lastname }}.
             </span>
         </div>
         <span v-if="$root.userData.account_type == 'student'" class="notAllowed">
           <img src="@/assets/add_to_zoom-unavailable.png" height="32" alt="Dołącz"/>
         </span>
         <span v-if="$root.userData.account_type == 'tutor'" class="pointer">
-          <a href="https://zoom.us/oauth/authorize?response_type=code&client_id=YsmfYSibRAOiduiok13lPg&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser" target="_blank" rel="noopener noreferrer"><img src="@/assets/add_to_zoom.png" height="32" alt="Dołącz" /></a>
+          <a href="https://zoom.us/oauth/authorize?response_type=code&client_id=YsmfYSibRAOiduiok13lPg&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser&lesson_id={{ data.lesson_id }}" target="_blank" rel="noopener noreferrer"><img src="@/assets/add_to_zoom.png" height="32" alt="Dołącz" /></a>
         </span>
     </div>
 </div>
