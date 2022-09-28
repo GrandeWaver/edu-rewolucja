@@ -12,6 +12,7 @@
               Kliknij, aby utworzyć spotkanie z {{ data.notification.student_firstname }} {{ data.notification.student_lastname }}.
             </span>
         </div>
+        {{data.notification.status}}
         <span v-if="$root.userData.account_type == 'student'">
             <span v-if="data.notification.status == 'not ready' " class="notAllowed">
               {{data.notification.status}}
