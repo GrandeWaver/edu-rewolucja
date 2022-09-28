@@ -75,10 +75,10 @@ class Registry():
         self.active_lessons.remove(lesson)
     
     def add_zoom_links(self, lesson_id, start_url, join_url):
-        for i in self.active_lessons:
-             if i["lesson_id"] == lesson_id:
+        for index, element in enumerate(self.active_lessons):
+             if element["lesson_id"] == lesson_id:
                 print("[DEBUG] adding zoom links to notification")
-                i.append({"start_url": start_url, "join_url": join_url})
+                self.active_lessons[index].append({"start_url": start_url, "join_url": join_url, 'lesson_id': lesson_id})
 
 
 registry = Registry()
