@@ -52,7 +52,6 @@ class Registry():
     def add_active_lessons(self, lesson_id, tutor_id, tutor_firstname, tutor_lastname, tutor_picture, student_id, student_firstname, student_lastname, student_picture):
         notification = {
             "notification": "start", 
-            "status": "not ready",
             "tutor_id": tutor_id,
             "tutor_firstname": tutor_firstname, 
             "tutor_lastname": tutor_lastname, 
