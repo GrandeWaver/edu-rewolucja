@@ -12,7 +12,6 @@
               Kliknij, aby utworzyć spotkanie z {{ data.notification.student_firstname }} {{ data.notification.student_lastname }}.
             </span>
         </div>
-        {{data.status}}
         <span v-if="$root.userData.account_type == 'student'">
             <span v-if="data.status != 'ready' " class="notAllowed">
               <img src="@/assets/add_to_zoom-unavailable.png" height="32" alt="Dołącz"/>
