@@ -13,7 +13,7 @@
             </span>
         </div>
         <span v-if="$root.userData.account_type == 'student'">
-            <span v-if="data.notification.status == 'not ready' " class="notAllowed">
+            <span v-if="data.notification.status == 'ready' " class="notAllowed">
               <img src="@/assets/add_to_zoom-unavailable.png" height="32" alt="Dołącz"/>
             </span>
             <span v-else class="pointer">
