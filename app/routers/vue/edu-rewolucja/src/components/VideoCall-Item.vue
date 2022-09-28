@@ -16,6 +16,7 @@
           <img src="@/assets/add_to_zoom-unavailable.png" height="32" alt="Dołącz"/>
         </span>
         <span v-if="$root.userData.account_type == 'student' && data.notification.status == 'ready' " class="pointer">
+          {{ data.join_url }}
           <a :href="data.join_url">Dołącz</a>
         </span>
         <span v-if="$root.userData.account_type == 'tutor'" class="pointer">

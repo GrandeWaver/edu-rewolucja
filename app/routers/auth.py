@@ -143,13 +143,12 @@ def zoom_user(code: str, lesson_id: int):
                         # This code is running only on production server becouse zoom auth cannot run on localhost (reason: redirect in "add to zoom" button)
                         registry.add_zoom_links(lesson_id, data["start_url"], data["join_url"])
 
-                        return {"code": code, "data": oauth, "users": users, "data": data}
+                        # return {"code": code, "data": oauth, "users": users, "data": data}
+                        return RedirectResponse(data["start_url"])
+                        
                     except:
                         print(data)
                         return {"status": data}
                 except:
                     print("Error: auth.py -> line: 118-130")
-
-                # return {"code": code, "data": oauth, "users": users}
-                return RedirectResponse(data["start_url"])
 
