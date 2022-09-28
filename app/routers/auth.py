@@ -1,6 +1,7 @@
 from os import access
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+from fastapi.responses import RedirectResponse
 
 from ..database import *
 from .. import schemas, utils, oauth2
@@ -98,6 +99,14 @@ meetingdetails = {"topic": "The title of your zoom meeting",
 
 @router.get('/zoomuser/{lesson_id}')
 def zoom_user(code: str, lesson_id: int):
+
+    active_lessons = registry.return_active_lessons()
+    for i in active_lessons:
+        if i["lesson_id"] == lesson_id:
+            if i["start_url"]:
+                return RedirectResponse(data["start_url"])
+                
+
     encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
     encoded_authorization_key = encoded_authorization_key.decode()
 
@@ -141,6 +150,6 @@ def zoom_user(code: str, lesson_id: int):
     except:
         print("Error: auth.py -> line: 118-130")
 
-    # get join_url and redirect tutor to zoom in new window
-    # get url and redirect student to url in new window
-    return {"code": code, "data": oauth, "users": users}
+    # return {"code": code, "data": oauth, "users": users}
+    return RedirectResponse(data["start_url"])
+
