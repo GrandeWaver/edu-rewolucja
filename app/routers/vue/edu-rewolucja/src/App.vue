@@ -85,7 +85,7 @@ export default {
                 } else { return r.json() }
             })
             .then(r => {
-              if(r.notification == 'start'){
+              if(r.notification.notification == 'start'){
                 _this.videocall = true
                 _this.videocall_data = r
               }
