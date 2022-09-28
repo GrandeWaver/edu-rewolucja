@@ -103,53 +103,53 @@ def zoom_user(code: str, lesson_id: int):
     active_lessons = registry.return_active_lessons()
     for i in active_lessons:
         if i["lesson_id"] == lesson_id:
-            if i["start_url"] != None:
+            try:
+                if i["start_url"] != None:
+                    return RedirectResponse(data["start_url"])
+            except:
+                encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
+                encoded_authorization_key = encoded_authorization_key.decode()
+
+                headers = { "Authorization": f"Basic {encoded_authorization_key}"}
+                r = requests.post(
+                    f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser/{lesson_id}', headers=headers)
+
+                oauth = json.loads(r.text)
+
+                try:
+                    headers = {'authorization': 'Bearer %s' % oauth['access_token'],
+                            'content-type': 'application/json'}
+                    r = requests.get('https://api.zoom.us/v2/users/', headers=headers)
+
+                    users = json.loads(r.text)
+                except:
+                    users = {"error": "read logs"}
+
+                try:
+                    print(users["users"][0]["id"])
+                    headers = {'authorization': 'Bearer %s' % oauth['access_token'],
+                            'content-type': 'application/json'}
+                    r = requests.post(
+                        f'https://api.zoom.us/v2/users/{users["users"][0]["id"]}/meetings', headers=headers, data=json.dumps(meetingdetails))
+
+                    print("\n creating zoom meeting ... \n")
+                    data = json.loads(r.text)
+                    try:
+                        print(data["start_url"])
+                        print('\n'+data["join_url"])
+                        print('\n'+data['password'])
+
+                        # IMPORTANT
+                        # This code is running only on production server becouse zoom auth cannot run on localhost (reason: redirect in "add to zoom" button)
+                        registry.add_zoom_links(lesson_id, data["start_url"], data["join_url"])
+
+                        return {"code": code, "data": oauth, "users": users, "data": data}
+                    except:
+                        print(data)
+                        return {"status": data}
+                except:
+                    print("Error: auth.py -> line: 118-130")
+
+                # return {"code": code, "data": oauth, "users": users}
                 return RedirectResponse(data["start_url"])
-
-
-    encoded_authorization_key = base64.b64encode(f'{secret.ZOOM_API_KEY}:{secret.ZOOM_API_SECRET}'.encode('ascii'))
-    encoded_authorization_key = encoded_authorization_key.decode()
-
-    headers = { "Authorization": f"Basic {encoded_authorization_key}"}
-    r = requests.post(
-        f'https://zoom.us/oauth/token?grant_type=authorization_code&code={code}&redirect_uri=https://app.edu-rewolucja.pl/auth/zoomuser/{lesson_id}', headers=headers)
-
-    oauth = json.loads(r.text)
-
-    try:
-        headers = {'authorization': 'Bearer %s' % oauth['access_token'],
-                'content-type': 'application/json'}
-        r = requests.get('https://api.zoom.us/v2/users/', headers=headers)
-
-        users = json.loads(r.text)
-    except:
-        users = {"error": "read logs"}
-
-    try:
-        print(users["users"][0]["id"])
-        headers = {'authorization': 'Bearer %s' % oauth['access_token'],
-                'content-type': 'application/json'}
-        r = requests.post(
-            f'https://api.zoom.us/v2/users/{users["users"][0]["id"]}/meetings', headers=headers, data=json.dumps(meetingdetails))
-
-        print("\n creating zoom meeting ... \n")
-        data = json.loads(r.text)
-        try:
-            print(data["start_url"])
-            print('\n'+data["join_url"])
-            print('\n'+data['password'])
-
-            # IMPORTANT
-            # This code is running only on production server becouse zoom auth cannot run on localhost (reason: redirect in "add to zoom" button)
-            registry.add_zoom_links(lesson_id, data["start_url"], data["join_url"])
-
-            return {"code": code, "data": oauth, "users": users, "data": data}
-        except:
-            print(data)
-            return {"status": data}
-    except:
-        print("Error: auth.py -> line: 118-130")
-
-    # return {"code": code, "data": oauth, "users": users}
-    return RedirectResponse(data["start_url"])
 
