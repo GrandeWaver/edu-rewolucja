@@ -69,7 +69,7 @@ export default {
       console.log(data)
       if(data.notification == 'start'){
         _this.videocall = true
-        _this.videocall_data.notification = data
+        _this.videocall_data = data
       }
       // zakończ viedeocall jakoś
     })

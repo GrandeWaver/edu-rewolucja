@@ -66,8 +66,8 @@ class Registry():
 
         print(f'active lessons: {len(self.active_lessons)}')
 
-        pusher_client.trigger('videocall', str(student_id), notification)
-        pusher_client.trigger('videocall', str(tutor_id), notification)
+        pusher_client.trigger('videocall', str(student_id), row)
+        pusher_client.trigger('videocall', str(tutor_id), row)
 
         # remove z ten_to_lesson TODO
     
