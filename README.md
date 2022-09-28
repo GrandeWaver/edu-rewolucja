@@ -2,4 +2,6 @@
 
 discord: https://discord.gg/xtSnvTBx
 <br>
-https://app.edu-rewolucja.pl
+website: https://app.edu-rewolucja.pl
+<br>
+about: https://edu-rewolucja.pl
