@@ -13,7 +13,7 @@
             </span>
         </div>
         <span v-if="$root.userData.account_type == 'student'">
-            <span v-if="data.notification.status == 'ready' " class="pointer">
+            <span v-if="data.notification.status == 'not ready' " class="pointer">
               {{ data.join_url }}
               <a :href="data.join_url">Dołącz</a>
             </span>
